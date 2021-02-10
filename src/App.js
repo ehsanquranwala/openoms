@@ -11,6 +11,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Category from './components/Category';
 import Product from './components/Product';
+import Cart from './components/Cart';
 import Shop from './components/Shop';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, } from 'reactstrap';
 
@@ -41,6 +42,9 @@ export default function App() {
             <NavItem>
               <NavLink style={{color:"#FFFFFF"}} href="/login">Login</NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink style={{color:"#FFFFFF"}} href="/cart">Cart</NavLink>
+            </NavItem>
             
           </Nav>
         </Collapse>
@@ -60,11 +64,14 @@ export default function App() {
           <Route path="/gallery">
             <Category />
           </Route>
-          <Route path="/product">
+          <Route path="/product/:id">
             <Product />
           </Route>
           <Route path="/login">
             <Login />
+          </Route>
+          <Route path="/cart">
+            <Cart />
           </Route>
         </Switch>
       </div>

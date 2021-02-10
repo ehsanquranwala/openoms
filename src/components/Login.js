@@ -1,6 +1,6 @@
 import React from "react";
-import { Button,Card, CardImg, CardText, CardBody,
-  CardTitle, CardHeader,Container,Row,Col,Input,FormGroup,Label} from 'reactstrap';
+import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Label,
+ } from 'reactstrap';
   import {
     Link
   } from "react-router-dom";
@@ -13,9 +13,7 @@ import { Button,Card, CardImg, CardText, CardBody,
                     password:'',
                     email:''};
     }
-    componentDidMount(){
-    //this.getProduct()
-    }
+  
 
     handleSubmit=()=>{
       const {username,password}=this.state;
@@ -28,11 +26,10 @@ import { Button,Card, CardImg, CardText, CardBody,
         .then(response => response.json())
         .then(json => { 
           if(json.token!=undefined){
-             ls.set('key', { token: json.token,
-                          email: json.user_email,
-                          user: json.user_nicename})
-            .then(()=>{})
-                              
+             ls.set('user', { token: json.token,
+                              email: json.user_email,
+                              user: json.user_nicename})
+              alert("Thank You For Login")
                         } else{ alert(json.message)}
                                       });
                 }else{alert("Username or Password empty")} 
