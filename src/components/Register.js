@@ -23,7 +23,7 @@ import { Button,Card, CardImg, CardText, CardBody,
       const {firstName,lastName,email,phone,address,city,area,password}=this.state;
       const billing={"first_name":firstName,
                     "last_name":lastName,
-                    "email":'moh@gmail.com' ,
+                    "email":email ,
                     "phone":phone ,
                     "address_1":address ,
                     "address_2":area ,
