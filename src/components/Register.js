@@ -21,38 +21,50 @@ import { Button,Card, CardImg, CardText, CardBody,
     
     handleSubmit=()=>{
       const {firstName,lastName,email,phone,address,city,area,password}=this.state;
-      const billing={"first_name":firstName,
+      if(firstName!=='' && lastName !=='' && email!=='' && phone!=='' && address!=='' && city!=='' && area!=='' && password!=='' ){
+      let data={  "first_name":firstName,
                     "last_name":lastName,
                     "email":email ,
-                    "phone":phone ,
-                    "address_1":address ,
-                    "address_2":area ,
-                    "city":city,
-                    "company":'',
-                    "state":'sindh',
-                    "postcode":'',
-                    "country":'pk'};
-      let formData = new FormData();
-          formData.append('first_name',firstName);
-          formData.append('last_name',lastName);
-          formData.append('email',email);
-          formData.append('password',password);
-          formData.append('username',phone);
-         // formData.append('billing',JSON.stringify(billing));
+                    "username":phone,
+                    "password":password ,
+                      "billing":{"first_name":firstName,
+                      "last_name":lastName,
+                      "email":email ,
+                      "phone":phone ,
+                      "address_1":address ,
+                      "address_2":area ,
+                      "city":city,
+                      "company":'',
+                      "state":'sindh',
+                      "postcode":'',
+                      "country":'pk'},
+                        "shipping":{"first_name":firstName,
+                        "last_name":lastName,
+                        "email":email ,
+                        "phone":phone ,
+                        "address_1":address ,
+                        "address_2":area ,
+                        "city":city,
+                        "company":'',
+                        "state":'sindh',
+                        "postcode":'',
+                        "country":'pk'}};
+
       fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/customers', {method:'POST', 
-        headers: {
+        headers: {'Content-Type': 'application/json',
                   'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvd2Vla2x5ZmlzaGNsdWIuY29tIiwiaWF0IjoxNjEyNjA2NjQyLCJuYmYiOjE2MTI2MDY2NDIsImV4cCI6MTYxMzIxMTQ0MiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.APfUmhipRCDa-ylYZeOgdbmZIW1iZsjLovpjZAfBsjk'},
-        body: formData})
+        body: JSON.stringify(data)})
         .then(response => response.json())
         .then(json => { 
           if(json.id!=undefined){
                 alert("Thank You For Registration");
               }else{alert(json.message)}
           console.log(json); });
+            }
+            else{alert("Please Fill Complete Data")}
     }
     render() {
        return (
-         
         <div style={{marginTop:'10%'}}>
         <Container className="themed-container" fluid="sm" >
           <Row>
