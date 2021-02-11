@@ -12,6 +12,7 @@ import Register from './components/Register';
 import Category from './components/Category';
 import Product from './components/Product';
 import Cart from './components/Cart';
+import Orders from './components/Orders';
 import Shop from './components/Shop';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, } from 'reactstrap';
 
@@ -45,6 +46,9 @@ export default function App() {
             <NavItem>
               <NavLink style={{color:"#FFFFFF"}} href="/cart">Cart</NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink style={{color:"#FFFFFF"}} href="/Orders">My Orders</NavLink>
+            </NavItem>
             
           </Nav>
         </Collapse>
@@ -72,6 +76,9 @@ export default function App() {
           </Route>
           <Route path="/cart">
             <Cart />
+          </Route>
+          <Route path="/orders">
+            <Orders />
           </Route>
         </Switch>
       </div>

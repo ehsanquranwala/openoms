@@ -31,10 +31,10 @@ import { Card, CardImg, CardBody,
       const productId= ls.get('productId');
       let cart= ls.get('cart');
       if(cart!=''){
-          cart.push({productId:productId,qty:qty,desc:desc,slug:slug,price:price,image:image})
+          cart.push({product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image})
           ls.set('cart',cart);
         }else{
-          ls.set('cart',[{productId:productId,qty:qty,desc:desc,slug:slug,price:price,image:image}]);
+          ls.set('cart',[{product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image}]);
         }
         console.log("Cart",ls.get('cart'));
       }

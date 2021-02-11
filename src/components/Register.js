@@ -36,7 +36,7 @@ import { Button,Card, CardImg, CardText, CardBody,
                       "city":city,
                       "company":'',
                       "state":'sindh',
-                      "postcode":'',
+                      "postcode":'250',
                       "country":'pk'},
                         "shipping":{"first_name":firstName,
                         "last_name":lastName,
@@ -47,7 +47,7 @@ import { Button,Card, CardImg, CardText, CardBody,
                         "city":city,
                         "company":'',
                         "state":'sindh',
-                        "postcode":'',
+                        "postcode":'250',
                         "country":'pk'}};
 
       fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/customers', {method:'POST', 
@@ -56,7 +56,7 @@ import { Button,Card, CardImg, CardText, CardBody,
         body: JSON.stringify(data)})
         .then(response => response.json())
         .then(json => { 
-          if(json.id!=undefined){
+          if(json.id!==undefined){
                 alert("Thank You For Registration");
               }else{alert(json.message)}
           console.log(json); });
