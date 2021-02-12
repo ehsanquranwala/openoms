@@ -18,13 +18,15 @@ import { Card, CardImg, CardBody,
                     address:'',
                     city:'',
                     area:'',
-                    delivery:'',
-                    editable:false
+                    delivery:250,
+                    editable:false,
+                    subTotal:0,
+                    total:0
                     };
     }
     
     componentDidMount(){
-      this.getCart() 
+      this.getCart()
       this.getCustomer()
     }
     async getCustomer(){
@@ -44,20 +46,30 @@ import { Card, CardImg, CardBody,
                           city:json.billing.city,
                           area:json.billing.address_2,
                           delivery:json.billing.postcode
-                          
-                          })} 
+                           })} 
             else{ 
               this.setState({ delivery:250,editable:true})
                         } 
               console.log(json.billing)
         });
+        this.updateCart()
     }
 
     getCart(){
-      let getCart= ls.get('cart');
+     let getCart= ls.get('cart');
       if(getCart===''){}else{
         this.setState({cart:getCart})
+        
       }
+    }
+    updateCart(){
+      let{cart,subTotal}=this.state;
+      let total=subTotal;
+      for(var a=0;a<= cart.length-1;a++){
+         total= total+(cart[a].price*cart[a].quantity)
+       }
+      this.setState({subTotal:total})
+      
     }
     checkOut(){
       const {firstName,lastName,email,phone,address,city,area,delivery}=this.state;
@@ -102,13 +114,17 @@ import { Card, CardImg, CardBody,
                 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvd2Vla2x5ZmlzaGNsdWIuY29tIiwiaWF0IjoxNjEyNjA2NjQyLCJuYmYiOjE2MTI2MDY2NDIsImV4cCI6MTYxMzIxMTQ0MiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.APfUmhipRCDa-ylYZeOgdbmZIW1iZsjLovpjZAfBsjk'},
       body: JSON.stringify(data)})
       .then(response => response.json())
-      .then(json => { 
-       alert("Order Book Successfull")
+      .then(json => { if(json.id){
+                        alert("Order Book Successfull");
+                        this.setState({cart:[]});
+                        ls.set('cart',[]);
+                        }
+                        else{alert(json)}
         console.log("Order book",json); });
-      }
+      }else{alert("Please Enter Complete Details")}
     }
     render() {
-      const {qty}=this.state;
+      var {subTotal,delivery,cart,address,total}=this.state;
        return (
           <div style={{marginTop:20}}>
             <Container className="themed-container" fluid="lg" >
@@ -178,11 +194,11 @@ import { Card, CardImg, CardBody,
                 <CardHeader>Order Summary</CardHeader>
                     <CardBody style={{backgroundColor: "#f6f6f6"}}>
                     <CardTitle tag="h6">Address</CardTitle>
-                    <CardSubtitle >{this.state.address}</CardSubtitle>
+                    <CardSubtitle >{address}</CardSubtitle>
                     <hr style={{ color: '#c0c0c0', }} />
                     <CardTitle tag="h6">Your Order</CardTitle>
-                    {this.state.cart.length >0?
-                    this.state.cart.map((product,i) =>  
+                    {cart.length >0?
+                    cart.map((product,i) =>  
              
                 <Row>
                     <Col  md="3">
@@ -190,7 +206,7 @@ import { Card, CardImg, CardBody,
                     </Col>
                     <Col  md="5">
                         <CardTitle tag="h6" >{product.slug} </CardTitle>
-                        <CardTitle tag="h6" >Rs. {product.price*product.quantity}</CardTitle>
+                        <CardTitle tag="h6" >Rs. {product.price*product.quantity }</CardTitle>
                         
                     </Col>
                     <Col  md="3">
@@ -207,7 +223,7 @@ import { Card, CardImg, CardBody,
                     <Col>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
                       <Label size="md" >Sub Total</Label>
-                      <Label size="md" >Pkr. 500/-</Label>
+                      <Label size="md" >{subTotal}</Label>
                     </div>
                     </Col>
                   </Row>
@@ -215,7 +231,7 @@ import { Card, CardImg, CardBody,
                     <Col>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
                       <Label size="sm" >Delivery Fee</Label>
-                      <Label size="sm" >Pkr. {this.state.delivery}/-</Label>
+                      <Label size="sm" >Pkr. {delivery}/-</Label>
                     </div>
                     </Col>
                   </Row>
@@ -223,7 +239,7 @@ import { Card, CardImg, CardBody,
                     <Col>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
                       <Label size="lg" >Total</Label>
-                      <Label size="lg" >Pkr. 750/-</Label>
+                      <Label size="lg" >{ (delivery)+(subTotal) }</Label>
                     </div>
                     </Col>
                   </Row>

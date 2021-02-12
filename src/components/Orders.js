@@ -3,6 +3,7 @@ import { Card, CardImg, CardBody,
   CardTitle,Container,Row,Button,Input,Col,Label, CardHeader, CardSubtitle,FormGroup} from 'reactstrap';
   import { Link } from "react-router-dom";
   import SecureLS from 'secure-ls';
+  import moment from 'moment';
   var ls = new SecureLS({encodingType: 'aes'});
   
   export default class Orders extends React.Component {
@@ -35,30 +36,59 @@ import { Card, CardImg, CardBody,
             <Container className="themed-container" fluid="lg" >
             <Row>
            
-            <Col md="12">
+            <Col md="4">
                 <Card>
-                <CardHeader>My Orders</CardHeader>
+                <CardHeader>Active Orders</CardHeader>
                     <CardBody style={{backgroundColor: "#f6f6f6"}}>
-                    <hr style={{ color: '#c0c0c0', }} />
-        {this.state.orders.length >0?
+                    
+        {
             this.state.orders.map((product,i) =>  
-            product.line_items.map((items,i) => 
-             
-                <Row>
-                    <Col  md="3">
-                        <CardImg  style={{width:80,height:70,padding:0}} src={items.image} alt="Fish" />
+                product.status=='processing'?
+                
+                  <Row>
+                    <Col> 
+                      <Row> 
+                        <Col>{ moment(product.date_created).format('MM-DD-YYYY')}</Col>
+                        <Col>{product.total}</Col>
+                      </Row>
+                        <div style={{flexDirection:"row",display:"flex"}}>
+                          { product.line_items.map((items,i) => 
+                              <p style={{fontSize:11}}>{items.quantity}x {items.name} ,</p>
+                            ) }
+                        </div>
                     </Col>
-                    <Col  md="5">
-                        <CardTitle tag="h6" >{items.name} </CardTitle>
-                        <CardTitle tag="h6" >Rs. {items.currency}</CardTitle>
+                      
+                  </Row>:
+                      <div>
                         
+                      </div>
+          )}
+                  
+                    </CardBody>
+
+      <CardHeader>Past Orders</CardHeader>
+      <CardBody style={{backgroundColor: "#f6f6f6"}}>
+         {this.state.orders.map((product,i) =>  
+                product.status=='completed'?
+                
+                  <Row>
+                    <Col> 
+                      <Row> 
+                        <Col>{ moment(product.date_created).format('MM-DD-YYYY')}</Col>
+                        <Col>{product.total}</Col>
+                      </Row>
+                        <div style={{flexDirection:"row",display:"flex"}}>
+                          { product.line_items.map((items,i) => 
+                              <p style={{fontSize:11}}>{items.quantity}x {items.name} ,</p>
+                            ) }
+                        </div>
                     </Col>
-                    <Col  md="3">
-                       <Label size="sm" style={{padding:10,height:5}}>{items.quantity}</Label>
-                    </Col>
-                </Row>
-         ) ):<h6>Oops, looks like you haven't placed any orders yet.</h6>}
-              <hr style={{ color: '#c0c0c0', }} />
+                      
+                  </Row>:
+                      <div>
+                        
+                      </div>
+          )}
                   
                     </CardBody>
                 </Card>
