@@ -3,8 +3,10 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
 } from "react-router-dom";
+import SecureLS from 'secure-ls';
+
 import Home from './components/Home';
 import About from './components/About';
 import Login from './components/Login';
@@ -15,8 +17,19 @@ import Cart from './components/Cart';
 import Orders from './components/Orders';
 import Profile from './components/Profile';
 import Shop from './components/Shop';
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, } from 'reactstrap';
-
+import {   Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  NavbarText } from 'reactstrap';
+var ls = new SecureLS({encodingType: 'aes'});
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -25,7 +38,6 @@ export default function App() {
     <Router>
       <div>
       <Navbar  style={{backgroundColor:"#006994",color:"#FFFFFF"}} light expand="md">
-        
         <NavbarBrand style={{color:"#FFFFFF"}} href="/">
         <img src={require('./Image/logo.png')} style={{width:70, marginTop: -7}} />
           Weekly Fish Club</NavbarBrand>
@@ -41,19 +53,35 @@ export default function App() {
             <NavItem>
               <NavLink style={{color:"#FFFFFF"}} href="/gallery">Gallery</NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink style={{color:"#FFFFFF"}} href="/login">Login</NavLink>
-            </NavItem>
+            
             <NavItem>
               <NavLink style={{color:"#FFFFFF"}} href="/cart">Cart</NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink style={{color:"#FFFFFF"}} href="/Orders">My Orders</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink style={{color:"#FFFFFF"}} href="/Profile">Profile</NavLink>
-            </NavItem>
             
+            {ls.get("user")==''?
+            <NavItem>
+              <NavLink style={{color:"#FFFFFF"}} href="/login">Login</NavLink>
+            </NavItem>
+            :
+            
+          <UncontrolledDropdown nav inNavbar>
+              <DropdownToggle nav caret>
+              <NavLink style={{color:"#FFFFFF"}} >Profile</NavLink>
+              </DropdownToggle>
+              <DropdownMenu right>
+                <DropdownItem>
+                <NavLink  href="/Orders">My Orders</NavLink>
+                </DropdownItem>
+                <DropdownItem>
+                <NavLink  href="/Profile">Profile</NavLink>
+                </DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem>
+                <NavLink  href="/Profile">Logout</NavLink>
+                </DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+            }
           </Nav>
         </Collapse>
       </Navbar>
@@ -72,7 +100,7 @@ export default function App() {
           <Route path="/gallery">
             <Category />
           </Route>
-          <Route path="/product/:id">
+          <Route path="/product">
             <Product />
           </Route>
           <Route path="/login">

@@ -2,16 +2,19 @@ import React from "react";
 import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Label,
  } from 'reactstrap';
   import {
-    Link
+    Link,
+    Redirect
   } from "react-router-dom";
   import SecureLS from 'secure-ls';
   var ls = new SecureLS({encodingType: 'aes'});
+ 
   export default class Login extends React.Component {
     constructor(props) {
       super(props);
       this.state = {username:'',
                     password:'',
-                    email:''};
+                    email:'',
+                    navigate:false};
     }
   
 
@@ -29,14 +32,17 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
              ls.set('user', { token: json.token,
                               email: json.user_email,
                               user: json.user_nicename})
-              alert("Thank You For Login")
-                        } else{ alert(json.message)}
-                                      });
+              this.setState({navigate:true})
+                        } else{ alert(json.message)}  });
                 }else{alert("Username or Password empty")} 
     }
 
 
     render() {
+      const { navigate } = this.state
+      if (navigate) {
+        return <Redirect to="/product" push={true} />
+      }
        return (
           <div style={{marginTop:'10%'}}>
             <Container className="themed-container" fluid="sm" >

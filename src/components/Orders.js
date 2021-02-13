@@ -35,14 +35,13 @@ import { Card, CardImg, CardBody,
           <div style={{marginTop:20}}>
             <Container className="themed-container" fluid="lg" >
             <Row>
-           
-            <Col md="4">
+           <Col md="3"></Col>
+            <Col md="5">
                 <Card>
                 <CardHeader>Active Orders</CardHeader>
                     <CardBody style={{backgroundColor: "#f6f6f6"}}>
                     
-        {
-            this.state.orders.map((product,i) =>  
+        {this.state.orders.map((product,i) =>  
                 product.status=='processing'?
                 
                   <Row>

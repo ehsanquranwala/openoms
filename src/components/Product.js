@@ -20,8 +20,9 @@ import { Card, CardImg, CardBody,
     }
     getProduct(){
       const productId= ls.get('productId');
+      const token=ls.get('token')
       fetch(`https://www.weeklyfishclub.com/wp-json/wc/v3/products/${productId}`, {method:'GET', 
-        headers: {'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvd2Vla2x5ZmlzaGNsdWIuY29tIiwiaWF0IjoxNjEyNjA2NjQyLCJuYmYiOjE2MTI2MDY2NDIsImV4cCI6MTYxMzIxMTQ0MiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.APfUmhipRCDa-ylYZeOgdbmZIW1iZsjLovpjZAfBsjk'}})
+        headers: {'Authorization': 'Bearer ' + token}})
         .then(response => response.json())
         .then(json => { this.setState({product:json,image:json.images[0].src}); 
                       //  console.log(json.images[0].src); 

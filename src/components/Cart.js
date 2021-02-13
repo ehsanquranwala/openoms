@@ -5,6 +5,7 @@ import { Card, CardImg, CardBody,
   import SecureLS from 'secure-ls';
   var ls = new SecureLS({encodingType: 'aes'});
   
+  const token=ls.get('token')
   export default class Home extends React.Component {
     constructor(props) {
       super(props);
@@ -27,14 +28,14 @@ import { Card, CardImg, CardBody,
     
     componentDidMount(){
       this.getCart()
-      this.getCustomer()
+      
     }
     async getCustomer(){
       const user=ls.get('user');
         await fetch(`https://www.weeklyfishclub.com/wp-json/wc/v3/customers/12`,
           {method:'GET', 
             headers: {
-            'Authorization':'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvd2Vla2x5ZmlzaGNsdWIuY29tIiwiaWF0IjoxNjEyNjA2NjQyLCJuYmYiOjE2MTI2MDY2NDIsImV4cCI6MTYxMzIxMTQ0MiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.APfUmhipRCDa-ylYZeOgdbmZIW1iZsjLovpjZAfBsjk'}})
+            'Authorization':'Bearer ' + token}})
           .then(response => response.json())
           .then(json => { 
             if(json.id){
@@ -57,9 +58,10 @@ import { Card, CardImg, CardBody,
 
     getCart(){
      let getCart= ls.get('cart');
-      if(getCart===''){}else{
+      if(getCart===''){this.setState({delivery:0})}
+      else{
         this.setState({cart:getCart})
-        
+        this.getCustomer()  
       }
     }
     updateCart(){
@@ -111,7 +113,7 @@ import { Card, CardImg, CardBody,
                         ]};
       fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/orders', {method:'POST', 
       headers: {'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvd2Vla2x5ZmlzaGNsdWIuY29tIiwiaWF0IjoxNjEyNjA2NjQyLCJuYmYiOjE2MTI2MDY2NDIsImV4cCI6MTYxMzIxMTQ0MiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.APfUmhipRCDa-ylYZeOgdbmZIW1iZsjLovpjZAfBsjk'},
+                'Authorization': 'Bearer ' + token},
       body: JSON.stringify(data)})
       .then(response => response.json())
       .then(json => { if(json.id){
@@ -124,7 +126,8 @@ import { Card, CardImg, CardBody,
       }else{alert("Please Enter Complete Details")}
     }
     render() {
-      var {subTotal,delivery,cart,address,total}=this.state;
+      var {subTotal,delivery,cart,address}=this.state;
+     const total=Number(delivery)+Number(subTotal);
        return (
           <div style={{marginTop:20}}>
             <Container className="themed-container" fluid="lg" >
@@ -239,7 +242,7 @@ import { Card, CardImg, CardBody,
                     <Col>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
                       <Label size="lg" >Total</Label>
-                      <Label size="lg" >{ (delivery)+(subTotal) }</Label>
+                      <Label size="lg" >{total}</Label>
                     </div>
                     </Col>
                   </Row>
