@@ -2,11 +2,6 @@ import React from "react";
 import { Button,Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle,Container,Row,Col,List} from 'reactstrap';
   import SecureLS from 'secure-ls';
-  import TreeMenu from 'react-simple-tree-menu';
-  import CheckboxTree from 'react-checkbox-tree';
-  import { enableRipple } from '@syncfusion/ej2-base';
-
-  import { TreeViewComponent } from '@syncfusion/ej2-react-navigations';
   import DropdownTreeSelect from 'react-dropdown-tree-select';
   import 'react-dropdown-tree-select/dist/styles.css';
   var ls = new SecureLS({encodingType: 'aes'});
@@ -16,37 +11,34 @@ import { Button,Card, CardImg, CardText, CardBody,
       super(props);
       this.state = {category:[],
                     product:[],
-                    catId:0,
-                    checked: [],
-                    expanded: [],};
+                    catId:0,};
                    
 
                   
               }
-              
-              nodeChecked(args) {
-                alert("The checked node's id: " + this.checkedNodes); }      
+                  
     
     componentDidMount(){
     this.getCategory()
     }
     getCategory(){
       let data=[];
-      fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/products/categories?hide_empty=false', {method:'GET', 
-        headers: {'Authorization': 'Bearer ' + token}})
+      fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/products/categories?hide_empty=false', 
+        { method:'GET', 
+          headers: {'Authorization': 'Bearer ' + token}})
         .then(response => response.json())
         .then(json => { //this.setState({category:json}); 
-        console.log("json",json)  
+        
         for(var a=0;a<= json.length-1;a++){
           let tempData1=[];
-          console.log(json[a].name)
+        
                 for(var b=0;b<= json.length-1;b++){
-                  console.log(json[b].name)
+                 
                       if(json[a].id==json[b].parent){
                           let tempData2=[];
                             
                             for(var c=0;c<= json.length-1;c++){
-                              console.log(json[c].name)
+                             
                                       if(json[b].id==json[c].parent){
                                             tempData2.push({'value':json[c].id,
                                                             'label':json[c].name,
