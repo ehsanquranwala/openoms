@@ -4,6 +4,11 @@ import { Button,Card, CardImg, CardText, CardBody,
   import SecureLS from 'secure-ls';
   import TreeMenu from 'react-simple-tree-menu';
   import CheckboxTree from 'react-checkbox-tree';
+  import { enableRipple } from '@syncfusion/ej2-base';
+
+  import { TreeViewComponent } from '@syncfusion/ej2-react-navigations';
+  import DropdownTreeSelect from 'react-dropdown-tree-select';
+  import 'react-dropdown-tree-select/dist/styles.css';
   var ls = new SecureLS({encodingType: 'aes'});
   const token=ls.get('token')
   export default class Category extends React.Component {
@@ -14,7 +19,14 @@ import { Button,Card, CardImg, CardText, CardBody,
                     catId:0,
                     checked: [],
                     expanded: [],};
-    }
+                   
+
+                  
+              }
+              
+              nodeChecked(args) {
+                alert("The checked node's id: " + this.checkedNodes); }      
+    
     componentDidMount(){
     this.getCategory()
     }
@@ -78,15 +90,33 @@ import { Button,Card, CardImg, CardText, CardBody,
         
        });
     }
+    
     render() {
-      const nodes = [{
-        value: 'mars',
-        label: 'Mars',
+      const data = {
+        label: 'search me',
+        value: 'searchme',
         children: [
-            { value: 'phobos', label: 'Phobos' },
-            { value: 'deimos', label: 'Deimos' },
+          {
+            label: 'search me too',
+            value: 'searchmetoo',
+            children: [
+              {
+                label: 'No one can get me',
+                value: 'anonymous',
+              },
+            ],
+          },
         ],
-    }];
+      }
+      const onChange = (currentNode, selectedNodes) => {
+        console.log('onChange::', currentNode, selectedNodes)
+      }
+      const onAction = (node, action) => {
+        console.log('onAction::', action, node)
+      }
+      const onNodeToggle = currentNode => {
+        console.log('onNodeToggle::', currentNode)
+      }
        return (
           <div style={{marginTop:20}}>
             <Container className="themed-container" fluid="sm" >
@@ -94,18 +124,15 @@ import { Button,Card, CardImg, CardText, CardBody,
             <Col md="4">
             
               <h5>Category</h5>
-              <CheckboxTree
-                nodes={this.state.category}
-                checked={this.state.checked}
-                expanded={this.state.expanded}
-                onCheck={checked => this.setState({ checked })}
-                onExpand={expanded => this.setState({ expanded })}
-                onClick={(e)=>{alert(e.value)}}
-            />
+              <DropdownTreeSelect
+                            data={this.state.category} 
+                            onChange={onChange}
+                            onAction={onAction} 
+                            onNodeToggle={onNodeToggle} />
             </Col>
               <Col>
               <h5>Fishes</h5><Row>
-              
+             
                 {this.state.product.map((product) =>  <Col sm="4">
                 
                   <Card>
