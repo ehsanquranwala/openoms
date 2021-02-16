@@ -21,47 +21,41 @@ import { Button,Card, CardImg, CardText, CardBody,
     componentDidMount(){
     this.getCategory()
     }
-    getCategory(){
+    loop(json){
       let data=[];
+      for(var a=0;a<= json.length-1;a++){
+        let tempData1=[];
+      
+              for(var b=0;b<= json.length-1;b++){
+               
+                    if(json[a].id==json[b].parent){
+                        
+                                tempData1.push({'value':json[b].id,
+                                                'label':json[b].name,
+                                                })
+                          json.splice(b, 1); 
+                    }
+                  
+                }
+
+        data.push({'value':json[a].id,
+                    'label':json[a].name,
+                    'children':tempData1,
+                    })
+        
+       }
+
+       console.log("array",data) 
+    }
+    getCategory(){
+      
       fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/products/categories?hide_empty=false', 
         { method:'GET', 
           headers: {'Authorization': 'Bearer ' + token}})
         .then(response => response.json())
         .then(json => { //this.setState({category:json}); 
         
-        for(var a=0;a<= json.length-1;a++){
-          let tempData1=[];
-        
-                for(var b=0;b<= json.length-1;b++){
-                 
-                      if(json[a].id==json[b].parent){
-                          let tempData2=[];
-                            
-                            for(var c=0;c<= json.length-1;c++){
-                             
-                                      if(json[b].id==json[c].parent){
-                                            tempData2.push({'value':json[c].id,
-                                                            'label':json[c].name,
-                                                            })
-                                            json.splice(c, 1); 
-                                      }
-                            } 
-                                  tempData1.push({'value':json[b].id,
-                                                  'label':json[b].name,
-                                                  'children':tempData2})
-                              json.splice(b, 1); 
-                      }
-                    
-                  }
-
-          data.push({'value':json[a].id,
-                      'label':json[a].name,
-                      'children':tempData1,
-                      })
-          
-         }
-         console.log("array",data)  
-         this.setState({category:data})
+        this.loop(json)
        });
     }
     getProduct(id){
@@ -120,7 +114,9 @@ import { Button,Card, CardImg, CardText, CardBody,
                             data={this.state.category} 
                             onChange={onChange}
                             onAction={onAction} 
-                            onNodeToggle={onNodeToggle} />
+                            onNodeToggle={onNodeToggle} 
+                            showDropdown={false}
+                            />
             </Col>
               <Col>
               <h5>Fishes</h5><Row>
