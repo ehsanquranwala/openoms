@@ -28,7 +28,8 @@ import {   Collapse,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  NavbarText } from 'reactstrap';
+  NavbarText ,
+CardImg} from 'reactstrap';
 var ls = new SecureLS({encodingType: 'aes'});
 export default function App() {
   
@@ -42,7 +43,7 @@ export default function App() {
       <div>
       <Navbar  style={{backgroundColor:"#006994",color:"#FFFFFF"}} light expand="md">
         <NavbarBrand style={{color:"#FFFFFF"}} href="/">
-        <img src={require('./Image/logo.png')} style={{width:70, marginTop: -7}} />
+        <img src={'./Image/logo.png'} style={{width:70, marginTop: -7}} />
           Weekly Fish Club</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>

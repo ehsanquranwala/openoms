@@ -3,6 +3,7 @@ import { Button,Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle,Container,Row,Col,List} from 'reactstrap';
   import SecureLS from 'secure-ls';
   import TreeMenu from 'react-simple-tree-menu';
+  import CheckboxTree from 'react-checkbox-tree';
   var ls = new SecureLS({encodingType: 'aes'});
   const token=ls.get('token')
   export default class Category extends React.Component {
@@ -10,7 +11,9 @@ import { Button,Card, CardImg, CardText, CardBody,
       super(props);
       this.state = {category:[],
                     product:[],
-                    catId:0};
+                    catId:0,
+                    checked: [],
+                    expanded: [],};
     }
     componentDidMount(){
     this.getCategory()
@@ -33,23 +36,23 @@ import { Button,Card, CardImg, CardText, CardBody,
                             for(var c=0;c<= json.length-1;c++){
                               console.log(json[c].name)
                                       if(json[b].id==json[c].parent){
-                                            tempData2.push({'key':json[c].id,
+                                            tempData2.push({'value':json[c].id,
                                                             'label':json[c].name,
                                                             })
                                             json.splice(c, 1); 
                                       }
                             } 
-                                  tempData1.push({'key':json[b].id,
+                                  tempData1.push({'value':json[b].id,
                                                   'label':json[b].name,
-                                                  'nodes':tempData2})
+                                                  'children':tempData2})
                               json.splice(b, 1); 
                       }
                     
                   }
 
-          data.push({'key':json[a].id,
+          data.push({'value':json[a].id,
                       'label':json[a].name,
-                      'nodes':tempData1,
+                      'children':tempData1,
                       })
           
          }
@@ -76,6 +79,14 @@ import { Button,Card, CardImg, CardText, CardBody,
        });
     }
     render() {
+      const nodes = [{
+        value: 'mars',
+        label: 'Mars',
+        children: [
+            { value: 'phobos', label: 'Phobos' },
+            { value: 'deimos', label: 'Deimos' },
+        ],
+    }];
        return (
           <div style={{marginTop:20}}>
             <Container className="themed-container" fluid="sm" >
@@ -83,10 +94,14 @@ import { Button,Card, CardImg, CardText, CardBody,
             <Col md="4">
             
               <h5>Category</h5>
-              <TreeMenu data={this.state.category} 
-              debounceTime={125}
-              disableKeyboard={false}
-              hasSearch/>
+              <CheckboxTree
+                nodes={this.state.category}
+                checked={this.state.checked}
+                expanded={this.state.expanded}
+                onCheck={checked => this.setState({ checked })}
+                onExpand={expanded => this.setState({ expanded })}
+                onClick={(e)=>{alert(e.value)}}
+            />
             </Col>
               <Col>
               <h5>Fishes</h5><Row>
