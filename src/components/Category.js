@@ -44,8 +44,7 @@ import { Button,Card, CardImg, CardText, CardBody,
                     })
         
        }
-
-       console.log("array",data) 
+       console.log("array",json) 
     }
     getCategory(){
       
