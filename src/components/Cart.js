@@ -4,7 +4,6 @@ import { Card, CardImg, CardBody,
   import { Link } from "react-router-dom";
   import SecureLS from 'secure-ls';
   var ls = new SecureLS({encodingType: 'aes'});
-  
   const token=ls.get('token')
   export default class Home extends React.Component {
     constructor(props) {
@@ -20,7 +19,7 @@ import { Card, CardImg, CardBody,
                     city:'',
                     area:'',
                     delivery:250,
-                    editable:false,
+                    readonly:false,
                     subTotal:0,
                     total:0
                     };
@@ -46,12 +45,12 @@ import { Card, CardImg, CardBody,
                           address:json.billing.address_1,
                           city:json.billing.city,
                           area:json.billing.address_2,
-                          delivery:json.billing.postcode
+                          delivery:json.billing.postcode,
+                          readonly:true
                            })} 
             else{ 
-              this.setState({ delivery:250,editable:true})
+              this.setState({ delivery:250,editable:false})
                         } 
-              console.log(json.billing)
         });
         this.updateCart()
     }
@@ -118,7 +117,7 @@ import { Card, CardImg, CardBody,
       .then(response => response.json())
       .then(json => { if(json.id){
                         alert("Order Book Successfull");
-                        this.setState({cart:[]});
+                        this.setState({cart:[],subTotal:0,total:0});
                         ls.set('cart',[]);
                         }
                         else{alert(json)}
@@ -126,7 +125,7 @@ import { Card, CardImg, CardBody,
       }else{alert("Please Enter Complete Details")}
     }
     render() {
-      var {subTotal,delivery,cart,address}=this.state;
+      var {subTotal,delivery,cart,address,readonly}=this.state;
      const total=Number(delivery)+Number(subTotal);
        return (
           <div style={{marginTop:20}}>
@@ -137,33 +136,34 @@ import { Card, CardImg, CardBody,
              <Card>
                <CardHeader>Customer Details</CardHeader>
               <CardBody style={{backgroundColor: "#f6f6f6"}}>
-              <Row>
-                <Col md="6">
-                  <FormGroup>
-                    <Label >First Name</Label>
-                    <Input  name='id' placeholder='Enter First Name' value={this.state.firstName} onChange={ (e)=>this.setState({firstName: e.target.value})}  required></Input>
-                  </FormGroup>
-                </Col>
-                <Col md="6">
-                  <FormGroup>
-                    <Label >Last Name</Label>
-                    <Input  name='pass' placeholder='Enter Last Name' value={this.state.lastName} onChange={ (e)=>this.setState({lastName: e.target.value})} required></Input>
-                  </FormGroup>
-                  </Col>
-                  </Row>
+                
                   <Row>
                 <Col md="6">
                   <FormGroup>
-                    <Label >Email Address</Label>
-                    <Input type='email'  name='email' placeholder='Enter Email' value={this.state.email} onChange={ (e)=>this.setState({email: e.target.value}) } required></Input>
+                    <Label >Email Address *</Label>
+                    <Input readOnly={readonly} type='email'  name='email' placeholder='Enter Email' value={this.state.email} onChange={ (e)=>this.setState({email: e.target.value}) } required></Input>
                   </FormGroup>
                   </Col>
                   <Col md="6">
                   <FormGroup>
-                    <Label >Phone</Label>
+                    <Label >Phone *</Label>
                     <Input type='number'  name='phone' placeholder='Enter Phone' value={this.state.phone} onChange={ (e)=>this.setState({phone: e.target.value})} required></Input>
                   </FormGroup> 
                   </Col></Row>
+                  <Row>
+                    <Col md="6">
+                      <FormGroup>
+                        <Label >First Name</Label>
+                        <Input  name='id' placeholder='Enter First Name' value={this.state.firstName} onChange={ (e)=>this.setState({firstName: e.target.value})}  required></Input>
+                      </FormGroup>
+                    </Col>
+                    <Col md="6">
+                      <FormGroup>
+                        <Label >Last Name</Label>
+                        <Input  name='pass' placeholder='Enter Last Name' value={this.state.lastName} onChange={ (e)=>this.setState({lastName: e.target.value})} required></Input>
+                      </FormGroup>
+                    </Col>
+                </Row>
                   <Row>
                 <Col md="12">
                   <FormGroup>

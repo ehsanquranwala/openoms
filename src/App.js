@@ -8,15 +8,15 @@ import {
 import SecureLS from 'secure-ls';
 
 import Home from './components/Home';
-import About from './components/About';
 import Login from './components/Login';
 import Register from './components/Register';
 import Category from './components/Category';
+import Gallery from './components/Gallery';
 import Product from './components/Product';
 import Cart from './components/Cart';
 import Orders from './components/Orders';
 import Profile from './components/Profile';
-import Shop from './components/Shop';
+
 import {   Collapse,
   Navbar,
   NavbarToggler,
@@ -31,10 +31,13 @@ import {   Collapse,
   NavbarText } from 'reactstrap';
 var ls = new SecureLS({encodingType: 'aes'});
 export default function App() {
+  
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
+  
   return (
+    
     <Router>
       <div>
       <Navbar  style={{backgroundColor:"#006994",color:"#FFFFFF"}} light expand="md">
@@ -45,10 +48,10 @@ export default function App() {
         <Collapse isOpen={isOpen} navbar>
           <Nav  className="mr-auto" navbar>
             <NavItem>
-              <NavLink style={{color:"#FFFFFF"}}  href="/shop">Shop</NavLink>
+              <NavLink style={{color:"#FFFFFF"}}  href="/">Shop</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink style={{color:"#FFFFFF"}} href="/about">About</NavLink>
+              <NavLink style={{color:"#FFFFFF"}} href="/category">Category</NavLink>
             </NavItem>
             <NavItem>
               <NavLink style={{color:"#FFFFFF"}} href="/gallery">Gallery</NavLink>
@@ -77,7 +80,7 @@ export default function App() {
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
-                <NavLink  href="/Profile">Logout</NavLink>
+                <NavLink  onClick={()=>{ls.set('user', '')}} href="/login">Logout</NavLink>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
@@ -88,16 +91,14 @@ export default function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-        <Route path="/shop">
-            <Home />
-          </Route>
-          <Route path="/about">
-            <About />
-          </Route>
+          
          <Route path="/register">
             <Register />
           </Route>
           <Route path="/gallery">
+            <Gallery />
+          </Route>
+          <Route path="/category">
             <Category />
           </Route>
           <Route path="/product">
@@ -114,6 +115,9 @@ export default function App() {
           </Route>
           <Route path="/profile">
             <Profile />
+          </Route>
+          <Route path="/">
+            <Home />
           </Route>
         </Switch>
       </div>

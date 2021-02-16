@@ -16,8 +16,6 @@ import { Card, CardImg, CardText, CardBody,
                     };
     }
     componentDidMount(){
-      
-      if(ls.get('token')=='' ){this.getGuestUser()}
       this.getProduct()
      }
     
@@ -27,8 +25,11 @@ import { Card, CardImg, CardText, CardBody,
         method:'GET', 
         headers: {'Authorization': 'Bearer ' + token}})
         .then(response => response.json())
-        .then(json => {this.setState({product:json}); 
-        console.log(json);
+        .then(json => {
+          if(json.length>0){
+          this.setState({product:json});}
+          else{this.getGuestUser()} 
+        
        });
     }
     getGuestUser(){
@@ -42,6 +43,7 @@ import { Card, CardImg, CardText, CardBody,
         .then(json => { 
           if(json.token!=undefined){
              ls.set('token',  json.token)
+             this.getProduct()
           } else{ alert(json.message)}
                                       });
                 
@@ -64,8 +66,9 @@ import { Card, CardImg, CardText, CardBody,
                 {this.state.product.map((product) =>  <Col sm="3">
                   <Card>
                     <CardBody  style={{backgroundColor: "#f6f6f6"}}>
+                      {product.images[0]?
                     <CardImg onClick={()=>{this.setParam(product.id)}} top width="20%" style={{width:200,height:150}} src={product.images[0].src} alt="Fish" />
-                    <CardTitle tag="h5" >{product.slug} </CardTitle>
+                      :<div></div>}<CardTitle tag="h5" >{product.slug} </CardTitle>
                     <CardTitle tag="h6" color="blue">Rs. {product.price}</CardTitle>
                         
                 </CardBody>

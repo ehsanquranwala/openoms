@@ -34,6 +34,7 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
                               user: json.user_nicename})
               this.setState({navigate:true})
                         } else{ alert(json.message)}  });
+                        
                 }else{alert("Username or Password empty")} 
     }
 

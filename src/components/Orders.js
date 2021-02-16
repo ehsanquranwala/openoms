@@ -6,6 +6,7 @@ import { Card, CardImg, CardBody,
   import moment from 'moment';
   var ls = new SecureLS({encodingType: 'aes'});
   
+  const token=ls.get('token')
   export default class Orders extends React.Component {
     constructor(props) {
       super(props);
@@ -22,11 +23,12 @@ import { Card, CardImg, CardBody,
         await fetch(`https://www.weeklyfishclub.com/wp-json/wc/v3/orders?search=ymohsin102@gmail.com`,
           {method:'GET', 
             headers: {
-            'Authorization':'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvd2Vla2x5ZmlzaGNsdWIuY29tIiwiaWF0IjoxNjEyNjA2NjQyLCJuYmYiOjE2MTI2MDY2NDIsImV4cCI6MTYxMzIxMTQ0MiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.APfUmhipRCDa-ylYZeOgdbmZIW1iZsjLovpjZAfBsjk'}})
+            'Authorization':'Bearer ' + token}})
           .then(response => response.json())
           .then(json => { 
-             this.setState({orders:json})
-             console.log(json)
+            if(json.length>0){
+              this.setState({orders:json})
+            }
         });
     }
    render() {
@@ -41,7 +43,7 @@ import { Card, CardImg, CardBody,
                 <CardHeader>Active Orders</CardHeader>
                     <CardBody style={{backgroundColor: "#f6f6f6"}}>
                     
-        {this.state.orders.map((product,i) =>  
+             {this.state.orders.map((product,i) =>  
                 product.status=='processing'?
                 
                   <Row>
@@ -59,9 +61,8 @@ import { Card, CardImg, CardBody,
                       
                   </Row>:
                       <div>
-                        
                       </div>
-          )}
+                )}
                   
                     </CardBody>
 
