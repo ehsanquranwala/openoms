@@ -1,6 +1,5 @@
 import React from "react";
-import { Button,Card, CardImg, CardText, CardBody,
-  CardTitle, CardHeader,Container,Row,Col,Input,FormGroup,Label} from 'reactstrap';
+import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Label} from 'reactstrap';
   import {
     Link
   } from "react-router-dom";
@@ -52,7 +51,7 @@ import { Button,Card, CardImg, CardText, CardBody,
 
       fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/customers', {method:'POST', 
         headers: {'Content-Type': 'application/json',
-                  'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvd2Vla2x5ZmlzaGNsdWIuY29tIiwiaWF0IjoxNjEyNjA2NjQyLCJuYmYiOjE2MTI2MDY2NDIsImV4cCI6MTYxMzIxMTQ0MiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.APfUmhipRCDa-ylYZeOgdbmZIW1iZsjLovpjZAfBsjk'},
+                  'Authorization': 'Bearer '+'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvd2Vla2x5ZmlzaGNsdWIuY29tIiwiaWF0IjoxNjEyNjA2NjQyLCJuYmYiOjE2MTI2MDY2NDIsImV4cCI6MTYxMzIxMTQ0MiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.APfUmhipRCDa-ylYZeOgdbmZIW1iZsjLovpjZAfBsjk'},
         body: JSON.stringify(data)})
         .then(response => response.json())
         .then(json => { 

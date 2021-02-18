@@ -110,10 +110,11 @@ import { Card, CardImg, CardBody,
                                 "total": delivery
                               }
                         ]};
-      fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/orders', {method:'POST', 
-      headers: {'Content-Type': 'application/json',
+      fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/orders', 
+      { method:'POST', 
+        headers: {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + token},
-      body: JSON.stringify(data)})
+        body: JSON.stringify(data)})
       .then(response => response.json())
       .then(json => { if(json.id){
                         alert("Order Book Successfull");

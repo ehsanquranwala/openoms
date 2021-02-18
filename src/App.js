@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { Fragment ,Component} from "react";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
 } from "react-router-dom";
-import SecureLS from 'secure-ls';
-
+import AppHeader from './layout/Header';
 import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -17,112 +16,45 @@ import Cart from './components/Cart';
 import Orders from './components/Orders';
 import Profile from './components/Profile';
 
-import {   Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText ,
-CardImg} from 'reactstrap';
-var ls = new SecureLS({encodingType: 'aes'});
-export default function App() {
-  
-  const [isOpen, setIsOpen] = useState(false);
 
-  const toggle = () => setIsOpen(!isOpen);
-  
-  return (
-    
+class App extends Component {
+  render() {
+      return (
     <Router>
-      <div>
-      <Navbar  style={{backgroundColor:"#006994",color:"#FFFFFF"}} light expand="md">
-        <NavbarBrand style={{color:"#FFFFFF"}} href="/">
-        <img src={'./Image/logo.png'} style={{width:70, marginTop: -7}} />
-          Weekly Fish Club</NavbarBrand>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav  className="mr-auto" navbar>
-            <NavItem>
-              <NavLink style={{color:"#FFFFFF"}}  href="/">Shop</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink style={{color:"#FFFFFF"}} href="/category">Category</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink style={{color:"#FFFFFF"}} href="/gallery">Gallery</NavLink>
-            </NavItem>
-            
-            <NavItem>
-              <NavLink style={{color:"#FFFFFF"}} href="/cart">Cart</NavLink>
-            </NavItem>
-            
-            {ls.get("user")==''?
-            <NavItem>
-              <NavLink style={{color:"#FFFFFF"}} href="/login">Login</NavLink>
-            </NavItem>
-            :
-            
-          <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-              <NavLink style={{color:"#FFFFFF"}} >Profile</NavLink>
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>
-                <NavLink  href="/Orders">My Orders</NavLink>
-                </DropdownItem>
-                <DropdownItem>
-                <NavLink  href="/Profile">Profile</NavLink>
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>
-                <NavLink  onClick={()=>{ls.set('user', '')}} href="/login">Logout</NavLink>
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-            }
-          </Nav>
-        </Collapse>
-      </Navbar>
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+      <Fragment>
+            <AppHeader/>
         <Switch>
-          
-         <Route path="/register">
-            <Register />
+          <Route path="/register" component={Register}>
+            
           </Route>
-          <Route path="/gallery">
-            <Gallery />
+          <Route path="/gallery" component={Gallery}>
+            
           </Route>
-          <Route path="/category">
-            <Category />
+          <Route path="/category" component={Category}>
+            
           </Route>
-          <Route path="/product">
-            <Product />
+          <Route path="/product" component={Product}>
+            
           </Route>
-          <Route path="/login">
+          <Route path="/login" component={Login}>
             <Login />
           </Route>
-          <Route path="/cart">
-            <Cart />
+          <Route path="/cart" component={Cart}>
+            
           </Route>
-          <Route path="/orders">
-            <Orders />
+          <Route path="/orders" component={Orders}>
+            
           </Route>
-          <Route path="/profile">
-            <Profile />
+          <Route path="/profile" Component={Profile}>
+            
           </Route>
-          <Route path="/">
-            <Home />
+          <Route path="/" component={Home}>
+            
           </Route>
         </Switch>
-      </div>
+      </Fragment>
     </Router>
   );
 }
-
+}
+export default App;

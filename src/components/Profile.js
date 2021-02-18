@@ -1,7 +1,6 @@
 import React from "react";
-import { Card, CardImg, CardBody,
-  CardTitle,Container,Row,Button,Input,Col,Label, CardHeader, CardSubtitle,FormGroup} from 'reactstrap';
-  import { Link } from "react-router-dom";
+import { Card,  CardBody,Container,Row,Input,Col,Label, CardHeader, FormGroup} from 'reactstrap';
+  
   import SecureLS from 'secure-ls';
   var ls = new SecureLS({encodingType: 'aes'});
   
