@@ -19,11 +19,11 @@ import { Card, CardImg, CardBody,
     }
     
     componentDidMount(){
-      console.log(this.props.selectProduct)
+     // console.log(this.props.selectProduct)
     }
   
     addCart(qty,desc,slug,price,image){
-      const productId= ls.get('productId');
+      const productId= this.props.selectProduct.id
       let cart= ls.get('cart');
       if(cart!=''){
           cart.push({product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image})

@@ -4,14 +4,20 @@ import { Card, CardImg, CardBody,
   import { Link } from "react-router-dom";
   import SecureLS from 'secure-ls';
   import moment from 'moment';
+  import { connect } from "react-redux";
+  import {
+    Redirect
+  } from "react-router-dom";
+  import { products, addtocart, category,addArticle,user ,selectProduct} from "../js/actions/index";
   var ls = new SecureLS({encodingType: 'aes'});
   
   const token=ls.get('token')
-  export default class Orders extends React.Component {
+ class Orders extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
                     orders:[],
+                    navigate:false
                     };
     }
     
@@ -32,6 +38,10 @@ import { Card, CardImg, CardBody,
         });
     }
    render() {
+    const { navigate } = this.state
+    if (navigate) {
+      return <Redirect to="/product" push={true} />
+    }
       const {qty}=this.state;
        return (
           <div style={{marginTop:20}}>
@@ -39,9 +49,9 @@ import { Card, CardImg, CardBody,
             <Row>
            <Col md="3"></Col>
             <Col md="5">
-                <Card>
-                <CardHeader>Active Orders</CardHeader>
-                    <CardBody style={{backgroundColor: "#f6f6f6"}}>
+            <Card>
+            <CardHeader>Active Orders</CardHeader>
+                <CardBody style={{backgroundColor: "#f6f6f6"}}>
                     
              {this.state.orders.map((product,i) =>  
                 product.status=='processing'?
@@ -93,11 +103,58 @@ import { Card, CardImg, CardBody,
                     </CardBody>
                 </Card>
             </Col>
+            <Col md="4">
+              <Card>
+                <CardHeader>Suggestions</CardHeader>
+                    <CardBody style={{backgroundColor: "#f6f6f6"}}>
+                   
+                    {this.props.product.length >0?
+                    this.props.product.map((product,i) =>  
+                    
+                  <Row  key={product.id} 
+                        onClick={()=>{this.props.selectProduct(this.props.product[i])
+                                      this.setState({navigate:true})
+                    }}>
+                    <Col  md="4" >
+                    {product.images[0]?
+                        <CardImg  style={{width:80,height:70,padding:0}} src={product.images[0].src}  />
+                        :<div></div>}
+                        </Col>
+                    <Col  md="6">
+                        <CardTitle tag="h6" >{product.slug} </CardTitle>
+                        <CardTitle tag="h6" >Rs. {product.price}</CardTitle>
+                    </Col>
+                 
+                </Row>
+                 ):<h6>No Product Found</h6>}
+              
+                    </CardBody>
+                </Card>
+              </Col>
             </Row> 
             </Container>
           </div>
        );
     }
  }
+ const mapStateToProps = state => {
+  return {
+    product: state.product,
+  };
+};
 
+const mapDispatchToProps = dispatch => {
+  return {
+    selectProduct(product) {
+      dispatch(selectProduct(product));
+      
+    },
+   
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Orders);
  

@@ -52,7 +52,6 @@ import { Card, CardImg, CardBody,
               this.setState({ delivery:250,editable:false})
                         } 
         });
-        this.updateCart()
     }
 
     getCart(){
@@ -60,18 +59,15 @@ import { Card, CardImg, CardBody,
       if(getCart===''){this.setState({delivery:0})}
       else{
         this.setState({cart:getCart})
-        this.getCustomer()  
+        this.getCustomer() 
+        let total=0; 
+        for(var a=0;a<= getCart.length-1;a++){
+          total= total+(getCart[a].price*getCart[a].quantity)
+        }
+       this.setState({subTotal:total})
       }
     }
-    updateCart(){
-      let{cart,subTotal}=this.state;
-      let total=subTotal;
-      for(var a=0;a<= cart.length-1;a++){
-         total= total+(cart[a].price*cart[a].quantity)
-       }
-      this.setState({subTotal:total})
-      
-    }
+  
     checkOut(){
       const {firstName,lastName,email,phone,address,city,area,delivery}=this.state;
       if(  phone!=='' && address!==''  ){
@@ -124,6 +120,30 @@ import { Card, CardImg, CardBody,
                         else{alert(json)}
         console.log("Order book",json); });
       }else{alert("Please Enter Complete Details")}
+    }
+    plusProduct(i){
+      let {cart}=this.state;
+      let product={product_id:cart[i].product_id,quantity:cart[i].quantity+1,desc:cart[i].desc,slug:cart[i].slug,price:cart[i].price,image:cart[i].image}
+      cart[i] = product;
+      ls.set('cart',cart);
+      this.getCart();
+    
+    }
+    minusProduct(i){
+      let {cart}=this.state;
+      if(cart[i].quantity!==1){
+      let product={product_id:cart[i].product_id,quantity:cart[i].quantity-1,desc:cart[i].desc,slug:cart[i].slug,price:cart[i].price,image:cart[i].image}
+      cart[i] = product;
+      ls.set('cart',cart);
+      this.getCart();
+      }
+    }
+    removeProduct(i){
+      let {cart}=this.state;
+      cart.splice(i, 1);
+      ls.set('cart',this.state.cart);
+      this.getCart();
+      
     }
     render() {
       var {subTotal,delivery,cart,address,readonly}=this.state;
@@ -215,10 +235,12 @@ import { Card, CardImg, CardBody,
                     </Col>
                     <Col  md="3">
                                 <div style={{flexDirection:"row",display:"flex"}}>
-                                    <Button color="info" size="sm" onClick={()=>{  product.quantity=product.quantity-1 }} >-</Button>
+                                    <Button color="info" size="sm" onClick={()=>this.minusProduct(i)} >-</Button>
                                     <Label size="sm" style={{padding:10,height:5}}>{product.quantity}</Label>
-                                    <Button color="info" size="sm" onClick={()=>{product.quantity=product.quantity+1 }}>+</Button>
+                                    <Button color="info" size="sm" onClick={()=>this.plusProduct(i)}>+</Button>
                                 </div>
+                                <Button color="info" size="sm" onClick={()=>this.removeProduct(i)}>Remove</Button>
+                        
                     </Col>
                 </Row>
              ):<h6>No Product Found</h6>}

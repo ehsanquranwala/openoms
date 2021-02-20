@@ -15,9 +15,6 @@ import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,La
                     area:'',
                     password:''};
     }
-
-
-    
     handleSubmit=()=>{
       const {firstName,lastName,email,phone,address,city,area,password}=this.state;
       if(firstName!=='' && lastName !=='' && email!=='' && phone!=='' && address!=='' && city!=='' && area!=='' && password!=='' ){
@@ -127,7 +124,6 @@ import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,La
                   </FormGroup> 
                   <FormGroup>
                     <Button onClick={()=>this.handleSubmit()}>Register</Button>
-                  
                   </FormGroup>
                   <Label>OR </Label>
                   <FormGroup>

@@ -122,7 +122,7 @@ import { Card, CardImg,  CardBody,
                                                           }}>
                       <CardBody  style={{backgroundColor: "#f6f6f6"}}>
                         {products.images[0]?
-                      <CardImg  top width="20%" style={{width:200,height:150}} src={products.images[0].src} alt="Fish" />
+                      <CardImg  top width="20%" style={{width:200,height:150}} src={products.images[0].src}  />
                         :<div></div>}<CardTitle tag="h5" >{products.slug} </CardTitle>
                       <CardTitle tag="h6" color="blue">Rs. {products.price}</CardTitle>
                   </CardBody>
