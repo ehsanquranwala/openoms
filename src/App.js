@@ -15,6 +15,7 @@ import Product from './components/Product';
 import Cart from './components/Cart';
 import Orders from './components/Orders';
 import Profile from './components/Profile';
+import Oms from './components/Oms';
 
 
 class App extends Component {
@@ -46,8 +47,11 @@ class App extends Component {
             
           </Route>
           <Route path="/profile" Component={Profile}>
-            
+         
           </Route>
+          <Route path="/Oms" component={Oms}>
+            
+            </Route>
           <Route path="/" component={Home}>
             
           </Route>

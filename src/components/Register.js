@@ -1,7 +1,9 @@
 import React from "react";
 import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Label} from 'reactstrap';
+ 
   import {
-    Link
+    Link,
+    Redirect
   } from "react-router-dom";
   export default class Register extends React.Component {
     constructor(props) {
@@ -13,7 +15,8 @@ import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,La
                     address:'',
                     city:'',
                     area:'',
-                    password:''};
+                    password:'',
+                    navigate:false};
     }
     handleSubmit=()=>{
       const {firstName,lastName,email,phone,address,city,area,password}=this.state;
@@ -48,18 +51,23 @@ import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,La
 
       fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/customers', {method:'POST', 
         headers: {'Content-Type': 'application/json',
-                  'Authorization': 'Bearer '+'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvd2Vla2x5ZmlzaGNsdWIuY29tIiwiaWF0IjoxNjEyNjA2NjQyLCJuYmYiOjE2MTI2MDY2NDIsImV4cCI6MTYxMzIxMTQ0MiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.APfUmhipRCDa-ylYZeOgdbmZIW1iZsjLovpjZAfBsjk'},
+                  'Authorization':  'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')},
         body: JSON.stringify(data)})
         .then(response => response.json())
         .then(json => { 
           if(json.id!==undefined){
                 alert("Thank You For Registration");
+         this.setState({navigate:true})
               }else{alert(json.message)}
-          console.log(json); });
+          });
             }
             else{alert("Please Fill Complete Data")}
     }
     render() {
+      const { navigate } = this.state
+      if (navigate) {
+        return <Redirect to="/" push={true} />
+      }
        return (
         <div style={{marginTop:'10%'}}>
         <Container className="themed-container" fluid="sm" >

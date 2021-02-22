@@ -9,23 +9,7 @@ import { Button,Card, CardImg,  CardBody,
   import 'react-dropdown-tree-select/dist/styles.css';
   var ls = new SecureLS({encodingType: 'aes'});
  let categories=[];
- function Tree(){
-  const onChange = (currentNode, selectedNodes) => {
-    console.log('onChange::',  currentNode)
-      this.setState({catId:currentNode})
-    for(var a=0;a <= selectedNodes.length-1;a++ )
-    {//onsole.log(selectedNodes[a].value)
-     }
-  }
-  return(
-  <DropdownTreeSelect
-          data={categories} 
-          onChange={onChange}
-          showDropdown='always'
-          hierarchical={true}
-          />
-  );
-}
+
    class Category extends React.Component {
     constructor(props) {
       super(props);
@@ -41,7 +25,13 @@ import { Button,Card, CardImg,  CardBody,
 
     render() {
       const { value } = this.state
-      
+      const onChange = (currentNode, selectedNodes) => {
+        console.log('onChange::',  currentNode)
+          this.setState({catId:currentNode})
+        for(var a=0;a <= selectedNodes.length-1;a++ )
+        {//onsole.log(selectedNodes[a].value)
+         }
+      }
       return (
 
         <div style={{marginTop:20}}>
@@ -49,7 +39,12 @@ import { Button,Card, CardImg,  CardBody,
             <Row>
               <Col md="4">
                 <h5>Category</h5>
-              <Tree/>
+                <DropdownTreeSelect
+          data={categories} 
+          onChange={onChange}
+          showDropdown='always'
+          hierarchical={true}
+          />
               <SingleSlider
             min={0}
              max={100}

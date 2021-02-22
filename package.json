@@ -19,6 +19,7 @@
     "react-rangeslider": "^2.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "react-select": "^4.1.0",
     "react-simple-tree-menu": "^1.1.18",
     "react-slider-kit": "^1.0.0-beta-0",
     "reactstrap": "^8.9.0",
