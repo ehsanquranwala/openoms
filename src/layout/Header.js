@@ -11,14 +11,19 @@ import {   Collapse,
     DropdownMenu,
     DropdownItem,} from 'reactstrap';
   import SecureLS from 'secure-ls';
+
   import {
     Link
   } from "react-router-dom";
+  import { useDispatch, useSelector } from 'react-redux';
+  import { user} from "../js/actions/index";
   var ls = new SecureLS({encodingType: 'aes'});
+  
 
 const AppHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
-
+    const dispatch = useDispatch()
+    const login = useSelector(state => state.user);
     const toggle = () => setIsOpen(!isOpen);
     return (
         <Navbar  style={{backgroundColor:"#006994",color:"#FFFFFF"}} light expand="md">
@@ -41,17 +46,19 @@ const AppHeader = () => {
             <NavItem>
               <Link style={{color:"#FFFFFF"}} to="/cart">Cart</Link>
             </NavItem>
-            
-            {ls.get("user")===''?
+            {console.log(login)}
+            {
+            login.length===0?
             <NavItem>
               <Link style={{color:"#FFFFFF"}} to="/login">Login</Link>
             </NavItem>
             :
-            
           <UncontrolledDropdown nav inNavbar>
+            <NavItem>
               <DropdownToggle nav caret>
               <Link style={{color:"#FFFFFF"}} >Profile</Link>
               </DropdownToggle>
+              </NavItem>
               <DropdownMenu right>
                 <DropdownItem>
                   <Link  to="/Orders">My Orders</Link>
@@ -61,7 +68,7 @@ const AppHeader = () => {
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
-                <Link  onClick={()=>{ls.set('user', '')}} to="/login">Logout</Link>
+                <Link  onClick={()=>{dispatch(user([]))}} to="/login">Logout</Link>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>

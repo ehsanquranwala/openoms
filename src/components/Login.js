@@ -6,9 +6,12 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
     Redirect
   } from "react-router-dom";
   import SecureLS from 'secure-ls';
+  
+  import { connect } from "react-redux";
+  import { products, addtocart, category,addArticle,user ,selectProduct} from "../js/actions/index";
   var ls = new SecureLS({encodingType: 'aes'});
  
-  export default class Login extends React.Component {
+ class Login extends React.Component {
     constructor(props) {
       super(props);
       this.state = {username:'',
@@ -24,16 +27,17 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
       let formData = new FormData();
           formData.append('username',username);
           formData.append('password',password);
-      fetch('https://www.weeklyfishclub.com/wp-json/jwt-auth/v1/token', {method:'POST', 
-        body: formData})
+      //fetch('https://www.weeklyfishclub.com/wp-json/jwt-auth/v1/token',
+      fetch(`https://weeklyfishclub.com/api/user/generate_auth_cookie?email=${username}&password=${password}`,
+      {method:'POST'})
         .then(response => response.json())
         .then(json => { 
-          if(json.token!=undefined){
-             ls.set('user', { token: json.token,
-                              email: json.user_email,
-                              user: json.user_nicename})
+          console.log(json)
+          if(json.status=='ok'){
+             ls.set('user', json)
+             this.props.Adduser(json)
               this.setState({navigate:true})
-                        } else{ alert(json.message)}  });
+               } else{ alert(json.error)}   });
                         
                 }else{alert("Username or Password empty")} 
     }
@@ -42,7 +46,7 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
     render() {
       const { navigate } = this.state
       if (navigate) {
-        return <Redirect to="/product" push={true} />
+        return <Redirect to="/" push={true} />
       }
        return (
           <div style={{marginTop:'10%'}}>
@@ -80,3 +84,23 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
  }
 
  
+ const mapStateToProps = state => {
+  return {
+    product: state.product,
+    category: state.category,
+    selectProduct:state.selectProduct
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    Adduser(json) {
+      dispatch(user(json));
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);

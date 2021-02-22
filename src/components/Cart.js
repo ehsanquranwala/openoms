@@ -3,9 +3,11 @@ import { Card, CardImg, CardBody,
   CardTitle,Container,Row,Button,Input,Col,Label, CardHeader, CardSubtitle,FormGroup} from 'reactstrap';
   import { Link } from "react-router-dom";
   import SecureLS from 'secure-ls';
+  import { connect } from "react-redux";
+  import { products, addtocart, category,addArticle,user ,selectProduct} from "../js/actions/index";
   var ls = new SecureLS({encodingType: 'aes'});
   const token=ls.get('token')
-  export default class Home extends React.Component {
+ class Cart extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -30,28 +32,38 @@ import { Card, CardImg, CardBody,
       
     }
     async getCustomer(){
-      const user=ls.get('user');
-        await fetch(`https://www.weeklyfishclub.com/wp-json/wc/v3/customers/12`,
+      console.log(this.props.user)
+     if(this.props.user.length!==0){
+      this.setState({ firstName:this.props.user.user.firstname,
+                      lastName:this.props.user.user.lastname,
+                      email:this.props.user.user.email,
+                      phone:this.props.user.user.username,
+                      readonly:true
+                  })
+        await fetch(`https://www.weeklyfishclub.com/wp-json/wc/v3/customers/${this.props.user.user.id}`,
           {method:'GET', 
             headers: {
-            'Authorization':'Bearer ' + token}})
+            'Authorization':'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')}})
           .then(response => response.json())
           .then(json => { 
+            console.log(json)
             if(json.id){
+              console.log(json)
               this.setState({firstName:json.billing.first_name,
-                          lastName:json.billing.last_name,
-                          email:json.billing.email,
-                          phone:json.billing.phone,
-                          address:json.billing.address_1,
-                          city:json.billing.city,
-                          area:json.billing.address_2,
-                          delivery:json.billing.postcode,
-                          readonly:true
+                              lastName:json.billing.last_name,
+                              email:json.billing.email,
+                              phone:json.billing.phone,
+                              address:json.billing.address_1,
+                              city:json.billing.city,
+                              area:json.billing.address_2,
+                              delivery:json.billing.postcode,
+                              readonly:true
                            })} 
             else{ 
               this.setState({ delivery:250,editable:false})
                         } 
         });
+      }
     }
 
     getCart(){
@@ -109,7 +121,7 @@ import { Card, CardImg, CardBody,
       fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/orders', 
       { method:'POST', 
         headers: {'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token},
+                'Authorization': 'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')},
         body: JSON.stringify(data)})
       .then(response => response.json())
       .then(json => { if(json.id){
@@ -280,4 +292,19 @@ import { Card, CardImg, CardBody,
     }
  }
 
- 
+ const mapStateToProps = state => {
+  return {
+    user: state.user,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+   
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cart);

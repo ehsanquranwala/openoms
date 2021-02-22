@@ -59,13 +59,13 @@ import { Card, CardImg,  CardBody,
       if(this.props.product.length ===0){
       fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/products', {
         method:'GET', 
-        headers: {'Authorization': 'Bearer ' + token}})
+        headers: {'Authorization': 'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')}})
         .then(response => response.json())
         .then(json => {
           if(json.length>0){
             this.props.addProduct(json)
         }
-          else{this.getGuestUser()} 
+          else{} 
         
        });
       }
@@ -74,32 +74,15 @@ import { Card, CardImg,  CardBody,
       if(this.props.category.length ===0){
       fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/products/categories?hide_empty=false', {
         method:'GET', 
-        headers: {'Authorization': 'Bearer ' + token}})
+        headers: {'Authorization': 'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')}})
         .then(response => response.json())
         .then(json => {
           if(json.length>0){
             this.loop(json)
-          }else{this.getGuestUser()} 
+          }else{} 
         
        });
       }
-    }
-    getGuestUser(){
-      let formData = new FormData();
-          formData.append('username','admin');
-          formData.append('password','k$bxWKLRM5');
-      fetch('https://www.weeklyfishclub.com/wp-json/jwt-auth/v1/token', 
-      {method:'POST', 
-        body: formData})
-        .then(response => response.json())
-        .then(json => { 
-          if(json.token!=undefined){
-             ls.set('token',  json.token)
-             
-             this.getProduct()
-          } else{ alert(json.message)}
-                                      });
-                
     }
     setParam(id){
       ls.set('productId',id );

@@ -32,7 +32,7 @@ function rootReducer(state = initialState, action) {
   }
   if (action.type === 'ADD_USER') {
     return Object.assign({}, state, {
-      user: state.user.concat(action.payload)
+      user: action.payload
     });
   }
   if (action.type === 'SELECT_PRODUCT') {

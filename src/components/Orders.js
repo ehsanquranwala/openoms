@@ -25,17 +25,19 @@ import { Card, CardImg, CardBody,
       this.getOrders()
     }
     async getOrders(){
-      const user=ls.get('user');
-        await fetch(`https://www.weeklyfishclub.com/wp-json/wc/v3/orders?search=ymohsin102@gmail.com`,
+      console.log(this.props.user)
+      if(this.props.user.status=='ok'){
+        await fetch(`https://www.weeklyfishclub.com/wp-json/wc/v3/orders?search=${this.props.user.user.email}`,
           {method:'GET', 
             headers: {
-            'Authorization':'Bearer ' + token}})
+            'Authorization':'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')}})
           .then(response => response.json())
           .then(json => { 
             if(json.length>0){
               this.setState({orders:json})
             }
         });
+      }
     }
    render() {
     const { navigate } = this.state
@@ -56,7 +58,7 @@ import { Card, CardImg, CardBody,
              {this.state.orders.map((product,i) =>  
                 product.status=='processing'?
                 
-                  <Row>
+                  <Row key={product[i]}>
                     <Col> 
                       <Row> 
                         <Col>{ moment(product.date_created).format('MM-DD-YYYY')}</Col>
@@ -81,7 +83,7 @@ import { Card, CardImg, CardBody,
          {this.state.orders.map((product,i) =>  
                 product.status=='completed'?
                 
-                  <Row>
+                  <Row key={product[i]}>
                     <Col> 
                       <Row> 
                         <Col>{ moment(product.date_created).format('MM-DD-YYYY')}</Col>
@@ -140,6 +142,7 @@ import { Card, CardImg, CardBody,
  const mapStateToProps = state => {
   return {
     product: state.product,
+    user:state.user
   };
 };
 
