@@ -88,31 +88,47 @@ import { Card, CardImg,  CardBody,
           price_percent_profit_special,
           products,
         }=this.state;
-      let data={  'post':'addpurchase',
-                  "purchase_date":date,
-                  "helper_payment":helper,
-                  "cutting_payment":cutting ,
-                  "transport_fare":transport,
-                  "trolley_fare":trolley ,
-                  "ice_cost":ice,
-                  "shoppers_cost":shopper,
-                  "washing_payment":washing ,
-                  "packing_expense":packing,
-                  "food_cost":food ,
-                  "other_cost":otherExpense,
-                  "base_profit_retail":base_profit_retail,
-                  "price_percent_profit_retail":price_percent_profit_retail ,
-                  "base_profit_wholesale":base_profit_wholesale,
-                  "price_percent_profit_wholesale":price_percent_profit_wholesale,
-                  "base_profit_resale":base_profit_resale,
-                  "price_percent_profit_resale":price_percent_profit_resale ,
-                  "base_profit_special":base_profit_special,
-                  "price_percent_profit_special":price_percent_profit_special ,
-                    "items":products}
+        let data = new FormData();
+      data.append('post','addpurchase');
+      data.append("purchase_date",date);
+      data.append("helper_payment",helper);
+      data.append("cutting_payment",cutting);
+      data.append("transport_fare",transport);
+      data.append("trolley_fare",trolley );
+      data.append("ice_cost",ice);
+      data.append("shoppers_cost",shopper);
+      data.append("washing_payment",washing );
+      data.append("packing_expense",packing);
+      data.append("food_cost",food );
+      data.append("other_cost",otherExpense);
+      data.append("base_profit_retail",base_profit_retail);
+      data.append("price_percent_profit_retail",price_percent_profit_retail );
+      data.append("base_profit_wholesale",base_profit_wholesale);
+      data.append("price_percent_profit_wholesale",price_percent_profit_wholesale);
+      data.append("base_profit_resale",base_profit_resale);
+      data.append("price_percent_profit_resale",price_percent_profit_resale );
+      data.append("base_profit_special",base_profit_special);
+      data.append("price_percent_profit_special",price_percent_profit_special );
+          for(var a=0 ; a<=products.length-1;a++ ){
+            data.append("product_id",products[a].product_id);
+            data.append("product_slug",products[a].product_slug);
+            data.append("purchase_price",products[a].purchase_price);
+            data.append("price_date",products[a].price_date);
+            data.append("Wholeweight",products[a].Wholeweight);
+            data.append("Netweight",products[a].Netweight);
+            data.append("wholesale_price",products[a].wholesale_price);
+            data.append("retail_price",products[a].retail_price);
+            data.append("resale_price",products[a].resale_price);
+            data.append("special_price",products[a].special_price);
+            data.append("special_price_code",products[a].special_price_code);
+            
+            
+          }
+      console.log('gaya data',data)
       if(products.length !==0){
       fetch('https://weeklyfishclub.com/api/create_post', {
         method:'POST',
-        body: JSON.stringify(data)
+        body: data
         })
         .then(response =>  response.json())
         .then(json => console.log(json))
