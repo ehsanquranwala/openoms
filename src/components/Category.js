@@ -6,10 +6,12 @@ import { Button,Card, CardImg,  CardBody,
   import { products, addtocart, category,addArticle,user } from "../js/actions/index";
   import {SingleSlider} from 'react-slider-kit';
   import DropdownTreeSelect from 'react-dropdown-tree-select';
+  import Child from './dropdown';
   import 'react-dropdown-tree-select/dist/styles.css';
   var ls = new SecureLS({encodingType: 'aes'});
  let categories=[];
 
+ 
    class Category extends React.Component {
     constructor(props) {
       super(props);
@@ -25,13 +27,7 @@ import { Button,Card, CardImg,  CardBody,
 
     render() {
       const { value } = this.state
-      const onChange = (currentNode, selectedNodes) => {
-        console.log('onChange::',  currentNode)
-          this.setState({catId:currentNode})
-        for(var a=0;a <= selectedNodes.length-1;a++ )
-        {//onsole.log(selectedNodes[a].value)
-         }
-      }
+    
       return (
 
         <div style={{marginTop:20}}>
@@ -39,21 +35,19 @@ import { Button,Card, CardImg,  CardBody,
             <Row>
               <Col md="4">
                 <h5>Category</h5>
-                <DropdownTreeSelect
-          data={categories} 
-          onChange={onChange}
-          showDropdown='always'
-          hierarchical={true}
-          />
+              <Child
+              value2={categories}
+              sendToServer={(e)=>this.setState({catId:e})}
+              />
               <SingleSlider
-            min={0}
-             max={100}
-            step={1}
-            start={80}
-            onChangeStart={() => console.log('start drag')}
-            onChange={(value)=>console.log('drag value: ', value)}
-            onChangeComplete={(e)=>{this.setState({value:e})}}
-        />
+                min={0}
+                max={100}
+                step={1}
+                start={80}
+                onChangeStart={() => console.log('start drag')}
+                onChange={(value)=>console.log('drag value: ', value)}
+                onChangeComplete={(e)=>{this.setState({value:e})}}
+            />
               </Col>
                 <Col>
                 <h5>Fishes</h5><Row>

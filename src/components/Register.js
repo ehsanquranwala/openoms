@@ -15,11 +15,12 @@ import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,La
                     address:'',
                     city:'',
                     area:'',
+                    pinLocation:'',
                     password:'',
                     navigate:false};
     }
     handleSubmit=()=>{
-      const {firstName,lastName,email,phone,address,city,area,password}=this.state;
+      const {firstName,lastName,email,phone,address,city,area,password,pinLocation}=this.state;
       if(firstName!=='' && lastName !=='' && email!=='' && phone!=='' && address!=='' && city!=='' && area!=='' && password!=='' ){
       let data={  "first_name":firstName,
                     "last_name":lastName,
@@ -34,7 +35,7 @@ import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,La
                       "address_2":area ,
                       "city":city,
                       "company":'',
-                      "state":'sindh',
+                      "state":pinLocation,
                       "postcode":'250',
                       "country":'pk'},
                         "shipping":{"first_name":firstName,
@@ -45,11 +46,12 @@ import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,La
                         "address_2":area ,
                         "city":city,
                         "company":'',
-                        "state":'sindh',
+                        "state":pinLocation,
                         "postcode":'250',
                         "country":'pk'}};
 
-      fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/customers', {method:'POST', 
+      fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/customers', 
+      {method:'POST', 
         headers: {'Content-Type': 'application/json',
                   'Authorization':  'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')},
         body: JSON.stringify(data)})
@@ -127,9 +129,14 @@ import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,La
                   </FormGroup>
                   </Col></Row>
                   <FormGroup>
+                    <Label >Pin Location</Label>
+                    <Input type='text'  name='pinLocation' placeholder='Enter Pin Location' value={this.state.pinLocation} onChange={ (e)=>this.setState({pinLocation: e.target.value})} required></Input>
+                  </FormGroup> 
+                  <FormGroup>
                     <Label >Phone</Label>
                     <Input type='number'  name='phone' placeholder='Enter Phone' value={this.state.phone} onChange={ (e)=>this.setState({phone: e.target.value})} required></Input>
                   </FormGroup> 
+                 
                   <FormGroup>
                     <Button onClick={()=>this.handleSubmit()}>Register</Button>
                   </FormGroup>

@@ -24,19 +24,31 @@ import { Card, CardImg,  CardBody,
                     Netweight:'',
                     price:'',
                     products:[],
-                    helper:'',
-                    cutting:'',
-                    transport:'',
-                    ice:'',
-                    shopper:'',
-                    washing:'',
-                    packing:'',
-                    food:'',
-                    otherExpense:''
+                    date:'',
+                    helper:'200',
+                    cutting:'20',
+                    transport:'400',
+                    trolley:'100',
+                    ice:'10',
+                    shopper:'50',
+                    washing:'10',
+                    packing:'5',
+                    food:'100',
+                    otherExpense:'0',
+                    base_profit_retail:'60',
+                    price_percent_profit_retail:'35',
+                    base_profit_wholesale:'60',
+                    price_percent_profit_wholesale:'25',
+                    base_profit_resale:'60',
+                    price_percent_profit_resale:'30',
+                    base_profit_special:'60',
+                    price_percent_profit_special:'15',
+                    special_price_code:''
                     };
     }
     componentDidMount(){
       this.getProduct()
+      this.setState({date: new Date().getDate('Y-m-d')})
      }
     
     getProduct(){
@@ -54,25 +66,91 @@ import { Card, CardImg,  CardBody,
        });
       }
     }
+    purchase(){
+    const{date,
+          helper,
+          cutting,
+          transport,
+          trolley,
+          ice,
+          shopper,
+          washing,
+          packing,
+          food,
+          otherExpense,
+          base_profit_retail,
+          price_percent_profit_retail,
+          base_profit_wholesale,
+          price_percent_profit_wholesale,
+          base_profit_resale,
+          price_percent_profit_resale,
+          base_profit_special,
+          price_percent_profit_special,
+          products,
+        }=this.state;
+      let data={  'post':'addpurchase',
+                  "purchase_date":date,
+                  "helper_payment":helper,
+                  "cutting_payment":cutting ,
+                  "transport_fare":transport,
+                  "trolley_fare":trolley ,
+                  "ice_cost":ice,
+                  "shoppers_cost":shopper,
+                  "washing_payment":washing ,
+                  "packing_expense":packing,
+                  "food_cost":food ,
+                  "other_cost":otherExpense,
+                  "base_profit_retail":base_profit_retail,
+                  "price_percent_profit_retail":price_percent_profit_retail ,
+                  "base_profit_wholesale":base_profit_wholesale,
+                  "price_percent_profit_wholesale":price_percent_profit_wholesale,
+                  "base_profit_resale":base_profit_resale,
+                  "price_percent_profit_resale":price_percent_profit_resale ,
+                  "base_profit_special":base_profit_special,
+                  "price_percent_profit_special":price_percent_profit_special ,
+                    "items":products}
+      if(products.length !==0){
+      fetch('https://weeklyfishclub.com/api/create_post', {
+        method:'POST',
+        body: JSON.stringify(data)
+        })
+        .then(response =>  response.json())
+        .then(json => console.log(json))
+      }else{
+        console.log("Product Not Selected")
+      }
+    }
+   
  
     add(){
-        const{products,id,slug,Wholeweight,Netweight,price}=this.state;
-        products.push({id:id,slug:slug,Wholeweight:Wholeweight,Netweight:Netweight,price:price})
+        const{products,id,slug,Wholeweight,Netweight,price,date,base_profit_retail,price_percent_profit_retail,base_profit_resale,price_percent_profit_resale,base_profit_wholesale,price_percent_profit_wholesale,base_profit_special,price_percent_profit_special,special_price_code}=this.state;
+       //Formula Apply
+        const resale=(Number(price)/Number(Wholeweight))+ Number(base_profit_resale) +((Number(price)/Number(Wholeweight))/100*Number(price_percent_profit_resale))
+        const retail=(Number(price)/Number(Wholeweight))+ Number(base_profit_retail) +((Number(price)/Number(Wholeweight))/100*Number(price_percent_profit_retail))
+        const wholesale=(Number(price)/Number(Wholeweight))+ Number(base_profit_wholesale) +((Number(price)/Number(Wholeweight))/100*Number(price_percent_profit_wholesale))
+        const special=(Number(price)/Number(Wholeweight))+ Number(base_profit_special) +((Number(price)/Number(Wholeweight))/100*Number(price_percent_profit_special))
+        //Table Array
+        products.push({product_id:id,product_slug:slug,price_date:date,Wholeweight:Wholeweight,Netweight:Netweight,wholesale_price:wholesale,resale_price:resale,retail_price:retail,special_price:special,purchase_price:price,special_price_code:special_price_code})
+        //Set products table state
         this.setState({products:products})
-        console.log(this.state.products)
     }
     render() {
-        const options = [
-            { value: 'chocolate', label: 'Chocolate' },
-            { value: 'strawberry', label: 'Strawberry' },
-            { value: 'vanilla', label: 'Vanilla' }
-          ]
+       
        return (
           <div style={{marginTop:20}}>
             <Container className="themed-container" fluid="sm" >
             
                 <Row>
-                <Col md="3"><FormGroup>
+                <Col md="2">
+                <FormGroup>
+                <Input  type="date" 
+                        required={true} value={this.state.date}  
+                        onChange={(e)=>{this.setState({ date:e.target.value })}}>
+                   </Input>
+                 </FormGroup>
+                </Col>
+                <Col md="3">
+                <FormGroup>
                 <Input  type="select" required={true} value={this.state.id}  onChange={(e)=>{this.setState({id:this.props.product[e.target.value].id,slug:this.props.product[e.target.value].slug}); }}>
                           <option  disabled={this.props.defaultDisabled} value="">Select Product</option>
                           {this.props.product.map((data, idx)=>{
@@ -82,100 +160,179 @@ import { Card, CardImg,  CardBody,
                  </FormGroup>
                 </Col>
                 <Col md="2">
+                  <FormGroup>
+                <Input  type="number" placeholder={'Price'} required={true} value={this.state.price}  onChange={(e)=>{this.setState({price:e.target.value}); }}>
+                 </Input> </FormGroup>
+                </Col>
+                <Col md="2">
                     <FormGroup>
-                <Input  type="text" placeholder={'Whole Weight'} required={true} value={this.state.Wholeweight}  onChange={(e)=>{this.setState({Wholeweight:e.target.value}); }}>
+                <Input  type="number" placeholder={'Whole Weight'} required={true} value={this.state.Wholeweight}  onChange={(e)=>{this.setState({Wholeweight:e.target.value}); }}>
                  </Input>
                  </FormGroup>
                 </Col>
                 <Col md="2"><FormGroup>
-                <Input  type="text" placeholder={'Net Weight'} required={true} value={this.state.Netweight}  onChange={(e)=>{this.setState({Netweight:e.target.value}); }}>
+                <Input  type="number" placeholder={'Net Weight'} required={true} value={this.state.Netweight}  onChange={(e)=>{this.setState({Netweight:e.target.value}); }}>
                  </Input> </FormGroup>
                 </Col>
-                <Col md="2"><FormGroup>
-                <Input  type="text" placeholder={'Price'} required={true} value={this.state.price}  onChange={(e)=>{this.setState({price:e.target.value}); }}>
-                 </Input> </FormGroup>
-                </Col>
+                
                 <Col md="1"><FormGroup>
                 <Button onClick={()=>this.add()}>Add</Button> </FormGroup>
                 </Col>
               </Row>
               <Row>
-                <Col md="6">
+                <Col md="7">
                     <Table bordered="solid">
                     <thead>
                       <tr>
-                        <th>#</th>
+                        <th>Date</th>
                         <th>Product Name</th>
+                        <th>Purchase Price</th>
                         <th>Whole Weight</th>
                         <th>Net Weight</th>
-                        <th>Price</th>
+                        
+                        <th>Wholesale Price</th>
+                        <th>Resale Price</th>
+                        <th>Retail Price</th>
+                        <th>Special Price</th>
                       </tr>
                     </thead>
                     <tbody>
                         {this.state.products.map((product, i)=>
                       <tr>
-                        <td>{product.id}</td>
-                        <td>{product.slug}</td>
+                        <td>{product.price_date}</td>       
+                        <td>{product.product_id+" "+product.product_slug}</td>
+                        <td>{product.purchase_price}</td>
                         <td>{product.Wholeweight}</td>
                         <td>{product.Netweight}</td>
-                        <td>{product.price}</td>
+                        <td>{product.wholesale_price}</td>
+                        <td>{product.resale_price}</td>
+                        <td>{product.retail_price}</td>
+                        <td>{product.special_price}</td>
+                        
                       </tr>
                       )}
                     </tbody>
                   </Table>
                  
                   </Col>
-                  <Col md="3">
+                  <Row>
+                  <Col md="8">
                   <Card>
                       <CardHeader>Expenses</CardHeader>
                       <CardBody><Row>
-                          <Col md="6">
+                          <Col md="3">
                           <FormGroup>
                                <Label size="sm">Helper</Label>
-                                <Input size="sm" placeholder="Helper" type="text" value={this.state.helper} onChange={(e)=>{this.setState({helper:e.target.value})}}></Input>
-                          </FormGroup></Col><Col md="6">
+                                <Input size="sm" placeholder="Helper" type="number" value={this.state.helper} onChange={(e)=>{this.setState({helper:e.target.value})}}></Input>
+                          </FormGroup></Col>
+                          <Col md="3">
                           <FormGroup>
                            <Label size="sm">Cutting</Label>
-                                <Input size="sm" placeholder="Cutting" type="text" value={this.state.cutting} onChange={(e)=>{this.setState({cutting:e.target.value})}}></Input>
-                          </FormGroup></Col><Col md="6">
-                          <FormGroup>
-                           <Label size="sm">Transport</Label>
-                                <Input size="sm" placeholder="transport" type="text" value={this.state.transport} onChange={(e)=>{this.setState({transport:e.target.value})}}></Input>
-                          </FormGroup></Col><Col md="6">
-                          <FormGroup>
-                           <Label size="sm">Ice</Label>
-                                <Input size="sm" placeholder="Ice" type="text" value={this.state.ice} onChange={(e)=>{this.setState({ice:e.target.value})}}></Input>
-                          </FormGroup></Col><Col md="6">
-                          <FormGroup>
-                           <Label size="sm">Shoppers</Label>
-                                <Input size="sm" placeholder="Shopper" type="text" value={this.state.shopper} onChange={(e)=>{this.setState({shopper:e.target.value})}}></Input>
-                          </FormGroup></Col><Col md="6">
-                          <FormGroup>
-                           <Label size="sm">Washing</Label>
-                                <Input size="sm" placeholder="Washing" type="text" value={this.state.washing} onChange={(e)=>{this.setState({washing:e.target.value})}}></Input>
-                          </FormGroup></Col><Col md="6">
-                          <FormGroup>
-                           <Label size="sm">Packing</Label>
-                                <Input size="sm" placeholder="Packing" type="text" value={this.state.packing} onChange={(e)=>{this.setState({packing:e.target.value})}}></Input>
-                          </FormGroup></Col><Col md="6">
-                          <FormGroup>
-                           <Label size="sm">Food</Label>
-                                <Input size="sm" placeholder="Food" type="text" value={this.state.food} onChange={(e)=>{this.setState({food:e.target.value})}}></Input>
-                          </FormGroup></Col><Col md="12">
-                          <FormGroup>
-                           <Label size="sm">Other Expense</Label>
-                                <Input size="sm" placeholder="Other Expense" type="text" value={this.state.otherExpense} onChange={(e)=>{this.setState({otherExpense:e.target.value})}}></Input>
+                                <Input size="sm" placeholder="Cutting" type="number" value={this.state.cutting} onChange={(e)=>{this.setState({cutting:e.target.value})}}></Input>
                           </FormGroup></Col>
-                         
-                          
+                          <Col md="3">
+                            <FormGroup>
+                            <Label size="sm">Transport</Label>
+                                <Input size="sm" placeholder="Transport" type="number" value={this.state.transport} onChange={(e)=>{this.setState({transport:e.target.value})}}></Input>
+                            </FormGroup></Col>
+                          <Col md="3">
+                            <FormGroup>
+                            <Label size="sm">Trolley</Label>
+                                  <Input size="sm" placeholder="Trolley fare" type="number" value={this.state.trolley} onChange={(e)=>{this.setState({trolley:e.target.value})}}></Input>
+                            </FormGroup></Col>
+                          <Col md="3">
+                              <FormGroup>
+                                <Label size="sm">Ice</Label>
+                                <Input size="sm" placeholder="Ice" type="number" value={this.state.ice} onChange={(e)=>{this.setState({ice:e.target.value})}}></Input>
+                          </FormGroup></Col>
+                          <Col md="3">
+                              <FormGroup>
+                              <Label size="sm">Shoppers</Label>
+                                    <Input size="sm" placeholder="Shopper" type="number" value={this.state.shopper} onChange={(e)=>{this.setState({shopper:e.target.value})}}></Input>
+                              </FormGroup></Col>
+                          <Col md="3">
+                              <FormGroup>
+                              <Label size="sm">Washing</Label>
+                                    <Input size="sm" placeholder="Washing" type="number" value={this.state.washing} onChange={(e)=>{this.setState({washing:e.target.value})}}></Input>
+                              </FormGroup></Col>
+                          <Col md="3">
+                              <FormGroup>
+                              <Label size="sm">Packing</Label>
+                                    <Input size="sm" placeholder="Packing" type="number" value={this.state.packing} onChange={(e)=>{this.setState({packing:e.target.value})}}></Input>
+                              </FormGroup></Col>
+                          <Col md="3">
+                              <FormGroup>
+                              <Label size="sm">Food</Label>
+                                    <Input size="sm" placeholder="Food" type="number" value={this.state.food} onChange={(e)=>{this.setState({food:e.target.value})}}></Input>
+                              </FormGroup>
+                          </Col>
+                          <Col md="3">
+                              <FormGroup>
+                              <Label size="sm">Other Expense</Label>
+                                    <Input size="sm" placeholder="Other Expense" type="number" value={this.state.otherExpense} onChange={(e)=>{this.setState({otherExpense:e.target.value})}}></Input>
+                              </FormGroup>
+                          </Col>
                           </Row>
-                          <FormGroup>
-                         <Button size="lg">Update</Button>
-                          </FormGroup>
+                          
                       </CardBody>
                   </Card>
                 </Col>
+                <Col md="4">
+                  <Card>
+                      <CardHeader>Formula</CardHeader>
+                      <CardBody><Row>
+                          <Col md="6">
+                          <FormGroup>
+                               <Label size="sm">base_profit_retail</Label>
+                                <Input size="sm" placeholder="base_profit_retail" type="number" value={this.state.base_profit_retail} onChange={(e)=>{this.setState({base_profit_retail:e.target.value})}}></Input>
+                          </FormGroup></Col>
+                          <Col md="6">
+                          <FormGroup>
+                           <Label size="sm">price_percent_profit_retail</Label>
+                                <Input size="sm" placeholder="price_percent_profit_retail" type="number" value={this.state.price_percent_profit_retail} onChange={(e)=>{this.setState({price_percent_profit_retail:e.target.value})}}></Input>
+                          </FormGroup></Col>
+                          <Col md="6">
+                            <FormGroup>
+                            <Label size="sm">base_profit_wholesale</Label>
+                                <Input size="sm" placeholder="base_profit_wholesale" type="number" value={this.state.base_profit_wholesale} onChange={(e)=>{this.setState({base_profit_wholesale:e.target.value})}}></Input>
+                            </FormGroup>
+                          </Col>
+                          <Col md="6">
+                            <FormGroup>
+                            <Label size="sm">price_percent_profit_wholesale</Label>
+                                  <Input size="sm" placeholder="price_percent_profit_wholesale" type="number" value={this.state.price_percent_profit_wholesale} onChange={(e)=>{this.setState({price_percent_profit_wholesale:e.target.value})}}></Input>
+                            </FormGroup></Col>
+                            <Col md="6">
+                            <FormGroup>
+                            <Label size="sm">base_profit_resale</Label>
+                                <Input size="sm" placeholder="base_profit_resale" type="number" value={this.state.base_profit_resale} onChange={(e)=>{this.setState({base_profit_resale:e.target.value})}}></Input>
+                            </FormGroup>
+                          </Col>
+                          <Col md="6">
+                            <FormGroup>
+                            <Label size="sm">price_percent_profit_resale</Label>
+                                  <Input size="sm" placeholder="price_percent_profit_resale" type="number" value={this.state.price_percent_profit_resale} onChange={(e)=>{this.setState({price_percent_profit_resale:e.target.value})}}></Input>
+                            </FormGroup></Col>
+                            <Col md="6">
+                            <FormGroup>
+                            <Label size="sm">base_profit_special</Label>
+                                <Input size="sm" placeholder="base_profit_special" type="number" value={this.state.base_profit_special} onChange={(e)=>{this.setState({base_profit_special:e.target.value})}}></Input>
+                            </FormGroup>
+                          </Col>
+                          <Col md="6">
+                            <FormGroup>
+                            <Label size="sm">price_percent_profit_special</Label>
+                                  <Input size="sm" placeholder="price_percent_profit_special" type="number" value={this.state.price_percent_profit_special} onChange={(e)=>{this.setState({price_percent_profit_special:e.target.value})}}></Input>
+                            </FormGroup></Col>
+                          </Row>
+                      </CardBody>
+                  </Card>
+                </Col>
+                </Row>
               </Row>
+              <FormGroup>
+                         <Button onClick={()=>this.purchase()}  size="lg">Update</Button>
+               </FormGroup>
             </Container>
            
           </div>

@@ -22,12 +22,12 @@ function rootReducer(state = initialState, action) {
   }
   if (action.type === 'ADD_PRODUCT') {
     return Object.assign({}, state, {
-      product: state.product.concat(action.payload)
+      product: action.payload
     });
   }
   if (action.type === 'ADD_CATEGORY') {
     return Object.assign({}, state, {
-      category: state.category.concat(action.payload)
+      category: action.payload
     });
   }
   if (action.type === 'ADD_USER') {
