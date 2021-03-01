@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, CardImg, CardBody,
-  CardTitle,Container,Row,Button,Input,Col,Label, CardHeader, CardSubtitle,FormGroup} from 'reactstrap';
+  CardTitle,Container,Row,Button,Input,Col,Label, CardHeader, CardSubtitle,FormGroup,
+  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
   import { Link } from "react-router-dom";
   import SecureLS from 'secure-ls';
   import { connect } from "react-redux";
@@ -23,7 +24,12 @@ import { Card, CardImg, CardBody,
                     delivery:250,
                     readonly:false,
                     subTotal:0,
-                    total:0
+                    total:0,
+                    discount:false,
+                    discountPercent:0,
+                    discountRadio:'',
+                    kidCount:0,
+                    wifeCount:0,
                     };
     }
     
@@ -135,7 +141,14 @@ import { Card, CardImg, CardBody,
     }
     plusProduct(i){
       let {cart}=this.state;
-      let product={product_id:cart[i].product_id,quantity:cart[i].quantity+1,desc:cart[i].desc,slug:cart[i].slug,price:cart[i].price,image:cart[i].image}
+      if(cart[i].quantity>=20){alert("Whole Sale Price ")}
+      let product={
+                  product_id:cart[i].product_id,
+                  quantity:cart[i].quantity+1,
+                  desc:cart[i].desc,
+                  slug:cart[i].slug,
+                  price:cart[i].price,
+                  image:cart[i].image}
       cart[i] = product;
       ls.set('cart',cart);
       this.getCart();
@@ -157,9 +170,34 @@ import { Card, CardImg, CardBody,
       this.getCart();
       
     }
+    getDiscount(){
+      var {discountRadio,kidCount,wifeCount,discountPercent}=this.state;
+      if(discountRadio=='kids'){
+        if( kidCount>5){kidCount=5}
+       const discount= (Number(kidCount)*2)
+        this.setState({discountPercent:discount})
+      }
+      else if(discountRadio=='wife'){
+            if( wifeCount===0){this.setState({discountPercent:0})}
+        else if( wifeCount===1){this.setState({discountPercent:3})}
+        else if( wifeCount===2){this.setState({discountPercent:10})}
+        else if( wifeCount===3){this.setState({discountPercent:18})}
+        else if( wifeCount===4){this.setState({discountPercent:28})}
+                            else{this.setState({discountPercent:0})}
+        
+      }
+      else if(discountRadio==='guest'){this.setState({discountPercent:5})}
+      else if(discountRadio==='health'){this.setState({discountPercent:5})}
+      else if(discountRadio==='islamic'){this.setState({discountPercent:7})}
+      else if(discountRadio==='jobless'){this.setState({discountPercent:10})}
+      
+      else if(discountRadio==='disabled'){this.setState({discountPercent:10})}
+      else if(discountRadio==='quantity'){this.setState({discountPercent:0})}
+      this.setState({discount:false})
+    }
     render() {
-      var {subTotal,delivery,cart,address,readonly}=this.state;
-     const total=Number(delivery)+Number(subTotal);
+      var {subTotal,delivery,cart,address,readonly,discount,discountPercent}=this.state;
+     const total=Number(delivery)+Number(subTotal)-((Number(subTotal)/100)*discountPercent);
        return (
           <div style={{marginTop:20}}>
             <Container className="themed-container" fluid="lg" >
@@ -268,6 +306,14 @@ import { Card, CardImg, CardBody,
                   <Row>
                     <Col>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
+                      <Label size="md" >Discount</Label>
+                      <Label size="md" >{subTotal/100*discountPercent}</Label>
+                    </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                    <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
                       <Label size="sm" >Delivery Fee</Label>
                       <Label size="sm" >Pkr. {delivery}/-</Label>
                     </div>
@@ -281,12 +327,81 @@ import { Card, CardImg, CardBody,
                     </div>
                     </Col>
                   </Row>
+                  <Row>
+                    <Col>
+                    <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
+                      <Input  name='CouponCode' size="sm" placeholder='Coupon Code' value={this.state.address} onChange={ (e)=>this.setState({address: e.target.value})} required></Input>
+                      <Button onClick={()=>this.checkOut()} color='info' size="sm">Apply</Button>
+                      <Button onClick={()=>this.setState({discount:true})} color='info' size="sm">Discount</Button>
+                    </div>
+                    </Col>
+                  </Row>
+                  <hr style={{ color: '#c0c0c0', }} />
               <Button onClick={()=>this.checkOut()} size="md">GO TO CHECKOUT</Button>
                     </CardBody>
                 </Card>
             </Col>
             </Row> 
             </Container>
+                    <Modal size="lg" isOpen={discount} >
+                      <ModalHeader >Get Discount</ModalHeader>
+                      <ModalBody>
+                      <FormGroup check>
+                        <Label size='sm' check style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
+                          <Input  type="radio" name="radio1"  value="kids" onChange={(e)=>this.setState({discountRadio:e.currentTarget.value})} />{' '}
+                          Blessed with kids alhamdulillah, we love kids and have some gift for them. Tell us your kids.<Input min='0' max='5' size='sm'style={{width:60}}  type="number" name="" value={this.state.kidCount} onChange={ (e)=>this.setState({kidCount: e.target.value})}/>.
+                          
+                        </Label>
+                      </FormGroup>
+                      <FormGroup check>
+                        <Label size='sm' check style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
+                          <Input type="radio" name="radio1" value="wife" onChange={(e)=>this.setState({discountRadio:e.currentTarget.value})}/>{' '}
+                          Taken responsibility of wives, here is a small appreciation for you and your wife/wives. Tell us your wives.<Input size='sm'style={{width:60}} min='0' max='4'  type="number" name="" value={this.state.wifeCount} onChange={ (e)=>this.setState({wifeCount: e.target.value})} />.
+                        </Label>
+                      </FormGroup>
+                      <FormGroup check>
+                        <Label size='sm' check>
+                          <Input  type="radio" name="radio1" value="guest" onChange={(e)=>this.setState({discountRadio:e.currentTarget.value})} />{' '}
+                          Having guests to have fish, we want to be a source of Barakah with this small gift.
+                        </Label>
+                      </FormGroup>
+                      <FormGroup check>
+                        <Label size='sm' check>
+                          <Input type="radio" name="radio1" value="health" onChange={(e)=>this.setState({discountRadio:e.currentTarget.value})}/>{' '}
+                          Not feeling well, we pray for your health and here is a small gift.
+                        </Label>
+                      </FormGroup>
+                      <FormGroup check>
+                        <Label size='sm' check>
+                          <Input type="radio" name="radio1" value="islamic" onChange={(e)=>this.setState({discountRadio:e.currentTarget.value})}/>{' '}
+                          Working in some Islamic project like Madrasa, etc, pray for us as we are busy in dunya and do accept our small gift.
+                        </Label>
+                      </FormGroup>
+                      <FormGroup check>
+                        <Label size='sm' check>
+                          <Input type="radio" name="radio1" value="difficult" onChange={(e)=>this.setState({discountRadio:e.currentTarget.value})}/>{' '}
+                          Going through difficult times financially, keep strong, we all are being tested, here is a small gift.
+                        </Label>
+                      </FormGroup>
+                      <FormGroup check>
+                        <Label size='sm' check>
+                          <Input type="radio" name="radio1" value="disabled" onChange={(e)=>this.setState({discountRadio:e.currentTarget.value})}/>{' '}
+                          Taking care of a differntly abled family member, our moral support is with you and this small gift.
+                        </Label>
+                      </FormGroup>
+                      <FormGroup check>
+                        <Label size='sm' check>
+                          <Input type="radio" name="radio1" value="benefitial" onChange={(e)=>this.setState({discountRadio:e.currentTarget.value})}/>{' '}
+                          Need lots of fish, lets do a mutually benefitial deal with this discount price.
+                        </Label>
+                      </FormGroup>
+                     
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button color="primary" onClick={()=>this.getDiscount()}>Get Discount</Button>{' '}
+                        <Button color="secondary" onClick={()=>this.setState({discount:false})}>Cancel</Button>
+                      </ModalFooter>
+                    </Modal>
           </div>
        );
     }

@@ -22,14 +22,14 @@ import { Card, CardImg, CardBody,
      // console.log(this.props.selectProduct)
     }
   
-    addCart(qty,desc,slug,price,image){
+    addCart(qty,desc,slug,price,image,attributes){
       const productId= this.props.selectProduct.id
       let cart= ls.get('cart');
       if(cart!=''){
-          cart.push({product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image})
+          cart.push({product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image,attributes:attributes})
           ls.set('cart',cart);
         }else{
-          ls.set('cart',[{product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image}]);
+          ls.set('cart',[{product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image,attributes:attributes}]);
       }
         console.log("Cart",ls.get('cart'));
       }
@@ -68,7 +68,7 @@ import { Card, CardImg, CardBody,
                                   <Row>
                                     <Col>
                                       <Link  to="/cart" onClick={()=>{
-                                        this.addCart(qty,this.props.selectProduct.short_description,this.props.selectProduct.slug,this.props.selectProduct.price,this.props.selectProduct.images[0].src)
+                                        this.addCart(qty,this.props.selectProduct.short_description,this.props.selectProduct.slug,this.props.selectProduct.price,this.props.selectProduct.images[0].src,this.props.selectProduct.attributes)
                                         const user=ls.get('user');
                                         if(user!==''){this.setState({modal:true})}
                                         else{}

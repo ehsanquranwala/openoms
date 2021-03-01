@@ -64,6 +64,7 @@ import { Card, CardImg,  CardBody,
         .then(json => {
           if(json.length>0){
             this.props.addProduct(json)
+            console.log(json)
         }
           else{} 
         
