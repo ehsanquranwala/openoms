@@ -51,8 +51,10 @@ import { Card, CardImg, CardBody,
                             <Col sm="4"> <CardImg top width="20%" style={{width:200,height:250}} src={this.props.selectProduct.images[0].src}  alt="Fish" /></Col>
                             <Col sm="8"><CardTitle tag="h3" >{this.props.selectProduct.slug} </CardTitle>
                                   <hr style={{ color: '#c0c0c0', }} />
-                                  <CardTitle  tag="h1" > Rs.{this.props.selectProduct.price} </CardTitle>
-                                  <Row>
+                                  {this.props.selectProduct.attributes[0]!=undefined?
+                                  <CardTitle  tag="h1" > Rs.{this.props.selectProduct.attributes[0].options[0]} </CardTitle>:
+                                  <div></div>
+                                  }<Row>
                                     <Col>
                                       <CardTitle>Quantity: </CardTitle>
                                         <div style={{flexDirection:"row",display:"flex"}}>
@@ -67,13 +69,15 @@ import { Card, CardImg, CardBody,
                                   <hr style={{ color: '#c0c0c0', }} />
                                   <Row>
                                     <Col>
+                                    {this.props.selectProduct.attributes[0]!=undefined?
                                       <Link  to="/cart" onClick={()=>{
-                                        this.addCart(qty,this.props.selectProduct.short_description,this.props.selectProduct.slug,this.props.selectProduct.price,this.props.selectProduct.images[0].src,this.props.selectProduct.attributes)
+                                        this.addCart(qty,this.props.selectProduct.short_description,this.props.selectProduct.slug,this.props.selectProduct.attributes[0].options[0],this.props.selectProduct.images[0].src,this.props.selectProduct.attributes)
                                         const user=ls.get('user');
                                         if(user!==''){this.setState({modal:true})}
                                         else{}
                                         
-                                      }} color="info" size="lg">Add to cart</Link>
+                                      }} color="info" size="lg">Add to cart</Link>:
+                                      <div></div>}
                                     </Col>
                                   </Row>
                                 </Col>

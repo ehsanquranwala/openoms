@@ -30,6 +30,7 @@ import { Card, CardImg, CardBody,
                     discountRadio:'',
                     kidCount:0,
                     wifeCount:0,
+                    coupon:''
                     };
     }
     
@@ -74,6 +75,7 @@ import { Card, CardImg, CardBody,
 
     getCart(){
      let getCart= ls.get('cart');
+     console.log(getCart)
       if(getCart===''){this.setState({delivery:0})}
       else{
         this.setState({cart:getCart})
@@ -141,14 +143,20 @@ import { Card, CardImg, CardBody,
     }
     plusProduct(i){
       let {cart}=this.state;
-      if(cart[i].quantity>=20){alert("Whole Sale Price ")}
+      let price=0;
+      //Apply Wholesale Price
+      if(cart[i].quantity>=19){
+            price=cart[i].attributes[2].options[0]}
+      else{ price=cart[i].attributes[0].options[0]}
+
       let product={
                   product_id:cart[i].product_id,
                   quantity:cart[i].quantity+1,
                   desc:cart[i].desc,
                   slug:cart[i].slug,
-                  price:cart[i].price,
-                  image:cart[i].image}
+                  price:price,
+                  image:cart[i].image,
+                  attributes:cart[i].attributes}
       cart[i] = product;
       ls.set('cart',cart);
       this.getCart();
@@ -157,7 +165,18 @@ import { Card, CardImg, CardBody,
     minusProduct(i){
       let {cart}=this.state;
       if(cart[i].quantity!==1){
-      let product={product_id:cart[i].product_id,quantity:cart[i].quantity-1,desc:cart[i].desc,slug:cart[i].slug,price:cart[i].price,image:cart[i].image}
+        let price=0;
+        //Apply Wholesale Price
+        if(cart[i].quantity>20){
+              price=cart[i].attributes[2].options[0]}
+        else{ price=cart[i].attributes[0].options[0]}
+      let product={product_id:cart[i].product_id,
+                    quantity:cart[i].quantity-1,
+                    desc:cart[i].desc,
+                    slug:cart[i].slug,
+                    price:price,
+                    image:cart[i].image,
+                    attributes:cart[i].attributes}
       cart[i] = product;
       ls.set('cart',cart);
       this.getCart();
@@ -178,12 +197,13 @@ import { Card, CardImg, CardBody,
         this.setState({discountPercent:discount})
       }
       else if(discountRadio=='wife'){
-            if( wifeCount===0){this.setState({discountPercent:0})}
-        else if( wifeCount===1){this.setState({discountPercent:3})}
-        else if( wifeCount===2){this.setState({discountPercent:10})}
-        else if( wifeCount===3){this.setState({discountPercent:18})}
-        else if( wifeCount===4){this.setState({discountPercent:28})}
-                            else{this.setState({discountPercent:0})}
+        
+            if( wifeCount==0){this.setState({discountPercent:0})}
+            if( wifeCount==1){this.setState({discountPercent:3})}
+            if( wifeCount==2){this.setState({discountPercent:10})}
+            if( wifeCount==3){this.setState({discountPercent:18})}
+            if( wifeCount==4){this.setState({discountPercent:28})}
+               
         
       }
       else if(discountRadio==='guest'){this.setState({discountPercent:5})}
@@ -194,6 +214,29 @@ import { Card, CardImg, CardBody,
       else if(discountRadio==='disabled'){this.setState({discountPercent:10})}
       else if(discountRadio==='quantity'){this.setState({discountPercent:0})}
       this.setState({discount:false})
+    }
+    getCoupon(){
+      let {cart}=this.state;
+      var {coupon}=this.state;
+      for(var a=0;a<= cart.length-1;a++){
+      if(coupon==cart[a].attributes[4].options[0]){
+        
+        let price=0;
+        let product={
+          product_id:cart[a].product_id,
+          quantity:cart[a].quantity,
+          desc:cart[a].desc,
+          slug:cart[a].slug,
+          price:cart[a].attributes[3].options[0],
+          image:cart[a].image,
+          attributes:cart[a].attributes}
+
+          cart[a] = product;
+          ls.set('cart',cart);
+          this.getCart();
+      }
+      }
+      
     }
     render() {
       var {subTotal,delivery,cart,address,readonly,discount,discountPercent}=this.state;
@@ -307,7 +350,7 @@ import { Card, CardImg, CardBody,
                     <Col>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
                       <Label size="md" >Discount</Label>
-                      <Label size="md" >{subTotal/100*discountPercent}</Label>
+                      <Label size="md" >{parseInt(subTotal/100*discountPercent)}</Label>
                     </div>
                     </Col>
                   </Row>
@@ -315,7 +358,7 @@ import { Card, CardImg, CardBody,
                     <Col>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
                       <Label size="sm" >Delivery Fee</Label>
-                      <Label size="sm" >Pkr. {delivery}/-</Label>
+                      <Label size="sm" >{delivery}</Label>
                     </div>
                     </Col>
                   </Row>
@@ -323,15 +366,15 @@ import { Card, CardImg, CardBody,
                     <Col>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
                       <Label size="lg" >Total</Label>
-                      <Label size="lg" >{total}</Label>
+                      <Label size="lg" >{parseInt(total)}</Label>
                     </div>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
-                      <Input  name='CouponCode' size="sm" placeholder='Coupon Code' value={this.state.address} onChange={ (e)=>this.setState({address: e.target.value})} required></Input>
-                      <Button onClick={()=>this.checkOut()} color='info' size="sm">Apply</Button>
+                      <Input  name='CouponCode' size="sm" placeholder='Coupon Code' value={this.state.coupon} onChange={ (e)=>this.setState({coupon: e.target.value})} required></Input>
+                      <Button onClick={()=>this.getCoupon()} color='info' size="sm">Apply</Button>
                       <Button onClick={()=>this.setState({discount:true})} color='info' size="sm">Discount</Button>
                     </div>
                     </Col>

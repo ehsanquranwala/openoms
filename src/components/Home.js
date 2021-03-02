@@ -64,7 +64,7 @@ import { Card, CardImg,  CardBody,
         .then(json => {
           if(json.length>0){
             this.props.addProduct(json)
-            console.log(json)
+           
         }
           else{} 
         
@@ -108,8 +108,9 @@ import { Card, CardImg,  CardBody,
                         {products.images[0]?
                       <CardImg  top width="20%" style={{width:200,height:150}} src={products.images[0].src}  />
                         :<div></div>}<CardTitle tag="h5" >{products.slug} </CardTitle>
-                      <CardTitle tag="h6" color="blue">Rs. {products.price}</CardTitle>
-                  </CardBody>
+                        {this.props.selectProduct.attributes!=undefined?
+                      <CardTitle tag="h6" color="blue">Rs. {this.props.selectProduct.attributes[0].options[0]}</CardTitle>
+                          : <div></div>}   </CardBody>
                 </Card></Col>)}
               </Row>
             </Container>
