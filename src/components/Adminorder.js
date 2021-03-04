@@ -21,7 +21,7 @@ import { Card, CardImg, CardBody,
                     address:'',
                     city:'',
                     area:'',
-                    delivery:250,
+                    delivery:'250',
                     readonly:false,
                     subTotal:0,
                     total:0,
@@ -30,13 +30,13 @@ import { Card, CardImg, CardBody,
                     discountRadio:'',
                     kidCount:0,
                     wifeCount:0,
-                    coupon:'',
-                    priceType:'Retail'
+                    coupon:''
                     };
     }
     
     componentDidMount(){
       this.getCart()
+     
     }
     async getCustomer(){
       console.log(this.props.user)
@@ -74,7 +74,7 @@ import { Card, CardImg, CardBody,
     }
 
     getCart(){
-     let getCart= ls.get('cart');
+     let getCart= ls.get('admincart');
      console.log(getCart)
       if(getCart===''){this.setState({delivery:0})}
       else{
@@ -89,7 +89,7 @@ import { Card, CardImg, CardBody,
     }
   
     checkOut(){
-      const {firstName,lastName,email,phone,address,city,area,delivery,subTotal,discountPercent,discountRadio,total}=this.state;
+      const {firstName,lastName,email,phone,address,city,area,delivery}=this.state;
       if(  phone!=='' && address!==''  ){
        let data={
                     "payment_method": "COD",
@@ -104,26 +104,26 @@ import { Card, CardImg, CardBody,
                                 "city":city,
                                 "company":'',
                                 "state":'',
-                                "postcode":delivery.toString(),
+                                "postcode":delivery,
                                 "country":''},
                       "shipping":
                                 {"first_name":firstName,
                                 "last_name":lastName,
                                 "email":email ,
                                 "phone":phone ,
-                                "address_1":subTotal.toString(),
-                                "address_2":discountPercent.toString() ,
-                                "city":discountRadio.toString(),
-                                "company":total.toString(),
+                                "address_1":address ,
+                                "address_2":area ,
+                                "city":city,
+                                "company":'',
                                 "state":'',
-                                "postcode":delivery.toString(),
+                                "postcode":delivery,
                                 "country":'pk'},
                       "line_items": 
                                 this.state.cart,
                       "shipping_lines": [
                                 {"method_id": "flat_rate",
                                 "method_title": "Flat Rate",
-                                "total": delivery.toString()
+                                "total": delivery
                               }
                         ]};
       fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/orders', 
@@ -137,7 +137,7 @@ import { Card, CardImg, CardBody,
                         this.setState({cart:[],subTotal:0,total:0});
                         ls.set('cart',[]);
                         }
-                        else{alert(json)}
+                        else{alert(json.message)}
         console.log("Order book",json); });
       }else{alert("Please Enter Complete Details")}
     }
@@ -158,7 +158,7 @@ import { Card, CardImg, CardBody,
                   image:cart[i].image,
                   attributes:cart[i].attributes}
       cart[i] = product;
-      ls.set('cart',cart);
+      ls.set('admincart',cart);
       this.getCart();
     
     }
@@ -178,14 +178,14 @@ import { Card, CardImg, CardBody,
                     image:cart[i].image,
                     attributes:cart[i].attributes}
       cart[i] = product;
-      ls.set('cart',cart);
+      ls.set('admincart',cart);
       this.getCart();
       }
     }
     removeProduct(i){
       let {cart}=this.state;
       cart.splice(i, 1);
-      ls.set('cart',this.state.cart);
+      ls.set('admincart',this.state.cart);
       this.getCart();
       
     }
@@ -232,21 +232,60 @@ import { Card, CardImg, CardBody,
           attributes:cart[a].attributes}
 
           cart[a] = product;
-          ls.set('cart',cart);
+          ls.set('admincart',cart);
           this.getCart();
       }
       }
       
     }
+    addCart(){
+        const {id}= this.state
+        let cart= ls.get('admincart');
+        if(cart!=''){
+            cart.push({product_id:this.props.product[id].id,quantity:1,desc:this.props.product[id].desc,slug:this.props.product[id].slug,price:this.props.product[id].attributes[0].options[0],image:this.props.product[id].images[0].src,attributes:this.props.product[id].attributes})
+            ls.set('admincart',cart);
+          }else{
+            ls.set('admincart',[{product_id:this.props.product[id].id,quantity:1,desc:this.props.product[id].desc,slug:this.props.product[id].slug,price:this.props.product[id].attributes[0].options[0],image:this.props.product[id].images[0].src,attributes:this.props.product[id].attributes}]);
+        }
+          console.log("Cart",this.props.product[id]);  this.getCart();
+        }
     render() {
       var {subTotal,delivery,cart,address,readonly,discount,discountPercent}=this.state;
      const total=Number(delivery)+Number(subTotal)-((Number(subTotal)/100)*discountPercent);
        return (
           <div style={{marginTop:20}}>
             <Container className="themed-container" fluid="lg" >
+                
+               
             <Row>
             <Col md="6">
-               
+            <Row>
+                    <Col md='12'>
+                        <Card>
+                            <CardHeader>Add Products</CardHeader>
+                                <CardBody style={{backgroundColor: "#f6f6f6"}}>
+                                    <Row>
+                                    <Col md="6">
+                                        <FormGroup>
+                                            <Input  type="select" 
+                                                    required={true} 
+                                                    value={this.state.id}  
+                                                    onChange={(e)=>{this.setState({id:e.target.value});  }}>
+                                                    <option  disabled={this.props.defaultDisabled} value="">Select Product</option>
+                                                    {this.props.product.map((data, idx)=>{
+                                                        return <option key={idx} value={idx}>{data.slug}</option>
+                                                    })}
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+                                    <Col  md="5">
+                                                <Button size='sm' onClick={()=>this.addCart()}>Add to Cart</Button>
+                                    </Col>
+                                    </Row>
+                                    </CardBody>
+                        </Card>
+                    </Col>
+                </Row>
              <Card>
                <CardHeader>Customer Details</CardHeader>
               <CardBody style={{backgroundColor: "#f6f6f6"}}>
@@ -255,7 +294,7 @@ import { Card, CardImg, CardBody,
                 <Col md="6">
                   <FormGroup>
                     <Label >Email Address *</Label>
-                    <Input readOnly={readonly} type='email'  name='email' placeholder='Enter Email' value={this.state.email} onChange={ (e)=>this.setState({email: e.target.value}) } required></Input>
+                    <Input type='email'  name='email' placeholder='Enter Email' value={this.state.email} onChange={ (e)=>this.setState({email: e.target.value}) } required></Input>
                   </FormGroup>
                   </Col>
                   <Col md="6">
@@ -319,10 +358,10 @@ import { Card, CardImg, CardBody,
              
                 <Row>
                     <Col  md="3">
-                        <CardImg  style={{width:80,height:70,padding:0}} src={product.image} alt="Fish" />
+                        <CardImg  style={{width:80,height:70,padding:0}} src={product.image} alt="Image" />
                     </Col>
                     <Col  md="5">
-                        <CardTitle tag="h6" >{product.slug}<p>{this.state.priceType}</p> </CardTitle>
+                        <CardTitle tag="h6" >{product.slug} </CardTitle>
                         <CardTitle tag="h6" >Rs. {product.price*product.quantity }</CardTitle>
                         
                     </Col>
@@ -453,6 +492,7 @@ import { Card, CardImg, CardBody,
  const mapStateToProps = state => {
   return {
     user: state.user,
+    product: state.product,
   };
 };
 

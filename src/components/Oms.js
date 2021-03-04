@@ -43,7 +43,8 @@ import { Card, CardImg,  CardBody,
                     price_percent_profit_resale:'30',
                     base_profit_special:'60',
                     price_percent_profit_special:'15',
-                    special_price_code:''
+                    special_price_code:'',
+                    totalExpense:0
                     };
     }
     componentDidMount(){
@@ -87,7 +88,9 @@ import { Card, CardImg,  CardBody,
           base_profit_special,
           price_percent_profit_special,
           products,
+          totalExpense
         }=this.state;
+
         let data = new FormData();
       data.append('post','addpurchase');
       data.append("purchase_date",date);
@@ -109,29 +112,31 @@ import { Card, CardImg,  CardBody,
       data.append("price_percent_profit_resale",price_percent_profit_resale );
       data.append("base_profit_special",base_profit_special);
       data.append("price_percent_profit_special",price_percent_profit_special );
-          for(var a=0 ; a<=products.length-1;a++ ){
-            data.append("product_id",products[a].product_id);
-            data.append("product_slug",products[a].product_slug);
-            data.append("purchase_price",products[a].purchase_price);
-            data.append("price_date",products[a].price_date);
-            data.append("Wholeweight",products[a].Wholeweight);
-            data.append("Netweight",products[a].Netweight);
-            data.append("wholesale_price",products[a].wholesale_price);
-            data.append("retail_price",products[a].retail_price);
-            data.append("resale_price",products[a].resale_price);
-            data.append("special_price",products[a].special_price);
-            data.append("special_price_code",products[a].special_price_code);
-            
-            
+      let totalWholeWeight=0;
+      let perKgExpense=0;
+      for(var a=0 ; a<=products.length-1;a++ ){
+        totalWholeWeight=Number(totalWholeWeight)+ Number(products[a].Wholeweight);
+      }
+      perKgExpense=(Number(helper)+Number(cutting)+Number(transport)+Number(trolley)+Number(ice)+Number(shopper)+Number(washing)+Number(packing)+Number(food)+Number(otherExpense))/totalWholeWeight;
+      
+      for(var a=0 ; a<=products.length-1;a++ ){
+            data.append("product_id["+a+"]",products[a].product_id);
+            data.append("product_slug["+a+"]",products[a].product_slug);
+            data.append("purchase_price["+a+"]",products[a].purchase_price);
+            data.append("price_date["+a+"]",products[a].price_date);
+            data.append("whole_weight["+a+"]",products[a].Wholeweight);
+            data.append("net_weight["+a+"]",products[a].Netweight);
+            data.append("special_price_code["+a+"]",products[a].special_price_code);
+            data.append("expense",perKgExpense);
           }
-      console.log('gaya data',data)
+
       if(products.length !==0){
       fetch('https://weeklyfishclub.com/api/create_post', {
         method:'POST',
         body: data
         })
         .then(response =>  response.json())
-        .then(json => console.log(json))
+        .then(json => alert(json.status))
       }else{
         console.log("Product Not Selected")
       }
@@ -190,6 +195,10 @@ import { Card, CardImg,  CardBody,
                 <Input  type="number" placeholder={'Net Weight'} required={true} value={this.state.Netweight}  onChange={(e)=>{this.setState({Netweight:e.target.value}); }}>
                  </Input> </FormGroup>
                 </Col>
+                <Col md="2"><FormGroup>
+                <Input  type="text" placeholder={'Coupon Code'} required={true} value={this.state.special_price_code}  onChange={(e)=>{this.setState({special_price_code:e.target.value}); }}>
+                 </Input> </FormGroup>
+                </Col>
                 
                 <Col md="1"><FormGroup>
                 <Button onClick={()=>this.add()}>Add</Button> </FormGroup>
@@ -197,7 +206,7 @@ import { Card, CardImg,  CardBody,
               </Row>
               <Row>
                 <Col md="7">
-                    <Table bordered="solid">
+                    <Table bordered='true'>
                     <thead>
                       <tr>
                         <th>Date</th>
@@ -210,6 +219,7 @@ import { Card, CardImg,  CardBody,
                         <th>Resale Price</th>
                         <th>Retail Price</th>
                         <th>Special Price</th>
+                        <th>Coupon Code</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -224,6 +234,7 @@ import { Card, CardImg,  CardBody,
                         <td>{product.resale_price}</td>
                         <td>{product.retail_price}</td>
                         <td>{product.special_price}</td>
+                        <td>{product.special_price_code}</td>
                         
                       </tr>
                       )}

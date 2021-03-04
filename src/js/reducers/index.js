@@ -6,6 +6,7 @@ const initialState = {
   product: [],
   category: [],
   user: [],
+  userdetail:[],
   selectProduct:[]
 };
 
@@ -33,6 +34,11 @@ function rootReducer(state = initialState, action) {
   if (action.type === 'ADD_USER') {
     return Object.assign({}, state, {
       user: action.payload
+    });
+  }
+  if (action.type === 'ADD_USER_DETAIL') {
+    return Object.assign({}, state, {
+      userdetail: action.payload
     });
   }
   if (action.type === 'SELECT_PRODUCT') {

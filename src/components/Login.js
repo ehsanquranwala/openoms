@@ -8,7 +8,7 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
   import SecureLS from 'secure-ls';
   
   import { connect } from "react-redux";
-  import { products, addtocart, category,addArticle,user ,selectProduct} from "../js/actions/index";
+  import { products, addtocart, category,addArticle,user ,selectProduct, userdetail} from "../js/actions/index";
   var ls = new SecureLS({encodingType: 'aes'});
  
  class Login extends React.Component {
@@ -17,9 +17,31 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
       this.state = {username:'',
                     password:'',
                     email:'',
-                    navigate:false};
+                    navigate:false,
+                    admin:false};
     }
+  getUserDetail(id){
+    
   
+       fetch(`https://www.weeklyfishclub.com/wp-json/wc/v3/customers/${id}`,
+         {method:'GET', 
+           headers: {
+           'Authorization':'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')}})
+         .then(response => response.json())
+         .then(json => { 
+           if(json.id){
+            this.props.Adduserdetail(json)
+            if(json.role=='administrator')
+            { this.setState({admin:true})}
+            else{
+              this.setState({navigate:true})
+            }
+            } 
+           else{ 
+                       } 
+       });
+     
+  }
 
     handleSubmit=()=>{
       const {username,password}=this.state;
@@ -34,9 +56,10 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
         .then(json => { 
           console.log(json)
           if(json.status=='ok'){
-             ls.set('user', json)
-             this.props.Adduser(json)
-              this.setState({navigate:true})
+            this.props.Adduser(json)
+            this.getUserDetail(json.user.id)
+            
+             // 
                } else{ alert(json.error)}   });
                         
                 }else{alert("Username or Password empty")} 
@@ -44,10 +67,14 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
 
 
     render() {
-      const { navigate } = this.state
+      const { navigate,admin } = this.state
       if (navigate) {
         return <Redirect to="/" push={true} />
       }
+      if (admin) {
+        return <Redirect to="/Oms" push={true} />
+      }
+      
        return (
           <div style={{marginTop:'10%'}}>
             <Container className="themed-container" fluid="sm" >
@@ -86,17 +113,17 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
  
  const mapStateToProps = state => {
   return {
-    product: state.product,
-    category: state.category,
-    selectProduct:state.selectProduct
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     Adduser(json) {
-      dispatch(user(json));
+    dispatch(user(json));
     },
+    Adduserdetail(json) {
+      dispatch(userdetail(json));
+      }
   };
 };
 

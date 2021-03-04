@@ -16,7 +16,7 @@ import {   Collapse,
     Link
   } from "react-router-dom";
   import { useDispatch, useSelector } from 'react-redux';
-  import { user} from "../js/actions/index";
+  import { user, userdetail} from "../js/actions/index";
   var ls = new SecureLS({encodingType: 'aes'});
   
 
@@ -24,6 +24,7 @@ const AppHeader = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch()
     const login = useSelector(state => state.user);
+    const loginDetail = useSelector(state => state.userdetail);
     const toggle = () => setIsOpen(!isOpen);
     return (
         <Navbar  style={{backgroundColor:"#006994",color:"#FFFFFF"}} light expand="md">
@@ -32,13 +33,28 @@ const AppHeader = () => {
           Weekly Fish Club</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
-          <Nav  className="mr-auto" navbar>
+          
+         {loginDetail.role=='administrator'?
+         <Nav  className="mr-auto" navbar>
+            <NavItem>
+              <Link style={{color:"#FFFFFF"}}  to="/Oms">Purchase</Link>
+            </NavItem>
+            <NavItem>
+              <Link style={{color:"#FFFFFF"}}  to="/Admin-order">Order</Link>
+            </NavItem>
+            <NavItem>
+              <Link style={{color:"#FFFFFF"}}  to="/Admin-OrderList">Order-List</Link>
+            </NavItem>
+            
+            <Link  onClick={()=>{dispatch(user([]),userdetail([])) }} to="/login">Logout</Link>
+            
+           </Nav>:<Nav  className="mr-auto" navbar>
+
+
             <NavItem>
               <Link style={{color:"#FFFFFF"}}  to="/">Shop</Link>
             </NavItem>
-            <NavItem>
-              <Link style={{color:"#FFFFFF"}}  to="/Oms">OMS</Link>
-            </NavItem>
+           
             <NavItem>
               <Link style={{color:"#FFFFFF"}} to="/category">Category</Link>
             </NavItem>
@@ -49,7 +65,8 @@ const AppHeader = () => {
             <NavItem>
               <Link style={{color:"#FFFFFF"}} to="/cart">Cart</Link>
             </NavItem>
-            {console.log(login)}
+            
+            {console.log(loginDetail.role)}
             {
             login.length===0?
             <NavItem>
@@ -71,12 +88,14 @@ const AppHeader = () => {
                 </DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
-                <Link  onClick={()=>{dispatch(user([]))}} to="/login">Logout</Link>
+                <Link  onClick={()=>{dispatch(user([]),userdetail([])) }} to="/login">Logout</Link>
                 </DropdownItem>
               </DropdownMenu>
+              
             </UncontrolledDropdown>
             }
-          </Nav>
+
+          </Nav>}
         </Collapse>
       </Navbar>
     );

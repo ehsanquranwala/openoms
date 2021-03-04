@@ -4,6 +4,7 @@ const ADD_CART         = "ADD_CART";
 const ADD_PRODUCT      = "ADD_PRODUCT";
 const ADD_CATEGORY     = "ADD_CATEGORY";
 const ADD_USER         = "ADD_USER";
+const ADD_USER_DETAIL  = "ADD_USER_DETAIL";
 const SELECT_PRODUCT   = "SELECT_PRODUCT";
 
 export function addArticle(payload) {
@@ -20,6 +21,9 @@ export function category(payload) {
 }
 export function user(payload) {
   return { type: ADD_USER, payload };
+}
+export function userdetail(payload) {
+  return { type: ADD_USER_DETAIL, payload };
 }
 export function selectProduct(payload) {
   return { type: SELECT_PRODUCT, payload };
