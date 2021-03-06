@@ -22,14 +22,14 @@ import { Card, CardImg, CardBody,
      // console.log(this.props.selectProduct)
     }
   
-    addCart(qty,desc,slug,price,image,attributes){
+    addCart(qty,desc,slug,price,image,average){
       const productId= this.props.selectProduct.id
       let cart= ls.get('cart');
       if(cart!=''){
-          cart.push({product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image,attributes:attributes})
+          cart.push({product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image,average:average,discount:0,priceType:'retail'})
           ls.set('cart',cart);
         }else{
-          ls.set('cart',[{product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image,attributes:attributes}]);
+          ls.set('cart',[{product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image,average:average,discount:0,priceType:'retail'}]);
       }
         console.log("Cart",ls.get('cart'));
       }
@@ -48,11 +48,11 @@ import { Card, CardImg, CardBody,
                       <CardBody style={{backgroundColor: "#f6f6f6"}}>
                      
                           <Row> 
-                            <Col sm="4"> <CardImg top width="20%" style={{width:200,height:250}} src={this.props.selectProduct.images[0].src}  alt="Fish" /></Col>
-                            <Col sm="8"><CardTitle tag="h3" >{this.props.selectProduct.slug} </CardTitle>
+                            <Col sm="4"> <CardImg top width="20%" style={{width:200,height:250}} src={this.props.selectProduct.product.images[0].src}  alt="Fish" /></Col>
+                            <Col sm="8"><CardTitle tag="h3" >{this.props.selectProduct.product.slug} </CardTitle>
                                   <hr style={{ color: '#c0c0c0', }} />
-                                  {this.props.selectProduct.attributes[0]!=undefined?
-                                  <CardTitle  tag="h1" > Rs.{this.props.selectProduct.attributes[0].options[0]} </CardTitle>:
+                                  {this.props.selectProduct.average!=undefined?
+                                  <CardTitle  tag="h1" > Rs.{parseInt(this.props.selectProduct.average.total_retail_price)} </CardTitle>:
                                   <div></div>
                                   }<Row>
                                     <Col>
@@ -69,9 +69,9 @@ import { Card, CardImg, CardBody,
                                   <hr style={{ color: '#c0c0c0', }} />
                                   <Row>
                                     <Col>
-                                    {this.props.selectProduct.attributes[0]!=undefined?
+                                    {this.props.selectProduct.product.attributes[0]!=undefined?
                                       <Link  to="/cart" onClick={()=>{
-                                        this.addCart(qty,this.props.selectProduct.short_description,this.props.selectProduct.slug,this.props.selectProduct.attributes[0].options[0],this.props.selectProduct.images[0].src,this.props.selectProduct.attributes)
+                                        this.addCart(qty,this.props.selectProduct.product.short_description,this.props.selectProduct.product.slug,this.props.selectProduct.average.total_retail_price,this.props.selectProduct.product.images[0].src,this.props.selectProduct.average)
                                         const user=ls.get('user');
                                         if(user!==''){this.setState({modal:true})}
                                         else{}
@@ -97,10 +97,6 @@ import { Card, CardImg, CardBody,
                          
                 </Row>
                                     }
-
-              
-              
-              
           </Container>
           </div>
        );

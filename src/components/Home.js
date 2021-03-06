@@ -70,18 +70,7 @@ import { Card, CardImg,  CardBody,
         .then(json => {
           if(json[0].length>0){
             price_table_data=json[0];
-            let array=[];
-            for(var a=0;a<=price_table_data.length-1;a++){
-              array.push(price_table_data[a]);
-              
-            let product_id=             price_table_data[a].product_id;
-            
-            let purchase_price=             price_table_data[a].purchase_price;
-            let whole_weight=               price_table_data[a].whole_weight;
-            let expenses=                   price_table_data[a].expenses;
-            let base_profit_retail=         price_table_data[a].base_profit_retail;
-            let price_percent_profit_retail=price_table_data[a].price_percent_profit_retail;
-            }
+          
          }
        }); 
       fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/products', {
@@ -91,23 +80,55 @@ import { Card, CardImg,  CardBody,
         .then(json => {
           if(json.length>0){
             for(var i=0;i<=json.length-1;i++){
-              var found=0;var temp=[];
+              var found=0;
+              var temp=[];
+              let sum_price=0;
+              let sum_expense=0;
+              let sum_retail_base=0;
+              let sum_retail_percent=0;
+              let sum_whole_base=0;
+              let sum_whole_percent=0;
+              let sum_resale_base=0;
+              let sum_resale_percent=0;
+              let sum_special_base=0;
+              let sum_special_percent=0;
               for(var a=0;a<=price_table_data.length-1;a++){
                 if(json[i].id == price_table_data[a].product_id){
                   console.log('price table',price_table_data[a])
-                 temp.push(price_table_data[a])
+                   sum_price=sum_price+(price_table_data[a].purchase_price/price_table_data[a].whole_weight);
+                   sum_expense=sum_expense+Number(price_table_data[a].expenses);
+                   sum_retail_base=     sum_retail_base+(Number(price_table_data[a].base_profit_retail));
+                   sum_retail_percent=  sum_retail_percent+Number(price_table_data[a].price_percent_profit_retail);
+                   sum_whole_base=      sum_whole_base+Number(price_table_data[a].base_profit_wholesale);
+                   sum_whole_percent=   sum_whole_percent+Number(price_table_data[a].price_percent_profit_wholesale);
+                   sum_resale_base=     sum_resale_base+Number(price_table_data[a].base_profit_resale);
+                   sum_resale_percent=  sum_resale_percent+Number(price_table_data[a].price_percent_profit_resale);
+                   sum_special_base=    sum_special_base+Number(price_table_data[a].base_profit_special);
+                   sum_special_percent= sum_special_percent+Number(price_table_data[a].price_percent_profit_special);
+                  
+                   temp.push(price_table_data[a])
               //    products.push({product:json[i],price:price_table_data[a]})
               
                   found=found+1;
                 }
                  
               }
-              for(var d=0;d<=temp.length-1;d++){
-                let pp_retail=temp[d].price_percent_profit_retail;
-                
-              }
-              products.push({product:json[i],price:temp})
-              console.log(temp)
+              products.push({
+                product:json[i],
+               // price:temp,
+                average:{total_retail_price:(sum_price/temp.length)+(sum_retail_base/temp.length)+(sum_expense/temp.length)+(((sum_price/temp.length)/100)*sum_retail_percent/temp.length),
+                          price:sum_price/temp.length,
+                          expense:sum_expense/temp.length,
+                          retailbase:sum_retail_base/temp.length,
+                          retailpercent:sum_retail_percent/temp.length,
+                          wholebase:sum_whole_base/temp.length,
+                          wholepercent:sum_whole_percent/temp.length,
+                          resalebase:sum_resale_base/temp.length,
+                          resalepercent:sum_resale_percent/temp.length,
+                          specialbase:sum_special_base/temp.length,
+                          specialpercent:sum_special_percent/temp.length,
+                         }})
+              
             }
             this.props.addProduct(products)
         console.log('logs',products)
@@ -146,15 +167,15 @@ import { Card, CardImg,  CardBody,
             <Container className="themed-container" fluid="sm" >
                 <Row>
                   {this.props.product.map((products,i) =>  <Col sm="3">
-                    <Card key={products.product.id} onClick={()=>{this.props.selectProduct(this.props.product[i].product)
+                    <Card key={products.product.id} onClick={()=>{this.props.selectProduct(this.props.product[i])
                                                           this.setState({navigate:true})
                                                           }}>
                       <CardBody  style={{backgroundColor: "#f6f6f6"}}>
                         {products.product.images[0]?
                       <CardImg  top width="20%" style={{width:200,height:150}} src={products.product.images[0].src}  />
                         :<div></div>}<CardTitle tag="h5" >{products.product.slug} </CardTitle>
-                        {this.props.selectProduct.attributes!=undefined?
-                      <CardTitle tag="h6" color="blue">Rs. {this.props.selectProduct.product.attributes[0].options[0]}</CardTitle>
+                        {this.props.selectProduct.average!=undefined?
+                      <CardTitle tag="h6" color="blue">Rs. {this.props.selectProduct.average.price}</CardTitle>
                           : <div></div>}   </CardBody>
                 </Card></Col>)}
               </Row>

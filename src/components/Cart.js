@@ -31,7 +31,6 @@ import { Card, CardImg, CardBody,
                     kidCount:0,
                     wifeCount:0,
                     coupon:'',
-                    priceType:'Retail'
                     };
     }
     
@@ -142,13 +141,15 @@ import { Card, CardImg, CardBody,
       }else{alert("Please Enter Complete Details")}
     }
     plusProduct(i){
-      let {cart}=this.state;
-      let price=0;
+      let {cart,discountPercent}=this.state;
+      let price=0;let priceType='';
       //Apply Wholesale Price
       if(cart[i].quantity>=19){
-            price=cart[i].attributes[2].options[0]}
-      else{ price=cart[i].attributes[0].options[0]}
-
+            priceType='Wholesale';
+            price=(cart[i].average.price)+(cart[i].average.wholebase)+(cart[i].average.expense)+((cart[i].average.price/100)*(cart[i].average.wholepercent))}
+      else{ 
+        price=(cart[i].average.price)+(cart[i].average.retailbase)+(cart[i].average.expense)+((cart[i].average.price/100)*(cart[i].average.retailpercent))}
+        priceType='Retail';
       let product={
                   product_id:cart[i].product_id,
                   quantity:cart[i].quantity+1,
@@ -156,27 +157,34 @@ import { Card, CardImg, CardBody,
                   slug:cart[i].slug,
                   price:price,
                   image:cart[i].image,
-                  attributes:cart[i].attributes}
+                  average:cart[i].average,
+                  discount:cart[i].discount,
+                  priceType:cart[i].priceType}
       cart[i] = product;
       ls.set('cart',cart);
       this.getCart();
     
     }
     minusProduct(i){
-      let {cart}=this.state;
+      let {cart,discountPercent}=this.state;
       if(cart[i].quantity!==1){
-        let price=0;
+        let price=0;let priceType='';
         //Apply Wholesale Price
         if(cart[i].quantity>20){
-              price=cart[i].attributes[2].options[0]}
-        else{ price=cart[i].attributes[0].options[0]}
+          priceType='Wholesale';
+              price=price=(cart[i].average.price)+(cart[i].average.wholebase)+(cart[i].average.expense)+((cart[i].average.price/100)*(cart[i].average.wholepercent))}
+        else{ 
+          priceType='Retail';
+          price=(cart[i].average.price)+(cart[i].average.retailbase)+(cart[i].average.expense)+((cart[i].average.price/100)*(cart[i].average.retailpercent))}
       let product={product_id:cart[i].product_id,
                     quantity:cart[i].quantity-1,
                     desc:cart[i].desc,
                     slug:cart[i].slug,
                     price:price,
                     image:cart[i].image,
-                    attributes:cart[i].attributes}
+                    average:cart[i].average,
+                    discount:cart[i].discount,
+                    priceType:cart[i].priceType}
       cart[i] = product;
       ls.set('cart',cart);
       this.getCart();
@@ -214,12 +222,13 @@ import { Card, CardImg, CardBody,
       else if(discountRadio==='disabled'){this.setState({discountPercent:10})}
       else if(discountRadio==='quantity'){this.setState({discountPercent:0})}
       this.setState({discount:false})
+      
     }
     getCoupon(){
       let {cart}=this.state;
       var {coupon}=this.state;
       for(var a=0;a<= cart.length-1;a++){
-      if(coupon==cart[a].attributes[4].options[0]){
+      if(coupon==cart[a].average.total_retail_price){
         
         let price=0;
         let product={
@@ -227,9 +236,9 @@ import { Card, CardImg, CardBody,
           quantity:cart[a].quantity,
           desc:cart[a].desc,
           slug:cart[a].slug,
-          price:cart[a].attributes[3].options[0],
+          price:cart[a].average.total_retail_price,
           image:cart[a].image,
-          attributes:cart[a].attributes}
+          average:cart[a].average}
 
           cart[a] = product;
           ls.set('cart',cart);
@@ -323,17 +332,16 @@ import { Card, CardImg, CardBody,
                     </Col>
                     <Col  md="5">
                         <CardTitle tag="h6" >{product.slug}<p>{this.state.priceType}</p> </CardTitle>
-                        <CardTitle tag="h6" >Rs. {product.price*product.quantity }</CardTitle>
-                        
+                        <CardTitle tag="h6" >Rs. {parseInt(product.price*product.quantity )}</CardTitle>
                     </Col>
                     <Col  md="3">
-                                <div style={{flexDirection:"row",display:"flex"}}>
-                                    <Button color="info" size="sm" onClick={()=>this.minusProduct(i)} >-</Button>
-                                    <Label size="sm" style={{padding:10,height:5}}>{product.quantity}</Label>
-                                    <Button color="info" size="sm" onClick={()=>this.plusProduct(i)}>+</Button>
-                                </div>
-                                <Button color="info" size="sm" onClick={()=>this.removeProduct(i)}>Remove</Button>
-                        
+                          <div style={{flexDirection:"row",display:"flex"}}>
+                              <Button color="info" size="sm" onClick={()=>this.minusProduct(i)} >-</Button>
+                              <Label size="sm" style={{padding:10,height:5}}>{product.quantity}</Label>
+                              <Button color="info" size="sm" onClick={()=>this.plusProduct(i)}>+</Button>
+                          </div>
+                          <Button color="info" size="sm" onClick={()=>this.removeProduct(i)}>Remove</Button>
+                  
                     </Col>
                 </Row>
              ):<h6>No Product Found</h6>}
@@ -342,7 +350,7 @@ import { Card, CardImg, CardBody,
                     <Col>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
                       <Label size="md" >Sub Total</Label>
-                      <Label size="md" >{subTotal}</Label>
+                      <Label size="md" >{parseInt(subTotal)}</Label>
                     </div>
                     </Col>
                   </Row>
@@ -350,7 +358,7 @@ import { Card, CardImg, CardBody,
                     <Col>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
                       <Label size="md" >Discount</Label>
-                      <Label size="md" >{parseInt(subTotal/100*discountPercent)}</Label>
+                      <Label size="md" >{parseInt(discountPercent)}</Label>
                     </div>
                     </Col>
                   </Row>
