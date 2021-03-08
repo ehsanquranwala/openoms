@@ -95,8 +95,8 @@ import { Card, CardImg,  CardBody,
               for(var a=0;a<=price_table_data.length-1;a++){
                 if(json[i].id == price_table_data[a].product_id){
                   console.log('price table',price_table_data[a])
-                   sum_price=sum_price+(price_table_data[a].purchase_price/price_table_data[a].whole_weight);
-                   sum_expense=sum_expense+Number(price_table_data[a].expenses);
+                   sum_price=           sum_price+(price_table_data[a].purchase_price/price_table_data[a].whole_weight);
+                   sum_expense=         sum_expense+Number(price_table_data[a].expenses);
                    sum_retail_base=     sum_retail_base+(Number(price_table_data[a].base_profit_retail));
                    sum_retail_percent=  sum_retail_percent+Number(price_table_data[a].price_percent_profit_retail);
                    sum_whole_base=      sum_whole_base+Number(price_table_data[a].base_profit_wholesale);
@@ -105,7 +105,7 @@ import { Card, CardImg,  CardBody,
                    sum_resale_percent=  sum_resale_percent+Number(price_table_data[a].price_percent_profit_resale);
                    sum_special_base=    sum_special_base+Number(price_table_data[a].base_profit_special);
                    sum_special_percent= sum_special_percent+Number(price_table_data[a].price_percent_profit_special);
-                  
+                 
                    temp.push(price_table_data[a])
               //    products.push({product:json[i],price:price_table_data[a]})
               
@@ -113,9 +113,12 @@ import { Card, CardImg,  CardBody,
                 }
                  
               }
+              var coupon='';
+              if(temp.length>0){coupon=temp[0].special_price_code}
               products.push({
                 product:json[i],
                // price:temp,
+               
                 average:{total_retail_price:(sum_price/temp.length)+(sum_retail_base/temp.length)+(sum_expense/temp.length)+(((sum_price/temp.length)/100)*sum_retail_percent/temp.length),
                           price:sum_price/temp.length,
                           expense:sum_expense/temp.length,
@@ -127,7 +130,9 @@ import { Card, CardImg,  CardBody,
                           resalepercent:sum_resale_percent/temp.length,
                           specialbase:sum_special_base/temp.length,
                           specialpercent:sum_special_percent/temp.length,
+                          coupon:coupon
                          }})
+                         console.log('Temp',temp)
               
             }
             this.props.addProduct(products)

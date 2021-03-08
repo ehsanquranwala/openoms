@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardImg, CardBody,
   CardTitle,Container,Row,Button,Input,Col,Label, CardHeader, CardSubtitle,FormGroup,
-  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+  Modal, ModalHeader, ModalBody, ModalFooter ,Table} from 'reactstrap';
   import { Link } from "react-router-dom";
   import SecureLS from 'secure-ls';
   import { connect } from "react-redux";
@@ -12,7 +12,7 @@ import { Card, CardImg, CardBody,
     constructor(props) {
       super(props);
       this.state = {
-                    qty:1 ,
+                    totalqty:0 ,
                     cart:[],
                     firstName:'',
                     lastName:'',
@@ -31,6 +31,8 @@ import { Card, CardImg, CardBody,
                     kidCount:0,
                     wifeCount:0,
                     coupon:'',
+                    totaldiscount:0,
+                    
                     };
     }
     
@@ -79,12 +81,26 @@ import { Card, CardImg, CardBody,
       else{
         this.setState({cart:getCart})
         this.getCustomer() 
-        let total=0; 
+        let total=0,totalqty=0; 
         for(var a=0;a<= getCart.length-1;a++){
-          total= total+(getCart[a].price*getCart[a].quantity)
+          totalqty+=getCart[a].quantity
         }
-       this.setState({subTotal:total})
+        var{discountPercent}=this.state;
+        var subTotal=0;
+        for(var aa=0;a<= getCart.length-1;aa++){
+          if(getCart[aa].priceType=='retail'){
+                        if(totalqty>=20){
+                                subTotal+=    parseInt((getCart[aa].average.price)+(getCart[aa].average.resalebase)+(getCart[aa].average.expense)+((getCart[aa].average.price/100)*(getCart[aa].average.resalepercent-discountPercent)))*getCart[aa].quantity}
+                        else{   subTotal+=parseInt((getCart[aa].average.price)+(getCart[aa].average.retailbase)+(getCart[aa].average.expense)+((getCart[aa].average.price/100)*(getCart[aa].average.retailpercent-discountPercent)))*getCart[aa].quantity}
+          }else if(getCart[aa].priceType=='wholesale'){
+                                subTotal+=  parseInt((getCart[aa].average.price)+(getCart[aa].average.wholebase)+(getCart[aa].average.expense)+((getCart[aa].average.price/100)*(getCart[aa].average.wholepercent-discountPercent)))*getCart[aa].quantity}
+          else if(getCart[aa].priceType=='special'){
+                                subTotal+=  parseInt((getCart[aa].average.price)+(getCart[aa].average.specialbase)+(getCart[aa].average.expense)+((getCart[aa].average.price/100)*(getCart[aa].average.specialpercent-discountPercent)))*getCart[aa].quantity}
+          else{subTotal+=0}
+          console.log('subtotal',subTotal)
+       this.setState({subTotal:subTotal,totalqty:totalqty})
       }
+    }
     }
   
     checkOut(){
@@ -143,13 +159,16 @@ import { Card, CardImg, CardBody,
     plusProduct(i){
       let {cart,discountPercent}=this.state;
       let price=0;let priceType='';
+      var totalqty=1;  
+      for(var o=0;o<=cart.length-1;o++){
+        totalqty+=cart[o].quantity
+        }
       //Apply Wholesale Price
       if(cart[i].quantity>=19){
-            priceType='Wholesale';
-            price=(cart[i].average.price)+(cart[i].average.wholebase)+(cart[i].average.expense)+((cart[i].average.price/100)*(cart[i].average.wholepercent))}
+            priceType='wholesale';}
       else{ 
-        price=(cart[i].average.price)+(cart[i].average.retailbase)+(cart[i].average.expense)+((cart[i].average.price/100)*(cart[i].average.retailpercent))}
-        priceType='Retail';
+        if(cart[i].priceType=='special') {priceType='special';}else{priceType='retail';}
+      }
       let product={
                   product_id:cart[i].product_id,
                   quantity:cart[i].quantity+1,
@@ -159,32 +178,38 @@ import { Card, CardImg, CardBody,
                   image:cart[i].image,
                   average:cart[i].average,
                   discount:cart[i].discount,
-                  priceType:cart[i].priceType}
+                  priceType:priceType}
       cart[i] = product;
       ls.set('cart',cart);
       this.getCart();
-    
     }
     minusProduct(i){
       let {cart,discountPercent}=this.state;
+      var totalqty=-1;  
+      for(var o=0;o<=cart.length-1;o++){
+        totalqty+=cart[o].quantity
+        }
+        this.setState({totalqty:totalqty})
       if(cart[i].quantity!==1){
         let price=0;let priceType='';
         //Apply Wholesale Price
         if(cart[i].quantity>20){
-          priceType='Wholesale';
-              price=price=(cart[i].average.price)+(cart[i].average.wholebase)+(cart[i].average.expense)+((cart[i].average.price/100)*(cart[i].average.wholepercent))}
-        else{ 
-          priceType='Retail';
-          price=(cart[i].average.price)+(cart[i].average.retailbase)+(cart[i].average.expense)+((cart[i].average.price/100)*(cart[i].average.retailpercent))}
-      let product={product_id:cart[i].product_id,
+          priceType='wholesale';
+        }
+        else{  
+          if(cart[i].priceType=='special') {priceType='special';}else{priceType='retail';}
+          }
+      
+      
+          let product={product_id:cart[i].product_id,
                     quantity:cart[i].quantity-1,
                     desc:cart[i].desc,
                     slug:cart[i].slug,
-                    price:price,
+                    price:cart[i].price,
                     image:cart[i].image,
                     average:cart[i].average,
                     discount:cart[i].discount,
-                    priceType:cart[i].priceType}
+                    priceType:priceType}
       cart[i] = product;
       ls.set('cart',cart);
       this.getCart();
@@ -228,17 +253,22 @@ import { Card, CardImg, CardBody,
       let {cart}=this.state;
       var {coupon}=this.state;
       for(var a=0;a<= cart.length-1;a++){
-      if(coupon==cart[a].average.total_retail_price){
-        
-        let price=0;
-        let product={
-          product_id:cart[a].product_id,
+      var priceType=cart[a].priceType;
+        if(coupon==cart[a].average.coupon){
+        if(cart[a].priceType=='resale' || cart[a].priceType=='retail'){
+        priceType= 'special';
+
+        }
+
+        let product={product_id:cart[a].product_id,
           quantity:cart[a].quantity,
           desc:cart[a].desc,
           slug:cart[a].slug,
-          price:cart[a].average.total_retail_price,
+          price:cart[a].price,
           image:cart[a].image,
-          average:cart[a].average}
+          average:cart[a].average,
+          discount:cart[a].discount,
+          priceType:priceType}
 
           cart[a] = product;
           ls.set('cart',cart);
@@ -248,13 +278,94 @@ import { Card, CardImg, CardBody,
       
     }
     render() {
-      var {subTotal,delivery,cart,address,readonly,discount,discountPercent}=this.state;
+      var {subTotal,delivery,cart,address,readonly,discount,discountPercent,totalqty,totaldiscount}=this.state;
      const total=Number(delivery)+Number(subTotal)-((Number(subTotal)/100)*discountPercent);
        return (
           <div style={{marginTop:20}}>
+            {cart.length >0?
             <Container className="themed-container" fluid="lg" >
             <Row>
-            <Col md="6">
+            <Col md="8">
+             <Row><Col md='12'>
+              
+             
+             <Row>
+               <Table bordered={true} style={{fontSize:12}}>
+               <thead>
+                      <tr><th></th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Applied Price</th>
+                        <th>Qty</th>
+                        <th>Actual Price</th>
+                        <th>Discounted Price</th>
+                      </tr>
+                    </thead>
+                  <tbody>
+                  {cart.length >0?
+                    cart.map((product,i) => 
+                  <tr>
+                    <td><CardImg  style={{width:55,height:50,padding:0}} src={product.image} alt="Fish" /></td>
+                    <td>{product.slug}</td>
+                      <td ><Row>Retail: {parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent)))}</Row>
+                          <Row>Wholesale: {parseInt((product.average.price)+(product.average.wholebase)+(product.average.expense)+((product.average.price/100)*(product.average.wholepercent)))}</Row>
+                          <Row>Resale: {parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent)))}</Row>
+                          <Row>Promo: {parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)))}</Row>
+                          <Row>Special: {//Discount
+                    product.priceType=='retail'?
+                        totalqty>=20?
+                        (((product.average.price/100)*(product.average.specialpercent))-((product.average.price/100)*(product.average.specialpercent-discountPercent))).toFixed(2):
+                        (((product.average.price/100)*(product.average.retailpercent))-((product.average.price/100)*(product.average.retailpercent-discountPercent))).toFixed(2):
+                        product.priceType=='wholesale'?
+                        (((product.average.price/100)*(product.average.wholepercent))-((product.average.price/100)*(product.average.wholepercent-discountPercent))).toFixed(2):
+                        product.priceType=='special'?
+                        (((product.average.price/100)*(product.average.specialpercent))-((product.average.price/100)*(product.average.specialpercent-discountPercent))).toFixed(2):
+                        <div></div>
+                            }</Row>
+                     
+                      </td>
+                    
+                    <td>{//subtotal
+                    product.priceType=='retail' && totalqty>=20 ? 'resale':product.priceType }
+                      
+                    </td>
+                    <td>{product.quantity}</td>
+                    <td> {product.priceType=='retail'?
+                            totalqty>=20?
+                             parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent)))*product.quantity:
+                             parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent)))*product.quantity:
+                        product.priceType=='wholesale'?
+                        parseInt((product.average.price)+(product.average.wholebase)+(product.average.expense)+((product.average.price/100)*(product.average.wholepercent)))*product.quantity:
+                          product.priceType=='special'?
+                           parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)))*product.quantity:
+                        <div></div>
+                        }</td>
+                    <td>  
+                      {//total
+                      product.priceType=='retail'?
+                        totalqty>=20?
+                          parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent-discountPercent)))*product.quantity:
+                          parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent-discountPercent)))*product.quantity:
+                        product.priceType=='wholesale'?
+                          parseInt((product.average.price)+(product.average.wholebase)+(product.average.expense)+((product.average.price/100)*(product.average.wholepercent-discountPercent)))*product.quantity:
+                          product.priceType=='special'?
+                          parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent-discountPercent)))*product.quantity:
+                        <div></div>
+                        }
+                    </td>
+                    </tr>
+                    
+                  ):<h6>No Product Found</h6>}
+                  <tr> <td>Total</td>{totalqty}<td></td><td></td><td></td><td></td></tr>
+                  </tbody>
+               </Table>
+                 
+                    
+                </Row>
+                </Col>
+             </Row>
+             
+             <Row>
                
              <Card>
                <CardHeader>Customer Details</CardHeader>
@@ -313,7 +424,7 @@ import { Card, CardImg, CardBody,
                   
               </CardBody>
             </Card>
-                   
+                   </Row>
             </Col>
             <Col md="4">
                 <Card>
@@ -331,9 +442,21 @@ import { Card, CardImg, CardBody,
                         <CardImg  style={{width:80,height:70,padding:0}} src={product.image} alt="Fish" />
                     </Col>
                     <Col  md="5">
-                        <CardTitle tag="h6" >{product.slug}<p>{this.state.priceType}</p> </CardTitle>
-                        <CardTitle tag="h6" >Rs. {parseInt(product.price*product.quantity )}</CardTitle>
+                        <CardTitle tag="h6" >{product.slug} </CardTitle>
+                        <CardTitle tag="h6" >Rs. {
+                        product.priceType=='retail'?
+                        totalqty>=20?
+                          parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent-discountPercent)))*product.quantity:
+                          parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent-discountPercent)))*product.quantity:
+                        product.priceType=='wholesale'?
+                          parseInt((product.average.price)+(product.average.wholebase)+(product.average.expense)+((product.average.price/100)*(product.average.wholepercent-discountPercent)))*product.quantity:
+                          product.priceType=='special'?
+                          parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent-discountPercent)))*product.quantity:
+                        <div></div>
+                        }</CardTitle>
+                        
                     </Col>
+                    
                     <Col  md="3">
                           <div style={{flexDirection:"row",display:"flex"}}>
                               <Button color="info" size="sm" onClick={()=>this.minusProduct(i)} >-</Button>
@@ -393,7 +516,8 @@ import { Card, CardImg, CardBody,
                 </Card>
             </Col>
             </Row> 
-            </Container>
+            </Container>:
+            <Container><h3>No product in cart. Start adding items to your cart <Button>here</Button></h3> </Container>}
                     <Modal size="lg" isOpen={discount} >
                       <ModalHeader >Get Discount</ModalHeader>
                       <ModalBody>

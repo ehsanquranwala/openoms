@@ -206,7 +206,7 @@ import { Card, CardImg,  CardBody,
               </Row>
               <Row>
                 <Col md="7">
-                    <Table bordered='true'>
+                    <Table bordered='true'  style={{fontSize:12}}>
                     <thead>
                       <tr>
                         <th>Date</th>
