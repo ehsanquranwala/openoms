@@ -342,12 +342,12 @@ import { Card, CardImg, CardBody,
                           <Row>Special: {//Discount
                     product.priceType=='retail'?
                         totalqty>=20?
-                        this.getspecial(product):
+                        this.getresale(product):
                         this.getretail(product,discountPercent):
                         product.priceType=='wholesale'?
-                        (((product.average.price/100)*(product.average.wholepercent))-((product.average.price/100)*(product.average.wholepercent-discountPercent))).toFixed(2):
+                        this.getretail(product,discountPercent):
                         product.priceType=='special'?
-                        (((product.average.price/100)*(product.average.specialpercent))-((product.average.price/100)*(product.average.specialpercent-discountPercent))).toFixed(2):
+                        this.getspecial(product):
                         <div></div>
                             }</Row>
                      
