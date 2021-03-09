@@ -277,17 +277,34 @@ import { Card, CardImg, CardBody,
       }
       
     }
-    getretail(product){
-    return  parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent)));
+    getretail(product,discount){
+      if(discount>0){
+       return (((product.average.price/100)*(product.average.specialpercent))-((product.average.price/100)*(product.average.specialpercent-discount))).toFixed(2)
+      }else{
+        return parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent)));
+      }
+    
     }
-    getwholesale(product){
+    getwholesale(product,discount){
+      if(discount>0){
+        return (((product.average.price/100)*(product.average.specialpercent))-((product.average.price/100)*(product.average.specialpercent-discount))).toFixed(2)
+       }else{
      return parseInt((product.average.price)+(product.average.wholebase)+(product.average.expense)+((product.average.price/100)*(product.average.wholepercent)));
+       }
     }
-    getresale(product){
+    getresale(product,discount){
+      if(discount>0){
+        return (((product.average.price/100)*(product.average.specialpercent))-((product.average.price/100)*(product.average.specialpercent-discount))).toFixed(2)
+       }else{
       return parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent)));
+       }
     }
-    getspecial(product){
+    getspecial(product,discount){
+      if(discount>0){
+        return (((product.average.price/100)*(product.average.specialpercent))-((product.average.price/100)*(product.average.specialpercent-discount))).toFixed(2)
+       }else{
      return parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)));
+       }
     }
     render() {
       var {subTotal,delivery,cart,address,readonly,discount,discountPercent,totalqty,totaldiscount}=this.state;
@@ -319,10 +336,10 @@ import { Card, CardImg, CardBody,
                   <tr>
                     <td><CardImg  style={{width:55,height:50,padding:0}} src={product.image} alt="Fish" /></td>
                     <td>{product.slug}</td>
-                      <td ><Row>Retail: {this.getretail(product)}</Row>
-                          <Row>Wholesale: {this.getretail(product)}</Row>
-                          <Row>Resale: {this.getretail(product)}</Row>
-                          <Row>Promo: {this.getretail(product)}</Row>
+                      <td ><Row>Retail: {this.getretail(product,0)}</Row>
+                          <Row>Wholesale: {this.getretail(product,0)}</Row>
+                          <Row>Resale: {this.getretail(product,0)}</Row>
+                          <Row>Promo: {this.getretail(product,0)}</Row>
                           <Row>Special: {//Discount
                     product.priceType=='retail'?
                         totalqty>=20?
