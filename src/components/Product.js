@@ -75,7 +75,7 @@ import { Card, CardImg, CardBody,
                                     <Col>
                                     {this.props.selectProduct.average!=undefined?
                                       <Link  to="/cart" onClick={()=>{
-                                        this.addCart(qty,this.props.selectProduct.product.short_description,this.props.selectProduct.product.slug,this.props.selectProduct.average.total_retail_price,this.props.selectProduct.product.images[0].src,this.props.selectProduct.average)
+                                        this.addCart(qty,this.props.selectProduct.product.short_description,this.props.selectProduct.product.slug,this.props.selectProduct.average.total_retail_price,this.props.selectProduct.product.images,this.props.selectProduct.average)
                                         const user=ls.get('user');
                                         if(user!==''){this.setState({modal:true})}
                                         else{}

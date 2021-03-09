@@ -277,17 +277,17 @@ import { Card, CardImg, CardBody,
       }
       
     }
-    getretail(i){
-
+    getretail(product){
+    return  parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent)));
     }
-    getwholesale(i){
-      
+    getwholesale(product){
+     return parseInt((product.average.price)+(product.average.wholebase)+(product.average.expense)+((product.average.price/100)*(product.average.wholepercent)));
     }
-    getresale(i){
-      
+    getresale(product){
+      return parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent)));
     }
-    getspecial(i){
-      
+    getspecial(product){
+     return parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)));
     }
     render() {
       var {subTotal,delivery,cart,address,readonly,discount,discountPercent,totalqty,totaldiscount}=this.state;
@@ -319,10 +319,10 @@ import { Card, CardImg, CardBody,
                   <tr>
                     <td><CardImg  style={{width:55,height:50,padding:0}} src={product.image} alt="Fish" /></td>
                     <td>{product.slug}</td>
-                      <td ><Row>Retail: {parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent)))}</Row>
-                          <Row>Wholesale: {parseInt((product.average.price)+(product.average.wholebase)+(product.average.expense)+((product.average.price/100)*(product.average.wholepercent)))}</Row>
-                          <Row>Resale: {parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent)))}</Row>
-                          <Row>Promo: {parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)))}</Row>
+                      <td ><Row>Retail: {this.getretail(product)}</Row>
+                          <Row>Wholesale: {this.getretail(product)}</Row>
+                          <Row>Resale: {this.getretail(product)}</Row>
+                          <Row>Promo: {this.getretail(product)}</Row>
                           <Row>Special: {//Discount
                     product.priceType=='retail'?
                         totalqty>=20?
