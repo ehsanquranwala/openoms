@@ -13,6 +13,7 @@ import { Card, CardImg, CardBody,
       super(props);
       this.state = {
                     totalqty:0 ,
+
                     cart:[],
                     firstName:'',
                     lastName:'',
@@ -24,6 +25,7 @@ import { Card, CardImg, CardBody,
                     delivery:250,
                     readonly:false,
                     subTotal:0,
+                    totalActual:0,
                     total:0,
                     discount:false,
                     discountPercent:0,
@@ -86,9 +88,10 @@ import { Card, CardImg, CardBody,
           totalqty+=getCart[a].quantity
         }
         var{discountPercent}=this.state;
-        var subTotal=0;
-        for(var aa=0;a<= getCart.length-1;aa++){
-          if(getCart[aa].priceType=='retail'){
+        var subTotal=0,totalActual=0;
+        for(var aa=0;aa<= getCart.length-1;aa++){
+          totalActual+=this.getretail(getCart[aa])*getCart[aa].quantity
+          if(getCart[aa].priceType == 'retail'){
                         if(totalqty>=20){
                                 subTotal+=  this.getresale(getCart[aa])*getCart[aa].quantity}
                         else{   subTotal+=this.getretail(getCart[aa])*getCart[aa].quantity}
@@ -100,7 +103,7 @@ import { Card, CardImg, CardBody,
           
       }
       console.log('subtotal',subTotal)
-       this.setState({subTotal:subTotal,totalqty:totalqty})
+       this.setState({subTotal:subTotal,totalActual:totalActual,totalqty:totalqty})
     }
     }
   
@@ -278,17 +281,17 @@ import { Card, CardImg, CardBody,
     getdiscount(product){
       if(this.state.discountPercent>0){
        let discountedPrice=parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent-this.state.discountPercent)));
-        if(product.priceType!='retail'){
+        if(product.priceType=='retail'){
           return discountedPrice;
         }
-        else if(product.priceType!='wholesale'){
-         if(this.getwholesale(product) < discountedPrice) {return this.getwholesale(product)}else{return discountedPrice}
+        else if(product.priceType=='wholesale'){
+         if(this.getwholesale(product) > discountedPrice) {return discountedPrice}else{return 0}
         }
-        else if(product.priceType!='resale'){
-          if(this.getresale(product) < discountedPrice) {return this.getresale(product)}else{return discountedPrice}
+        else if(product.priceType=='resale'){
+          if(this.getresale(product) > discountedPrice) {return discountedPrice}else{return 0}
         }
-        else if(product.priceType!='special'){
-          if(this.getspecial(product) < discountedPrice) {return this.getspecial(product)}else{return discountedPrice}
+        else if(product.priceType=='special'){
+          if(this.getspecial(product) > discountedPrice) {return discountedPrice}else{return 0}
         }
        
       }else{ return 0;}
@@ -309,8 +312,8 @@ import { Card, CardImg, CardBody,
      return parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)));
      }
     render() {
-      var {subTotal,delivery,cart,address,readonly,discount,discountPercent,totalqty,totaldiscount}=this.state;
-     const total=0;
+      var {subTotal,delivery,cart,address,readonly,discount,discountPercent,totalqty,totaldiscount,totalActual}=this.state;
+     const total=subTotal+delivery;
        return (
           <div style={{marginTop:20}}>
             {cart.length >0?
@@ -347,6 +350,7 @@ import { Card, CardImg, CardBody,
                       </td>
                     
                     <td>{//actual
+                      this.getdiscount(product)>0?'Special':
                     product.priceType=='retail' && totalqty>=20 ? 'resale':product.priceType }
                       
                     </td>
@@ -354,6 +358,8 @@ import { Card, CardImg, CardBody,
                     <td> {this.getretail(product)*product.quantity}</td>
                     <td>  
                       {//discounted
+                        this.getdiscount(product)>0?
+                        this.getdiscount(product)*product.quantity:
                       product.priceType=='retail'?
                         totalqty>=20?
                           this.getresale(product)*product.quantity:
@@ -368,7 +374,7 @@ import { Card, CardImg, CardBody,
                     </tr>
                     
                   ):<h6>No Product Found</h6>}
-                  <tr> <td>Total</td>{totalqty}<td></td><td></td><td></td><td></td></tr>
+                  <tr> <td></td><td></td><td></td><td>Total</td><td>{totalqty}</td><td>{totalActual}</td><td>{subTotal}</td></tr>
                   </tbody>
                </Table>
                  
@@ -486,14 +492,6 @@ import { Card, CardImg, CardBody,
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
                       <Label size="md" >Sub Total</Label>
                       <Label size="md" >{parseInt(subTotal)}</Label>
-                    </div>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                    <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
-                      <Label size="md" >Discount</Label>
-                      <Label size="md" >{parseInt(discountPercent)}</Label>
                     </div>
                     </Col>
                   </Row>
