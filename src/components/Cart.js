@@ -279,32 +279,26 @@ import { Card, CardImg, CardBody,
     }
     getretail(product,discount){
       if(discount>0){
-       return (((product.average.price/100)*(product.average.specialpercent))-((product.average.price/100)*(product.average.specialpercent-discount))).toFixed(2)
+       return (((product.average.price/100)*(product.average.retailpercent))-((product.average.price/100)*(product.average.retailpercent-discount))).toFixed(2)
       }else{
         return parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent)));
       }
     
     }
-    getwholesale(product,discount){
-      if(discount>0){
-        return (((product.average.price/100)*(product.average.specialpercent))-((product.average.price/100)*(product.average.specialpercent-discount))).toFixed(2)
-       }else{
+    getwholesale(product){
+     
      return parseInt((product.average.price)+(product.average.wholebase)+(product.average.expense)+((product.average.price/100)*(product.average.wholepercent)));
-       }
+       
     }
-    getresale(product,discount){
-      if(discount>0){
-        return (((product.average.price/100)*(product.average.specialpercent))-((product.average.price/100)*(product.average.specialpercent-discount))).toFixed(2)
-       }else{
+    getresale(product){
+     
       return parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent)));
-       }
+       
     }
-    getspecial(product,discount){
-      if(discount>0){
-        return (((product.average.price/100)*(product.average.specialpercent))-((product.average.price/100)*(product.average.specialpercent-discount))).toFixed(2)
-       }else{
+    getspecial(product){
+     
      return parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)));
-       }
+       
     }
     render() {
       var {subTotal,delivery,cart,address,readonly,discount,discountPercent,totalqty,totaldiscount}=this.state;
