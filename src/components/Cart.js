@@ -255,59 +255,60 @@ import { Card, CardImg, CardBody,
       for(var a=0;a<= cart.length-1;a++){
       var priceType=cart[a].priceType;
         if(coupon==cart[a].average.coupon){
-        if(cart[a].priceType=='resale' || cart[a].priceType=='retail'){
-        priceType= 'special';
+            if(cart[a].priceType=='resale' || cart[a].priceType=='retail'){
+            priceType= 'special';
 
-        }
+            }
 
-        let product={product_id:cart[a].product_id,
-          quantity:cart[a].quantity,
-          desc:cart[a].desc,
-          slug:cart[a].slug,
-          price:cart[a].price,
-          image:cart[a].image,
-          average:cart[a].average,
-          discount:cart[a].discount,
-          priceType:priceType}
+            let product={product_id:cart[a].product_id,
+                          quantity:cart[a].quantity,
+                          desc:cart[a].desc,
+                          slug:cart[a].slug,
+                          price:cart[a].price,
+                          image:cart[a].image,
+                          average:cart[a].average,
+                          discount:cart[a].discount,
+                          priceType:priceType}
 
-          cart[a] = product;
-          ls.set('cart',cart);
-          this.getCart();
-      }
+              cart[a] = product;
+              ls.set('cart',cart);
+              this.getCart();
+          }
       }
       
     }
-    getretail(product,discount){
-      if(discount>0){
-       return (((product.average.price/100)*(product.average.retailpercent))-((product.average.price/100)*(product.average.retailpercent-discount))).toFixed(2)
-      }else{
-        return parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent)));
+    getdiscount(product){
+      if(this.state.discountPercent>0){
+        discountedPrice=0;
+        if(product.priceType!='retail'){
+          return (((product.average.price/100)*(product.average.retailpercent))-((product.average.price/100)*(product.average.retailpercent-this.state.discountPercent))).toFixed(2)
+        }
+        else if(product.priceType!='wholesale'){
+         if( this.getwholesale> ) 
+        }
+        else if(product.priceType!='resale'){}
+        else if(product.priceType!='special'){}
+       
+      }else{ return 0;}
       }
-    
+    getretail(product){
+        return parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent)));
     }
     getwholesale(product){
-     
      return parseInt((product.average.price)+(product.average.wholebase)+(product.average.expense)+((product.average.price/100)*(product.average.wholepercent)));
-       
-    }
+     }
     getresale(product){
-     
       return parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent)));
-       
-    }
+     }
     getpromo(product){
-     
-     return parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)));
-       
+    return parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)));
     }
     getspecial(product){
-     
-      return parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)));
-        
+     return parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)));
      }
     render() {
       var {subTotal,delivery,cart,address,readonly,discount,discountPercent,totalqty,totaldiscount}=this.state;
-     const total=Number(delivery)+Number(subTotal)-((Number(subTotal)/100)*discountPercent);
+     const total=0;
        return (
           <div style={{marginTop:20}}>
             {cart.length >0?
@@ -335,21 +336,11 @@ import { Card, CardImg, CardBody,
                   <tr>
                     <td><CardImg  style={{width:55,height:50,padding:0}} src={product.image} alt="Fish" /></td>
                     <td>{product.slug}</td>
-                      <td ><Row>Retail: {this.getretail(product,0)}</Row>
+                      <td ><Row>Retail: {this.getretail(product)}</Row>
                           <Row>Wholesale: {this.getwholesale(product)}</Row>
                           <Row>Resale: {this.getresale(product)}</Row>
                           <Row>Promo: {this.getpromo(product)}</Row>
-                          <Row>Special: {//Discount
-                    product.priceType=='retail'?
-                        totalqty>=20?
-                        this.getresale(product):
-                        this.getretail(product,discountPercent):
-                        product.priceType=='wholesale'?
-                        this.getretail(product,discountPercent):
-                        product.priceType=='special'?
-                        this.getspecial(product):
-                        <div></div>
-                            }</Row>
+                          <Row>Special: {this.getdiscount(product)}</Row>
                      
                       </td>
                     
@@ -363,12 +354,12 @@ import { Card, CardImg, CardBody,
                       {//discounted
                       product.priceType=='retail'?
                         totalqty>=20?
-                          parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent-discountPercent)))*product.quantity:
-                          parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent-discountPercent)))*product.quantity:
+                          this.getresale(product)*product.quantity:
+                          this.getretail(product)*product.quantity:
                         product.priceType=='wholesale'?
-                          parseInt((product.average.price)+(product.average.wholebase)+(product.average.expense)+((product.average.price/100)*(product.average.wholepercent-discountPercent)))*product.quantity:
+                        this.getwholesale(product)*product.quantity:
                           product.priceType=='special'?
-                          parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent-discountPercent)))*product.quantity:
+                          this.getspecial(product)*product.quantity:
                         <div></div>
                         }
                     </td>
