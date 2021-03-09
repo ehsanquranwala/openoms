@@ -295,11 +295,16 @@ import { Card, CardImg, CardBody,
       return parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent)));
        
     }
-    getspecial(product){
+    getpromo(product){
      
      return parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)));
        
     }
+    getspecial(product){
+     
+      return parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)));
+        
+     }
     render() {
       var {subTotal,delivery,cart,address,readonly,discount,discountPercent,totalqty,totaldiscount}=this.state;
      const total=Number(delivery)+Number(subTotal)-((Number(subTotal)/100)*discountPercent);
@@ -331,14 +336,14 @@ import { Card, CardImg, CardBody,
                     <td><CardImg  style={{width:55,height:50,padding:0}} src={product.image} alt="Fish" /></td>
                     <td>{product.slug}</td>
                       <td ><Row>Retail: {this.getretail(product,0)}</Row>
-                          <Row>Wholesale: {this.getretail(product,0)}</Row>
-                          <Row>Resale: {this.getretail(product,0)}</Row>
-                          <Row>Promo: {this.getretail(product,0)}</Row>
+                          <Row>Wholesale: {this.getwholesale(product)}</Row>
+                          <Row>Resale: {this.getresale(product)}</Row>
+                          <Row>Promo: {this.getpromo(product)}</Row>
                           <Row>Special: {//Discount
                     product.priceType=='retail'?
                         totalqty>=20?
-                        (((product.average.price/100)*(product.average.specialpercent))-((product.average.price/100)*(product.average.specialpercent-discountPercent))).toFixed(2):
-                        (((product.average.price/100)*(product.average.retailpercent))-((product.average.price/100)*(product.average.retailpercent-discountPercent))).toFixed(2):
+                        this.getspecial(product):
+                        this.getretail(product,discountPercent):
                         product.priceType=='wholesale'?
                         (((product.average.price/100)*(product.average.wholepercent))-((product.average.price/100)*(product.average.wholepercent-discountPercent))).toFixed(2):
                         product.priceType=='special'?
