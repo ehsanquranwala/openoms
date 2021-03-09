@@ -90,16 +90,17 @@ import { Card, CardImg, CardBody,
         for(var aa=0;a<= getCart.length-1;aa++){
           if(getCart[aa].priceType=='retail'){
                         if(totalqty>=20){
-                                subTotal+=    parseInt((getCart[aa].average.price)+(getCart[aa].average.resalebase)+(getCart[aa].average.expense)+((getCart[aa].average.price/100)*(getCart[aa].average.resalepercent-discountPercent)))*getCart[aa].quantity}
-                        else{   subTotal+=parseInt((getCart[aa].average.price)+(getCart[aa].average.retailbase)+(getCart[aa].average.expense)+((getCart[aa].average.price/100)*(getCart[aa].average.retailpercent-discountPercent)))*getCart[aa].quantity}
+                                subTotal+=  this.getresale(getCart[aa])*getCart[aa].quantity}
+                        else{   subTotal+=this.getretail(getCart[aa])*getCart[aa].quantity}
           }else if(getCart[aa].priceType=='wholesale'){
-                                subTotal+=  parseInt((getCart[aa].average.price)+(getCart[aa].average.wholebase)+(getCart[aa].average.expense)+((getCart[aa].average.price/100)*(getCart[aa].average.wholepercent-discountPercent)))*getCart[aa].quantity}
+                                subTotal+=  this.getwholesale(getCart[aa])*getCart[aa].quantity}
           else if(getCart[aa].priceType=='special'){
-                                subTotal+=  parseInt((getCart[aa].average.price)+(getCart[aa].average.specialbase)+(getCart[aa].average.expense)+((getCart[aa].average.price/100)*(getCart[aa].average.specialpercent-discountPercent)))*getCart[aa].quantity}
+                                subTotal+=  this.getspecial(getCart[aa])*getCart[aa].quantity}
           else{subTotal+=0}
-          console.log('subtotal',subTotal)
-       this.setState({subTotal:subTotal,totalqty:totalqty})
+          
       }
+      console.log('subtotal',subTotal)
+       this.setState({subTotal:subTotal,totalqty:totalqty})
     }
     }
   
@@ -222,7 +223,7 @@ import { Card, CardImg, CardBody,
       this.getCart();
       
     }
-    getDiscount(){
+    selectDiscount(){
       var {discountRadio,kidCount,wifeCount,discountPercent}=this.state;
       if(discountRadio=='kids'){
         if( kidCount>5){kidCount=5}
@@ -230,14 +231,11 @@ import { Card, CardImg, CardBody,
         this.setState({discountPercent:discount})
       }
       else if(discountRadio=='wife'){
-        
             if( wifeCount==0){this.setState({discountPercent:0})}
             if( wifeCount==1){this.setState({discountPercent:3})}
             if( wifeCount==2){this.setState({discountPercent:10})}
             if( wifeCount==3){this.setState({discountPercent:18})}
             if( wifeCount==4){this.setState({discountPercent:28})}
-               
-        
       }
       else if(discountRadio==='guest'){this.setState({discountPercent:5})}
       else if(discountRadio==='health'){this.setState({discountPercent:5})}
@@ -279,15 +277,19 @@ import { Card, CardImg, CardBody,
     }
     getdiscount(product){
       if(this.state.discountPercent>0){
-        discountedPrice=0;
+       let discountedPrice=parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent-this.state.discountPercent)));
         if(product.priceType!='retail'){
-          return (((product.average.price/100)*(product.average.retailpercent))-((product.average.price/100)*(product.average.retailpercent-this.state.discountPercent))).toFixed(2)
+          return discountedPrice;
         }
         else if(product.priceType!='wholesale'){
-         if( this.getwholesale> ) 
+         if(this.getwholesale(product) < discountedPrice) {return this.getwholesale(product)}else{return discountedPrice}
         }
-        else if(product.priceType!='resale'){}
-        else if(product.priceType!='special'){}
+        else if(product.priceType!='resale'){
+          if(this.getresale(product) < discountedPrice) {return this.getresale(product)}else{return discountedPrice}
+        }
+        else if(product.priceType!='special'){
+          if(this.getspecial(product) < discountedPrice) {return this.getspecial(product)}else{return discountedPrice}
+        }
        
       }else{ return 0;}
       }
@@ -453,15 +455,15 @@ import { Card, CardImg, CardBody,
                     </Col>
                     <Col  md="5">
                         <CardTitle tag="h6" >{product.slug} </CardTitle>
-                        <CardTitle tag="h6" >Rs. {
-                        product.priceType=='retail'?
+                        <CardTitle tag="h6" >Rs. {//discounted
+                      product.priceType=='retail'?
                         totalqty>=20?
-                          parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent-discountPercent)))*product.quantity:
-                          parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent-discountPercent)))*product.quantity:
+                          this.getresale(product)*product.quantity:
+                          this.getretail(product)*product.quantity:
                         product.priceType=='wholesale'?
-                          parseInt((product.average.price)+(product.average.wholebase)+(product.average.expense)+((product.average.price/100)*(product.average.wholepercent-discountPercent)))*product.quantity:
+                        this.getwholesale(product)*product.quantity:
                           product.priceType=='special'?
-                          parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent-discountPercent)))*product.quantity:
+                          this.getspecial(product)*product.quantity:
                         <div></div>
                         }</CardTitle>
                         
@@ -583,7 +585,7 @@ import { Card, CardImg, CardBody,
                      
                       </ModalBody>
                       <ModalFooter>
-                        <Button color="primary" onClick={()=>this.getDiscount()}>Get Discount</Button>{' '}
+                        <Button color="primary" onClick={()=>this.selectDiscount()}>Get Discount</Button>{' '}
                         <Button color="secondary" onClick={()=>this.setState({discount:false})}>Cancel</Button>
                       </ModalFooter>
                     </Modal>
