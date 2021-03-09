@@ -350,7 +350,7 @@ import { Card, CardImg, CardBody,
                       </td>
                     
                     <td>{//actual
-                      this.getdiscount(product)>0?'Special':
+                      this.getdiscount(product)>0?'Special Discount':
                     product.priceType=='retail' && totalqty>=20 ? 'resale':product.priceType }
                       
                     </td>
