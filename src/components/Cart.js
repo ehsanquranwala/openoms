@@ -353,23 +353,14 @@ import { Card, CardImg, CardBody,
                      
                       </td>
                     
-                    <td>{//subtotal
+                    <td>{//actual
                     product.priceType=='retail' && totalqty>=20 ? 'resale':product.priceType }
                       
                     </td>
                     <td>{product.quantity}</td>
-                    <td> {product.priceType=='retail'?
-                            totalqty>=20?
-                             parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent)))*product.quantity:
-                             parseInt((product.average.price)+(product.average.retailbase)+(product.average.expense)+((product.average.price/100)*(product.average.retailpercent)))*product.quantity:
-                        product.priceType=='wholesale'?
-                        parseInt((product.average.price)+(product.average.wholebase)+(product.average.expense)+((product.average.price/100)*(product.average.wholepercent)))*product.quantity:
-                          product.priceType=='special'?
-                           parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)))*product.quantity:
-                        <div></div>
-                        }</td>
+                    <td> {this.getretail(product)*product.quantity}</td>
                     <td>  
-                      {//total
+                      {//discounted
                       product.priceType=='retail'?
                         totalqty>=20?
                           parseInt((product.average.price)+(product.average.resalebase)+(product.average.expense)+((product.average.price/100)*(product.average.resalepercent-discountPercent)))*product.quantity:
