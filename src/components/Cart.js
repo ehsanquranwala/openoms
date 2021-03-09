@@ -532,7 +532,7 @@ import { Card, CardImg, CardBody,
                   <Row>
                     <Col>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
-                      <Input  name='CouponCode' size="sm" placeholder='Coupon Code' value={this.state.coupon} onChange={ (e)=>this.setState({coupon: e.target.value})} required></Input>
+                      <Input  name='PromoCode' size="sm" placeholder='Promo Code' value={this.state.coupon} onChange={ (e)=>this.setState({coupon: e.target.value})} required></Input>
                       <Button onClick={()=>this.getCoupon()} color='info' size="sm">Apply</Button>
                       <Button onClick={()=>this.setState({discount:true})} color='info' size="sm">Discount</Button>
                     </div>
