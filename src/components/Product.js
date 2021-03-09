@@ -48,7 +48,11 @@ import { Card, CardImg, CardBody,
                       <CardBody style={{backgroundColor: "#f6f6f6"}}>
                      
                           <Row> 
-                            <Col sm="4"> <CardImg top width="20%" style={{width:200,height:250}} src={this.props.selectProduct.product.images[0].src}  alt="Fish" /></Col>
+                            <Col sm="4">
+                            {this.props.selectProduct.product.images[0]?
+                             <CardImg top width="20%" style={{width:200,height:250}} src={this.props.selectProduct.product.images[0].src}  alt="Fish" />
+                             :<div></div>}
+                             </Col>
                             <Col sm="8"><CardTitle tag="h3" >{this.props.selectProduct.product.slug} </CardTitle>
                                   <hr style={{ color: '#c0c0c0', }} />
                                   {this.props.selectProduct.average!=undefined?
@@ -69,7 +73,7 @@ import { Card, CardImg, CardBody,
                                   <hr style={{ color: '#c0c0c0', }} />
                                   <Row>
                                     <Col>
-                                    {this.props.selectProduct.product.attributes[0]!=undefined?
+                                    {this.props.selectProduct.average!=undefined?
                                       <Link  to="/cart" onClick={()=>{
                                         this.addCart(qty,this.props.selectProduct.product.short_description,this.props.selectProduct.product.slug,this.props.selectProduct.average.total_retail_price,this.props.selectProduct.product.images[0].src,this.props.selectProduct.average)
                                         const user=ls.get('user');

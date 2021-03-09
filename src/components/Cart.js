@@ -277,6 +277,18 @@ import { Card, CardImg, CardBody,
       }
       
     }
+    getretail(i){
+
+    }
+    getwholesale(i){
+      
+    }
+    getresale(i){
+      
+    }
+    getspecial(i){
+      
+    }
     render() {
       var {subTotal,delivery,cart,address,readonly,discount,discountPercent,totalqty,totaldiscount}=this.state;
      const total=Number(delivery)+Number(subTotal)-((Number(subTotal)/100)*discountPercent);
