@@ -52,15 +52,15 @@ import { Button,Card, CardImg,  CardBody,
                 <Col>
                 <h5>Fishes</h5><Row>
                 {this.props.product.map((product) => 
-                product.categories[0].id==this.state.catId.value? 
+                product.product.categories[0].id==this.state.catId.value? 
                 <Col sm="4">
                   <Card>
                       <CardBody  style={{backgroundColor: "#f6f6f6"}}>
-                        {product.images[0]?
-                      <CardImg top width="20%" style={{width:200,height:150}} src={product.images[0].src} alt="Fish" />
+                        {product.product.images[0]?
+                      <CardImg top width="20%" style={{width:200,height:150}} src={product.product.images[0].src} alt="Fish" />
                         :<div></div>}
-                        <CardTitle tag="h5" >{product.slug} </CardTitle>
-                      <CardTitle tag="h6" color="blue">Rs. {product.price}</CardTitle>
+                        <CardTitle tag="h5" >{product.product.slug} </CardTitle>
+                      <CardTitle tag="h6" color="blue">Rs. {product.product.price}</CardTitle>
                   </CardBody>
                 </Card></Col>:<div></div>)}
                 </Row>
