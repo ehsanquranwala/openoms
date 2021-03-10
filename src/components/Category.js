@@ -5,7 +5,6 @@ import { Button,Card, CardImg,  CardBody,
   import { connect } from "react-redux";
   import { products, addtocart, category,addArticle,user } from "../js/actions/index";
   import {SingleSlider} from 'react-slider-kit';
-  import DropdownTreeSelect from 'react-dropdown-tree-select';
   import Child from './dropdown';
   import 'react-dropdown-tree-select/dist/styles.css';
   var ls = new SecureLS({encodingType: 'aes'});
@@ -35,6 +34,7 @@ import { Button,Card, CardImg,  CardBody,
             <Row>
               <Col md="4">
                 <h5>Category</h5>
+             
               <Child
               value2={categories}
               sendToServer={(e)=>this.setState({catId:e})}
