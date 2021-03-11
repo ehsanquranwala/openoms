@@ -248,7 +248,7 @@ import { Card, CardImg, CardBody,
       else if(discountRadio==='disabled'){this.setState({discountPercent:10})}
       else if(discountRadio==='quantity'){this.setState({discountPercent:0})}
       this.setState({discount:false})
-      
+      this.getCart();
     }
     getCoupon(){
       let {cart}=this.state;
@@ -257,7 +257,7 @@ import { Card, CardImg, CardBody,
       var priceType=cart[a].priceType;
         if(coupon==cart[a].average.coupon){
             if(cart[a].priceType=='resale' || cart[a].priceType=='retail'){
-            priceType= 'special';
+            priceType= 'promo';
 
             }
 
@@ -290,7 +290,7 @@ import { Card, CardImg, CardBody,
         else if(product.priceType=='resale'){
           if(this.getresale(product) > discountedPrice) {return discountedPrice}else{return 0}
         }
-        else if(product.priceType=='special'){
+        else if(product.priceType=='promo'){
           if(this.getspecial(product) > discountedPrice) {return discountedPrice}else{return 0}
         }
        
@@ -364,7 +364,7 @@ import { Card, CardImg, CardBody,
                           this.getretail(product)*product.quantity:
                         product.priceType=='wholesale'?
                         this.getwholesale(product)*product.quantity:
-                          product.priceType=='special'?
+                          product.priceType=='promo'?
                           this.getspecial(product)*product.quantity:
                         <div></div>
                         }
@@ -466,7 +466,7 @@ import { Card, CardImg, CardBody,
                           this.getretail(product)*product.quantity:
                         product.priceType=='wholesale'?
                         this.getwholesale(product)*product.quantity:
-                          product.priceType=='special'?
+                          product.priceType=='promo'?
                           this.getspecial(product)*product.quantity:
                         <div></div>
                         }</CardTitle>
