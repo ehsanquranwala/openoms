@@ -91,15 +91,22 @@ import { Card, CardImg, CardBody,
         var subTotal=0,totalActual=0;
         for(var aa=0;aa<= getCart.length-1;aa++){
           totalActual+=this.getretail(getCart[aa])*getCart[aa].quantity
+
+          
+
           if(getCart[aa].priceType == 'retail'){
                         if(totalqty>=20){
                                 subTotal+=  this.getresale(getCart[aa])*getCart[aa].quantity}
                         else{   subTotal+=this.getretail(getCart[aa])*getCart[aa].quantity}
           }else if(getCart[aa].priceType=='wholesale'){
                                 subTotal+=  this.getwholesale(getCart[aa])*getCart[aa].quantity}
-          else if(getCart[aa].priceType=='special'){
+          else if(getCart[aa].priceType=='promo'){
                                 subTotal+=  this.getspecial(getCart[aa])*getCart[aa].quantity}
+          
           else{subTotal+=0}
+          if(this.getdiscount(getCart[aa]) > 0){
+            subTotal+=  this.getdiscount(getCart[aa])*getCart[aa].quantity 
+          }
           
       }
       console.log('subtotal',subTotal)
@@ -171,7 +178,7 @@ import { Card, CardImg, CardBody,
       if(cart[i].quantity>=19){
             priceType='wholesale';}
       else{ 
-        if(cart[i].priceType=='special') {priceType='special';}else{priceType='retail';}
+        if(cart[i].priceType=='promo') {priceType='promo';}else{priceType='retail';}
       }
       let product={
                   product_id:cart[i].product_id,
@@ -203,8 +210,6 @@ import { Card, CardImg, CardBody,
         else{  
           if(cart[i].priceType=='special') {priceType='special';}else{priceType='retail';}
           }
-      
-      
           let product={product_id:cart[i].product_id,
                     quantity:cart[i].quantity-1,
                     desc:cart[i].desc,
