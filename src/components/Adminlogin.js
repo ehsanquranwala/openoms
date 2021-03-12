@@ -27,8 +27,8 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
       let formData = new FormData();
           formData.append('username',username);
           formData.append('password',password);
-      //fetch('https://www.weeklyfishclub.com/wp-json/jwt-auth/v1/token',
-      fetch(`https://weeklyfishclub.com/api/user/generate_auth_cookie?email=${username}&password=${password}`,
+      //fetch('https://blog.weeklyfishclub.com/wp-json/jwt-auth/v1/token',
+      fetch(`https://blog.weeklyfishclub.com/api/user/generate_auth_cookie?email=${username}&password=${password}`,
       {method:'POST'})
         .then(response => response.json())
         .then(json => { 

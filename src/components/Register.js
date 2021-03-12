@@ -50,7 +50,7 @@ import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,La
                         "postcode":'250',
                         "country":'pk'}};
 
-      fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/customers', 
+      fetch('https://blog.weeklyfishclub.com/wp-json/wc/v3/customers', 
       {method:'POST', 
         headers: {'Content-Type': 'application/json',
                   'Authorization':  'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')},

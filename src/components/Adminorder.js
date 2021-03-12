@@ -47,7 +47,7 @@ import { Card, CardImg, CardBody,
                       phone:this.props.user.user.username,
                       readonly:true
                   })
-        await fetch(`https://www.weeklyfishclub.com/wp-json/wc/v3/customers/${this.props.user.user.id}`,
+        await fetch(`https://blog.weeklyfishclub.com/wp-json/wc/v3/customers/${this.props.user.user.id}`,
           {method:'GET', 
             headers: {
             'Authorization':'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')}})
@@ -126,7 +126,7 @@ import { Card, CardImg, CardBody,
                                 "total": delivery
                               }
                         ]};
-      fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/orders', 
+      fetch('https://blog.weeklyfishclub.com/wp-json/wc/v3/orders', 
       { method:'POST', 
         headers: {'Content-Type': 'application/json',
                 'Authorization': 'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')},

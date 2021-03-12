@@ -27,7 +27,7 @@ import { Card, CardImg, CardBody,
     async getOrders(){
       console.log(this.props.user)
       if(this.props.user.status=='ok'){
-        await fetch(`https://www.weeklyfishclub.com/wp-json/wc/v3/orders`,
+        await fetch(`https://blog.weeklyfishclub.com/wp-json/wc/v3/orders`,
           {method:'GET', 
             headers: {
             'Authorization':'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')}})

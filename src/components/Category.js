@@ -5,12 +5,39 @@ import { Button,Card, CardImg,  CardBody,
   import { connect } from "react-redux";
   import { products, addtocart, category,addArticle,user } from "../js/actions/index";
   import {SingleSlider} from 'react-slider-kit';
+  import { Slider } from '@material-ui/core';
   import Child from './dropdown';
   import 'react-dropdown-tree-select/dist/styles.css';
   var ls = new SecureLS({encodingType: 'aes'});
   var fishData = require('../assets/fishdata.json');
  let categories=[];
 
+ const marks = [
+  {
+    value: 0,
+    label: '0°C',
+  },
+  {
+    value: 20,
+    label: '20°C',
+  },
+  {
+    value: 50,
+    label: '37°C',
+  },
+  {
+    value: 100,
+    label: '100°C',
+  },
+];
+
+function valuetext(value) {
+  return `${value}°C`;
+}
+
+function valueLabelFormat(value) {
+  return marks.findIndex((mark) => mark.value === value) + 1;
+}
  
    class Category extends React.Component {
     constructor(props) {
@@ -22,7 +49,7 @@ import { Button,Card, CardImg,  CardBody,
                     value:10,
                     fBone:4,
                     Salt_Water:2,
-                    filter:[{"Thorns":{"value":2}}],
+                    filter:{Thorns:4,Salt_Water:2,Meat_Whiteness:0},
                     appliedFilter:[]
                   };
                    }
@@ -32,25 +59,41 @@ import { Button,Card, CardImg,  CardBody,
     }
     filter(){
       let {filter}=this.state;
-      let filtered=null;
-      fishData.map((fishData) => {
-      var matchesAllFilters = true;
-                  filter.map(( filterName,filterValue)=>{
+      let filtered=[];
+      console.log('as',Object.keys(filter).length)
+      if(Object.keys(filter).length==0){
+        this.setState({appliedFilter:fishData});
+        console.log('filtered',fishData)
+      }else{
+        fishData.map((fishDataa) => {
+
+        let thorn=(fishDataa[`Thorns`]<5);
+        if(filter[`Thorns`]!=4){ thorn=(filter[`Thorns`]==fishDataa[`Thorns`]) }
+
+        let Salt_Water=(fishDataa[`Salt_Water`]<2);
+        if(filter[`Salt_Water`]!=2){  Salt_Water=(filter[`Salt_Water`]==fishDataa[`Salt_Water`]) }
+
+        let Meat_Whiteness=(fishDataa[`Meat_Whiteness`]<5);
+        if(filter[`Meat_Whiteness`]!=0){ Meat_Whiteness=(filter[`Meat_Whiteness`]==fishDataa[`Meat_Whiteness`]) }
+
+          if(thorn&& Salt_Water&&Meat_Whiteness){
+              filtered.push(fishDataa)
+           }
+            // for (let [key, value] of Object.entries(filter)) {
+               /*       var filterValue= fishDataa[`${key}`]
                     
-                    var fishValue = fishData.Thorns;
-            console.log("fu data",fishValue+"  "+filterValue)
-                        if (filterValue != fishValue) {
-                          matchesAllFilters = false;
-                        return false;
-                          }
-                  })
-                  if (matchesAllFilters) {
-                    filtered = fishData;
-                  }
+                        if(filterValue == value ) {
+                          filtered.push(fishDataa)
+                        }
+                }*/
+          
         })
-        console.log(filtered)
+     
+        console.log('filtered',filtered)
         
-      //  this.setState({appliedFilter:filtered});
+        this.setState({appliedFilter:filtered});
+      }
+
     }
     render() {
       const { value, fBone,filter,appliedFilter} = this.state
@@ -62,43 +105,87 @@ import { Button,Card, CardImg,  CardBody,
             <Row>
               <Col md='2'>
                   <FormGroup>
-                    <Label size='sm'>Select Thorns/Bones:</Label>
-                    <Input size='sm'  type="select" required={true} value={this.state.fBone}  onChange={(e)=>{ this.setState({fBone:e.target.value})}}>
+                    <Label size='sm'>Thorns/Bones:</Label>
+                    <Input  size='sm'  
+                            type="select" 
+                            required={true} 
+                            value={filter[`Thorns`]} 
+                            onChange={(e)=>{
+                                Object.assign(filter,{'Thorns':e.target.value });
+                              this.setState({filter:filter}) 
+                              this.filter()
+                                            }}>
                               <option value={4}>All</option>
-                              <option value={0}>Many Bone</option>
-                              <option value={1}>one Bone</option>
-                              <option value={2}>small few Bone</option>
-                              <option value={3}>Boneless</option>
+                              <option value={0}>None</option>
+                              <option value={1}>One</option>
+                              <option value={2}>Few</option>
+                              <option value={3}>Many</option>
                               
                     </Input>
                     </FormGroup>
               </Col>
               <Col md='2'>
                     <FormGroup>
-                    <Label size='sm'>Select Salt Water:</Label>
-                      <Input  size='sm' type="select" required={true} value={this.state.Salt_Water}  onChange={(e)=>{ this.setState({Salt_Water:e.target.value})}}>
-                              <option key={2} value={2}>All</option>
-                              <option key={0} value={0}>True</option>
-                              <option key={1} value={1}>false</option>
-                      </Input>
+                    <Label size='sm'>Salt Water:</Label>
+                    <Input  size='sm'  
+                            type="select" 
+                            required={true} 
+                            value={filter[`Salt_Water`]} 
+                            onChange={(e)=>{
+                                Object.assign(filter,{'Salt_Water':e.target.value });
+                              this.setState({filter:filter}) 
+                              this.filter()
+                                            }}>
+                              <option value={2}>All</option>
+                              <option value={1}>True</option>
+                              <option value={0}>False</option>
+                              
+                    </Input>
                     </FormGroup>
               </Col>
-              <Col md='2'></Col><Col md='2'></Col></Row>
+              <Col md='2'>
+              <FormGroup>
+                    <Label size='sm'>Meat Whiteness:</Label>
+                    <Input  size='sm'  
+                            type="select" 
+                            required={true} 
+                            value={filter[`Meat_Whiteness`]} 
+                            onChange={(e)=>{
+                                Object.assign(filter,{'Meat_Whiteness':e.target.value });
+                              this.setState({filter:filter}) 
+                              this.filter()
+                                            }}>
+                              <option value={0}>All</option>
+                              <option value={1}>Very Light</option>
+                              <option value={2}>Light</option>
+                              <option value={3}>Dark</option>
+                              
+                    </Input>
+                    </FormGroup>
+                </Col>
+                <Col md='2'>
+                <Slider
+                    defaultValue={20}
+                    valueLabelFormat={valueLabelFormat}
+                    getAriaValueText={valuetext}
+                    aria-labelledby="discrete-slider-restrict"
+                    step={null}
+                    valueLabelDisplay="auto"
+                    marks={marks}
+                  />
+                  </Col></Row>
             <Row>
               <Col md="4">
-                <Child
-                  value2={categories}
-                  sendToServer={(e)=>this.setState({catId:e})}
-                />
-                <SingleSlider
-                  min={0}
-                  max={100}
-                  step={1}
-                  start={80}
-                  onChangeStart={() => console.log('start drag')}
-                  onChange={(value)=>console.log('drag value: ', value)}
-                  onChangeComplete={(e)=>{this.setState({value:e})}}
-              />
+               
+               <Slider
+                    defaultValue={20}
+                    valueLabelFormat={valueLabelFormat}
+                    getAriaValueText={valuetext}
+                    aria-labelledby="discrete-slider-restrict"
+                    step={null}
+                    valueLabelDisplay="auto"
+                    marks={marks}
+                  />
               </Col>
                 <Col>
                 <Row>

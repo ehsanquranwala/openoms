@@ -62,7 +62,7 @@ import { Card, CardImg,  CardBody,
      let products=[];   
      let data = new FormData();
       data.append('post','getpurchase');
-     fetch('https://weeklyfishclub.com/api/create_post', {
+     fetch('https://blog.weeklyfishclub.com/api/create_post', {
         method:'POST', 
         body: data
       })
@@ -73,7 +73,7 @@ import { Card, CardImg,  CardBody,
           
          }
        }); 
-      fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/products', {
+      fetch('https://blog.weeklyfishclub.com/wp-json/wc/v3/products', {
         method:'GET', 
         headers: {'Authorization': 'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')}})
         .then(response => response.json())
@@ -144,7 +144,7 @@ import { Card, CardImg,  CardBody,
     }
     getCategory(){
       if(this.props.category.length ===0){
-      fetch('https://www.weeklyfishclub.com/wp-json/wc/v3/products/categories?hide_empty=false', {
+      fetch('https://blog.weeklyfishclub.com/wp-json/wc/v3/products/categories?hide_empty=false', {
         method:'GET', 
         headers: {'Authorization': 'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')}})
         .then(response => response.json())

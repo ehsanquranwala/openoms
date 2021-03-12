@@ -26,7 +26,7 @@ import { Card,  CardBody,Container,Row,Input,Col,Label, CardHeader, FormGroup} f
     }
     async getCustomer(){
       const user=ls.get('user');
-        await fetch(`https://www.weeklyfishclub.com/wp-json/wc/v3/customers/12`,
+        await fetch(`https://blog.weeklyfishclub.com/wp-json/wc/v3/customers/12`,
           {method:'GET', 
             headers: {
             'Authorization':'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvd2Vla2x5ZmlzaGNsdWIuY29tIiwiaWF0IjoxNjEyNjA2NjQyLCJuYmYiOjE2MTI2MDY2NDIsImV4cCI6MTYxMzIxMTQ0MiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.APfUmhipRCDa-ylYZeOgdbmZIW1iZsjLovpjZAfBsjk'}})

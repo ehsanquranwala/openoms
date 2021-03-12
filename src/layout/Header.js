@@ -29,7 +29,7 @@ const AppHeader = () => {
     return (
         <Navbar  style={{backgroundColor:"#006994",color:"#FFFFFF"}} light expand="md">
          <NavbarBrand style={{color:"#FFFFFF"}} to="/">
-        <img src={'https://weeklyfishclub.com/wp-content/uploads/2021/02/tuna.jpg'} alt="Logo" style={{width:70, marginTop: -7}} />
+        <img src={'https://blog.weeklyfishclub.com/wp-content/uploads/2021/02/tuna.jpg'} alt="Logo" style={{width:70, marginTop: -7}} />
           Weekly Fish Club</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
