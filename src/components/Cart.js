@@ -345,14 +345,37 @@ import { Card, CardImg, CardBody,
                           <Row>Wholesale: {this.getwholesale(product)}</Row>
                           <Row>Resale: {this.getresale(product)}</Row>
                           <Row>Promo: {this.getpromo(product)}</Row>
-                          <Row>Special: {this.getdiscount(product)}</Row>
+                          <Row style= {{cursor: 'pointer'}} 
+                              onClick={()=>{this.setState({discount:true})}}>
+                                  Special: {discountPercent>0?this.getdiscount(product):
+                                  <p>Get Discount</p>}</Row>
                       </td>
                     <td>{//actual
                       this.getdiscount(product)>0?'Special Discount':
                     product.priceType=='retail' && totalqty>=20 ? 'resale':product.priceType }
                       
                     </td>
-                    <td>{product.quantity}</td>
+                    <td>
+                          <div style={{flexDirection:"row",display:"flex"}}>
+                              <Button style={{padding:4}}  
+                                      color="primary" 
+                                      size="sm" 
+                                      onClick={()=>this.minusProduct(i)} >-</Button>
+                              
+                              <Label  size="sm" 
+                                      style={{padding:10,height:5}}>{product.quantity}</Label>
+                              
+                              <Button style={{padding:3}} 
+                                      color="primary" 
+                                      size="sm" 
+                                      onClick={()=>this.plusProduct(i)}>+</Button>
+                          </div>
+                          <Button style={{padding:4,marginTop:10}} 
+                                  color="danger" 
+                                  size="sm" 
+                                  onClick={()=>this.removeProduct(i)}>remove</Button>
+                  
+                          </td>
                     <td> {this.getretail(product)*product.quantity}</td>
                     <td>  
                       {//discounted
@@ -473,15 +496,7 @@ import { Card, CardImg, CardBody,
                         
                     </Col>
                     
-                    <Col  md="3">
-                          <div style={{flexDirection:"row",display:"flex"}}>
-                              <Button color="info" size="sm" onClick={()=>this.minusProduct(i)} >-</Button>
-                              <Label size="sm" style={{padding:10,height:5}}>{product.quantity}</Label>
-                              <Button color="info" size="sm" onClick={()=>this.plusProduct(i)}>+</Button>
-                          </div>
-                          <Button color="info" size="sm" onClick={()=>this.removeProduct(i)}>Remove</Button>
-                  
-                    </Col>
+                   
                 </Row>
              ):<h6>No Product Found</h6>}
               <hr style={{ color: '#c0c0c0', }} />
@@ -510,11 +525,10 @@ import { Card, CardImg, CardBody,
                     </Col>
                   </Row>
                   <Row>
-                    <Col>
+                    <Col md='10'>
                     <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between"}}>
                       <Input  name='PromoCode' size="sm" placeholder='Promo Code' value={this.state.coupon} onChange={ (e)=>this.setState({coupon: e.target.value})} required></Input>
                       <Button onClick={()=>this.getCoupon()} color='info' size="sm">Apply</Button>
-                      <Button onClick={()=>this.setState({discount:true})} color='info' size="sm">Discount</Button>
                     </div>
                     </Col>
                   </Row>
