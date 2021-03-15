@@ -8,6 +8,7 @@ import { Card, CardImg,  CardBody,
   import { connect } from "react-redux";
   import { products, addtocart, category,addArticle,user ,selectProduct} from "../js/actions/index";
   var ls = new SecureLS({encodingType: 'aes'});
+  var fishData = require('../assets/fishdata.json');
   const token=ls.get('token')
   require('dotenv').config()
    class Home extends React.Component {
@@ -73,7 +74,7 @@ import { Card, CardImg,  CardBody,
           
          }
        }); 
-      fetch('https://blog.weeklyfishclub.com/wp-json/wc/v3/products', {
+      fetch('https://blog.weeklyfishclub.com/wp-json/wc/v3/products?per_page=99', {
         method:'GET', 
         headers: {'Authorization': 'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')}})
         .then(response => response.json())
@@ -113,13 +114,18 @@ import { Card, CardImg,  CardBody,
                 }
                  
               }
+              var filter={}
+              fishData.map((value,ia)=>{
+                if(json[i].sku == fishData[ia].Id){
+                  filter=fishData[ia]
+                }
+              })
+              
               var coupon='';
               if(temp.length>0){coupon=temp[0].special_price_code}
               products.push({
                 product:json[i],
-               // price:temp,
-               
-                average:{total_retail_price:(sum_price/temp.length)+(sum_retail_base/temp.length)+(sum_expense/temp.length)+(((sum_price/temp.length)/100)*sum_retail_percent/temp.length),
+               average:{total_retail_price:(sum_price/temp.length)+(sum_retail_base/temp.length)+(sum_expense/temp.length)+(((sum_price/temp.length)/100)*sum_retail_percent/temp.length),
                           price:sum_price/temp.length,
                           expense:sum_expense/temp.length,
                           retailbase:sum_retail_base/temp.length,
@@ -131,7 +137,9 @@ import { Card, CardImg,  CardBody,
                           specialbase:sum_special_base/temp.length,
                           specialpercent:sum_special_percent/temp.length,
                           coupon:coupon
-                         }})
+                         },
+               filter:filter
+                        })
                          console.log('Temp',temp)
               
             }

@@ -24,10 +24,38 @@ import { Card, CardImg, CardBody,
   
     addCart(qty,desc,slug,price,image,average){
       const productId= this.props.selectProduct.id
+      var checkCart=0;
       let cart= ls.get('cart');
       if(cart!=''){
-          cart.push({product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image,average:average,discount:0,priceType:'retail'})
-          ls.set('cart',cart);
+        
+        cart.map((value,i)=>{
+          if(cart[i].product_id==productId){
+                var priceType='';
+                qty=cart[i].quantity+qty;
+                if(qty>=19){
+                  priceType='wholesale';}
+                else{ 
+                  if(cart[i].priceType=='special') {priceType='special';}else{priceType='retail';}
+                }
+                    let product={
+                      product_id:cart[i].product_id,
+                      quantity:qty,
+                      desc:cart[i].desc,
+                      slug:cart[i].slug,
+                      price:price,
+                      image:cart[i].image,
+                      average:cart[i].average,
+                      discount:cart[i].discount,
+                      priceType:priceType}
+                cart[i] = product;
+                ls.set('cart',cart);
+                checkCart=0
+                        }else{checkCart=1}
+        })
+        if(checkCart==1){  
+            cart.push({product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image,average:average,discount:0,priceType:'retail'})
+              ls.set('cart',cart);
+        }
         }else{
           ls.set('cart',[{product_id:productId,quantity:qty,desc:desc,slug:slug,price:price,image:image,average:average,discount:0,priceType:'retail'}]);
       }

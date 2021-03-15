@@ -189,12 +189,14 @@ import { Card, CardImg, CardBody,
     }
     minusProduct(i){
       let {cart,discountPercent}=this.state;
-      var totalqty=-1;  
-      for(var o=0;o<=cart.length-1;o++){
-        totalqty+=cart[o].quantity
-        }
-        this.setState({totalqty:totalqty})
+       
+     
       if(cart[i].quantity!==1){
+        var totalqty=-1; 
+        for(var o=0;o<=cart.length-1;o++){
+          totalqty+=cart[o].quantity
+          }
+          this.setState({totalqty:totalqty})
         let price=0;let priceType='';
         //Apply Wholesale Price
         if(cart[i].quantity>20){
