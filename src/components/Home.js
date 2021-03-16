@@ -112,7 +112,6 @@ import { Card, CardImg,  CardBody,
               
                   found=found+1;
                 }
-                 
               }
               var filter={}
               fishData.map((value,ia)=>{

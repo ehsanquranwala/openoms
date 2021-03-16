@@ -8,7 +8,6 @@ import { Button,Card, CardImg, CardText, CardBody,
       this.state = {product:[]};
     }
     componentDidMount(){
-    this.getProduct()
     }
     render() {
        return (

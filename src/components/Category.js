@@ -46,7 +46,7 @@ const Salt_Water = [
   },
   {
     value: 100,
-    label: 'Sweet Water',
+    label: 'Fresh Water',
   },
 ];
 const Meat_Whiteness = [
@@ -92,48 +92,48 @@ const Taste_Class = [
 const Price_Class = [
   {
     value: 8,
-    label: '100',
+    label: 'A',
   }
   ,{
     value: 16,
-    label: '200',
+    label: 'B',
   },
   {
     value: 24,
-    label: '300',
+    label: 'C',
   },
   {
     value: 32,
-    label: '400',
+    label: 'D',
   }
   ,{
     value: 40,
-    label: '500',
+    label: 'E',
   },
   {
     value: 48,
-    label: '600',
+    label: 'F',
   },
   {
     value: 56,
-    label: '700',
+    label: 'G',
   },
   {
     value: 64,
-    label: '800',
+    label: 'H',
   },
   {
     value: 72,
-    label: '1000',
+    label: 'I',
   },{
     value: 80,
-    label: '1200',
+    label: 'J',
   },{
     value: 88,
-    label: '1500',
+    label: 'K',
   },{
     value: 96,
-    label: '10000',
+    label: 'L',
   },
 ];
 const Length = [
@@ -205,7 +205,7 @@ const Size = [
 
 
 function valuetext(value) {
-  return `${value}`;
+  return `${value}`+'0g';
 }
 
 function valueLabelFormat(value) {
@@ -250,6 +250,10 @@ function valueLabelFormat(value) {
         let Taste_Class=(fishDataa.filter[`Taste_Class`]<10);
         if(filter[`Taste_Class`]!=0){ Taste_Class=(filter[`Taste_Class`]==fishDataa.filter[`Taste_Class`]) }
 
+       // let Price_Class=(fishDataa.filter[`Taste_Class`]<10);
+       // if(filter[`Price_Class`]!=0){ Price_Class=(filter[`Taste_Class`]==fishDataa.filter[`Taste_Class`]) }
+
+
         let Length=(fishDataa.filter[`Length`]<10);
         if(filter[`Length`]!=0){ Length=(filter[`Length`]==fishDataa.filter[`Length`]) }
         let Body=(fishDataa.filter[`Body`]<10);
@@ -291,7 +295,8 @@ function valueLabelFormat(value) {
     }
     render() {
       let { value, fBone,filter,appliedFilter,Steaks,Fillets,colorFilter} = this.state
-    var tempo=0;var color=this.state.colorFilter
+    var tempo=0,tempo1=0;
+    var color=this.state.colorFilter
       return (
 
         <div style={{marginTop:20}}>
@@ -306,6 +311,7 @@ function valueLabelFormat(value) {
                     step={25}
                     marks={thorns}
                     track={false}
+                    valueLabelDisplay="auto"
                     onChange={(e,a)=>{
                       a==0? tempo=4:
                       a==25?tempo=0:
@@ -355,14 +361,15 @@ function valueLabelFormat(value) {
                     this.setState({filter:filter}) 
                     this.filter()}}
                   />
+                  <div style={{height:70}}>
                     <Label size='sm'>Taste Class:</Label>
                   <Slider
+                  
                     defaultValue={0}
                     getAriaValueText={valuetext}
                     aria-labelledby="track-false-slider"
                     step={25}
                     marks={Taste_Class}
-                    track={false}
                     onChange={(e,a)=>{
                       a==0? tempo=0:
                       a==25?tempo=4:
@@ -374,24 +381,39 @@ function valueLabelFormat(value) {
                       Object.assign(filter,{'Taste_Class':tempo });
                     this.setState({filter:filter}) 
                     this.filter()}}
-                  />
+                  /></div>
               <Label size='sm'>Price Class:</Label>
                   <Slider
                     defaultValue={[0,100]}
-                    getAriaValueText={valuetext}
-                    aria-labelledby="track-false-range-slider"
-                    step={8}
                     marks={Price_Class}
-                    track={false}
                     onChange={(e,a)=>{
-                      a==0? tempo=0:
-                      a==25?tempo=4:
-                      a==50?tempo=2:
-                      a==75?tempo=3:
-                      
-                      tempo=0
-                      
-                      Object.assign(filter,{'Price_Class':tempo });
+                      a[0]==8? tempo=3000:
+                      a[0]==16?tempo=2000:
+                      a[0]==24?tempo=1500:
+                      a[0]==32?tempo=1200:
+                      a[0]==40? tempo=1000:
+                      a[0]==48?tempo=800:
+                      a[0]==56?tempo=700:
+                      a[0]==64?tempo=600:
+                      a[0]==72? tempo=500:
+                      a[0]==80?tempo=300:
+                      a[0]==88?tempo=200:
+                      a[0]==96?tempo=100:
+
+                      a[1]==8? tempo1=3000:
+                      a[1]==16?tempo1=2000:
+                      a[1]==24?tempo1=1500:
+                      a[1]==32?tempo1=1200:
+                      a[1]==40? tempo1=1000:
+                      a[1]==48?tempo1=800:
+                      a[1]==56?tempo1=700:
+                      a[1]==64?tempo1=600:
+                      a[1]==72? tempo1=500:
+                      a[1]==80?tempo1=300:
+                      a[1]==88?tempo1=200:
+                      a[1]==96?tempo1=100:
+
+                      Object.assign(filter,{'Price_Class':[] });
                     this.setState({filter:filter}) 
                     this.filter()}
                   }

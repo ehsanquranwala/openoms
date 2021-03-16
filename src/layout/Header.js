@@ -61,6 +61,9 @@ const AppHeader = () => {
             <NavItem>
               <Link style={{color:"#FFFFFF"}} to="/gallery">Gallery</Link>
             </NavItem>
+            <NavItem>
+              <Link style={{color:"#FFFFFF"}} to="/price-list">Price List</Link>
+            </NavItem>
             
             <NavItem>
               <Link style={{color:"#FFFFFF"}} to="/cart">Cart</Link>

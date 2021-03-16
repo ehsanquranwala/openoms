@@ -319,7 +319,7 @@ import { Card, CardImg, CardBody,
        return (
           <div style={{marginTop:20}}>
             {cart.length >0?
-            <Container className="themed-container" fluid="lg" >
+            <Container className="themed-container" fluid="sm" >
             <Row>
             <Col md="8">
              <Row><Col md='12'>
@@ -329,9 +329,9 @@ import { Card, CardImg, CardBody,
                <Table bordered={true} style={{fontSize:12}}>
                <thead>
                       <tr><th></th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Applied Price</th>
+                        <th>Product</th>
+                        <th>Rate</th>
+                        <th>Applied Rate</th>
                         <th>Qty</th>
                         <th>Actual Price</th>
                         <th>Discounted Price</th>
