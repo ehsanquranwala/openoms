@@ -249,9 +249,9 @@ function valueLabelFormat(value) {
 
         let Taste_Class=(fishDataa.filter[`Taste_Class`]<10);
         if(filter[`Taste_Class`]!=0){ Taste_Class=(filter[`Taste_Class`]==fishDataa.filter[`Taste_Class`]) }
-
-       // let Price_Class=(fishDataa.filter[`Taste_Class`]<10);
-       // if(filter[`Price_Class`]!=0){ Price_Class=(filter[`Taste_Class`]==fishDataa.filter[`Taste_Class`]) }
+console.log('price',filter[`Price_Class`])
+       // let Price_Class=(fishDataa.filter[`Price_Class`]<10);
+       // if(filter[`Price_Class`]!=0){ Price_Class=(filter[`Price_Class`]==fishDataa.filter[`Price_Class`]) }
 
 
         let Length=(fishDataa.filter[`Length`]<10);
@@ -386,7 +386,9 @@ function valueLabelFormat(value) {
                   <Slider
                     defaultValue={[0,100]}
                     marks={Price_Class}
+                    step={8}
                     onChange={(e,a)=>{
+                      console.log(a[0])
                       a[0]==8? tempo=3000:
                       a[0]==16?tempo=2000:
                       a[0]==24?tempo=1500:
@@ -413,7 +415,7 @@ function valueLabelFormat(value) {
                       a[1]==88?tempo1=200:
                       a[1]==96?tempo1=100:
 
-                      Object.assign(filter,{'Price_Class':[] });
+                      Object.assign(filter,{'Price_Class':[tempo,tempo1] });
                     this.setState({filter:filter}) 
                     this.filter()}
                   }
