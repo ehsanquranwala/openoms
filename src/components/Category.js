@@ -222,7 +222,7 @@ function valueLabelFormat(value) {
                     value:10,
                     fBone:4,
                     Salt_Water:2,
-                    filter:{Thorns:4,Salt_Water:2,Meat_Whiteness:0,Taste_Class:0,Length:0,Body:0,Size:0,Steaks_Available:false,Fillets_Available:false,Whole_Available:false,Dots_Spots:false,Lines_Stripes:false},
+                    filter:{Thorns:4,Salt_Water:2,Meat_Whiteness:0,Taste_Class:0,Length:0,Body:0,Size:0,Steaks_Available:false,Fillets_Available:false,Whole_Available:false,Dots_Spots:false,Lines_Stripes:false,Price_Class:[10000,100]},
                     colorFilter:[],
                     appliedFilter:[],
                   };
@@ -281,7 +281,6 @@ console.log('price',filter[`Price_Class`])
             Skin_Color_1=Skin_Color_1 && v
         })
       }
-            console.log('coloe',Skin_Color_1)
           if(thorn&& Salt_Water&&Meat_Whiteness&&Taste_Class&&Steaks_Available&&Fillets_Available&&Whole_Available&&Scales&&Dots_Spots&&Lines_Stripes&&Length&&Body&&Size){
               filtered.push(fishDataa)
            }
@@ -388,13 +387,13 @@ console.log('price',filter[`Price_Class`])
                     marks={Price_Class}
                     step={8}
                     onChange={(e,a)=>{
-                      console.log(a[0])
-                      a[0]==8? tempo=3000:
-                      a[0]==16?tempo=2000:
-                      a[0]==24?tempo=1500:
-                      a[0]==32?tempo=1200:
-                      a[0]==40? tempo=1000:
-                      a[0]==48?tempo=800:
+                      a[0]>0? tempo=10000:
+                      a[0]>8? tempo=3000:
+                      a[0]>16?tempo=2000:
+                      a[0]>24?tempo=1500:
+                      a[0]>32?tempo=1200:
+                      a[0]>40? tempo=1000:
+                      a[0]>48?tempo=800:
                       a[0]==56?tempo=700:
                       a[0]==64?tempo=600:
                       a[0]==72? tempo=500:
@@ -402,6 +401,7 @@ console.log('price',filter[`Price_Class`])
                       a[0]==88?tempo=200:
                       a[0]==96?tempo=100:
 
+                      a[1]==0? tempo1=10000:
                       a[1]==8? tempo1=3000:
                       a[1]==16?tempo1=2000:
                       a[1]==24?tempo1=1500:
@@ -415,9 +415,10 @@ console.log('price',filter[`Price_Class`])
                       a[1]==88?tempo1=200:
                       a[1]==96?tempo1=100:
 
-                      Object.assign(filter,{'Price_Class':[tempo,tempo1] });
+                      Object.assign(filter,{'Price_Class':a });
                     this.setState({filter:filter}) 
-                    this.filter()}
+                    this.filter()
+                   
                   }
                   />
                   <Label size='sm'>Length:</Label>
