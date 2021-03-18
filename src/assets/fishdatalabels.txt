@@ -32,6 +32,7 @@ less than 100 200 300 400 500 600 700 800  1000 1200 1500 2000 10000
 "Salan": 1,
 "Biryani": 2,
 "Soup": 0,
+
 (make a checkbox grid for this with squares of these colors)
 (white, black, silver, golden, gray, red, pink, green, brown, purple, yellow, orange, blue)
 "Skin_Color_1": "pink",
