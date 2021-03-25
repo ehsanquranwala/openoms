@@ -19,7 +19,7 @@ import { Card, CardImg, CardBody,
     }
     
     componentDidMount(){
-     // console.log(this.props.selectProduct)
+      console.log(this.props.selectProduct)
     }
   
     addCart(qty,desc,slug,price,image,average){
@@ -119,11 +119,97 @@ import { Card, CardImg, CardBody,
                   </Col>
                       <Col sm="4"><Card>
                         <CardBody style={{backgroundColor: "#f6f6f3"}}>
-                          <h6>Delivery Options</h6>
+                          <h6>Product features</h6>
                           <hr style={{ color: '#c0c0c0', }} />
-                            <CardTitle tag="h6" >{this.props.selectProduct.shipping_class} </CardTitle>
-                            <CardTitle tag="h6" color="blue">Rs. {this.props.selectProduct.price}</CardTitle>
-                              
+                            <CardTitle tag="h6" >Whole Available: {this.props.selectProduct.filter.Whole_Available==1?'Yes':'No'} </CardTitle>
+                            <CardTitle tag="h6" >Fillet Available: {this.props.selectProduct.filter.Fillets_Available==1?'Yes':'No'} </CardTitle>
+                            <CardTitle tag="h6" >Steaks Available: {this.props.selectProduct.filter.Steaks_Available==1?'Yes':'No'} </CardTitle>
+                            <CardTitle tag="h6" >Dots_Spots Available: {this.props.selectProduct.filter.Dots_Spots==1?'Yes':'No'} </CardTitle>
+                            <CardTitle tag="h6" >Lines_Stripes Available: {this.props.selectProduct.filter.Lines_Stripes==1?'Yes':'No'} </CardTitle>
+                            <CardTitle tag="h6" >Scales Available: {this.props.selectProduct.filter.Scales==1?'Yes':'No'} </CardTitle>
+                            <CardTitle tag="h6" >Horizontal Available: {this.props.selectProduct.filter.Horizontal==1?'Yes':'No'} </CardTitle>
+                            <CardTitle tag="h6" >Water: {this.props.selectProduct.filter.Salt_Water==1?'Salt':'Sweet'} </CardTitle>
+                            <CardTitle tag="h6" >Thorns: {this.props.selectProduct.filter.Thorns==0?'None':
+                            this.props.selectProduct.filter.Thorns==1?'One':
+                            this.props.selectProduct.filter.Thorns==2?'Few':
+                            this.props.selectProduct.filter.Thorns==3?'Many':
+                            'Many'} </CardTitle>
+                              <CardTitle tag="h6" >Meat Color: {this.props.selectProduct.filter.Meat_Whiteness==1?'Very Light':
+                            this.props.selectProduct.filter.Meat_Whiteness==2?'Light':
+                            this.props.selectProduct.filter.Meat_Whiteness==3?'Dark':
+                            'Light'} </CardTitle>
+                              <CardTitle tag="h6" >Taste: {this.props.selectProduct.filter.Taste_Class==1?'Lesser':
+                            this.props.selectProduct.filter.Taste_Class==2?'Normal':
+                            this.props.selectProduct.filter.Taste_Class==3?'Good':
+                            this.props.selectProduct.filter.Taste_Class==4?'Best':
+                            'Normal'} </CardTitle>
+
+                        <CardTitle tag="h6" >Length: {this.props.selectProduct.filter.Length==1?'Short':
+                            this.props.selectProduct.filter.Length==2?'Medium':
+                            this.props.selectProduct.filter.Length==3?'Long':
+                            this.props.selectProduct.filter.Length==4?'Very Long':
+                            'Many'} </CardTitle>
+                              <CardTitle tag="h6" >Body: {this.props.selectProduct.filter.Body==1?'Slim':
+                            this.props.selectProduct.filter.Body==2?'Medium':
+                            this.props.selectProduct.filter.Body==3?'Round':
+                            'Light'} </CardTitle>
+                              <CardTitle tag="h6" >Size: {this.props.selectProduct.filter.Size==1?'Tiny':
+                            this.props.selectProduct.filter.Size==2?'Small':
+                            this.props.selectProduct.filter.Size==3?'Medium':
+                            this.props.selectProduct.filter.Size==4?'Large':
+                            this.props.selectProduct.filter.Size==5?'Extra Large':
+                            'Medium'} </CardTitle>
+                              <CardTitle tag="h6" >Price Class: {this.props.selectProduct.filter.Price_Class==1?'Lesser':
+                            this.props.selectProduct.filter.Price_Class==2?'L':
+                            this.props.selectProduct.filter.Price_Class==3?'K':
+                            this.props.selectProduct.filter.Price_Class==4?'J':
+                            this.props.selectProduct.filter.Price_Class==5?'I':
+                            this.props.selectProduct.filter.Price_Class==6?'H':
+                            this.props.selectProduct.filter.Price_Class==7?'G':
+                            this.props.selectProduct.filter.Price_Class==8?'F':
+                            this.props.selectProduct.filter.Price_Class==9?'E':
+                            this.props.selectProduct.filter.Price_Class==10?'D':
+                            this.props.selectProduct.filter.Price_Class==11?'C':
+                            this.props.selectProduct.filter.Price_Class==12?'B':
+                            this.props.selectProduct.filter.Price_Class==13?'A':
+                            'D'} </CardTitle>
+                            <CardTitle tag="h6" >Whole(Net wt/kg): {this.props.selectProduct.filter.Net_Wt_Whole_Min}</CardTitle>
+                            <CardTitle tag="h6" >Steaks(Net wt/kg): {this.props.selectProduct.filter.Net_Wt_Steaks_Min}</CardTitle>
+                            <CardTitle tag="h6" >Net_Wt_Fillets(Net wt/kg): {this.props.selectProduct.filter.Net_Wt_Fillets_Min}</CardTitle>
+                            <CardTitle tag="h6" >Pieces(Net wt/kg): {this.props.selectProduct.filter.Pieces_Per_Kg_Min}</CardTitle>
+                            <CardTitle tag="h6" >Piece(Net wt/kg): {this.props.selectProduct.filter.Piece_Weight_Min}</CardTitle>
+                            <CardTitle tag="h6" >Local_Grouping: {this.props.selectProduct.filter.Local_Grouping}</CardTitle>
+                            <CardTitle tag="h6" >Foreign_Names: {this.props.selectProduct.filter.Foreign_Names}</CardTitle>
+                            <CardTitle tag="h6" >Foreign_Grouping: {this.props.selectProduct.filter.Foreign_Grouping}</CardTitle>
+                            <CardTitle tag="h6" >Fish Color: {this.props.selectProduct.filter.Skin_Color_1}, {this.props.selectProduct.filter.Skin_Color_2}, {this.props.selectProduct.filter.Skin_Color_3}</CardTitle>
+                            <CardTitle tag="h6" >{this.props.selectProduct.filter.Whole_Fry==0?'Not':
+                            this.props.selectProduct.filter.Whole_Fry==1?'Best':
+                            this.props.selectProduct.filter.Whole_Fry==2?'Good':
+                            this.props.selectProduct.filter.Whole_Fry==3?'Normal':'Lesser'} for Whole Fry</CardTitle>
+                                <CardTitle tag="h6" >{this.props.selectProduct.filter.Piece_Fry==0?'Not':
+                            this.props.selectProduct.filter.Piece_Fry==1?'Best':
+                            this.props.selectProduct.filter.Piece_Fry==2?'Good':
+                            this.props.selectProduct.filter.Piece_Fry==3?'Normal':'Lesser'} for Piece Fry</CardTitle>
+                                <CardTitle tag="h6" >{this.props.selectProduct.filter.Fillets==0?'Not':
+                            this.props.selectProduct.filter.Fillets==1?'Best':
+                            this.props.selectProduct.filter.Fillets==2?'Good':
+                            this.props.selectProduct.filter.Fillets==3?'Normal':'Lesser'} for Fillets</CardTitle>
+                                <CardTitle tag="h6" >{this.props.selectProduct.filter.Grill==0?'Not':
+                            this.props.selectProduct.filter.Grill==1?'Best':
+                            this.props.selectProduct.filter.Grill==2?'Good':
+                            this.props.selectProduct.filter.Grill==3?'Normal':'Lesser'} for Grill</CardTitle>
+                                <CardTitle tag="h6" >{this.props.selectProduct.filter.Salan==0?'Not':
+                            this.props.selectProduct.filter.Salan==1?'Best':
+                            this.props.selectProduct.filter.Salan==2?'Good':
+                            this.props.selectProduct.filter.Salan==3?'Normal':'Lesser'} for Salan</CardTitle>
+                                <CardTitle tag="h6" >{this.props.selectProduct.filter.Biryani==0?'Not':
+                            this.props.selectProduct.filter.Biryani==1?'Best':
+                            this.props.selectProduct.filter.Biryani==2?'Good':
+                            this.props.selectProduct.filter.Biryani==3?'Normal':'Lesser'} for Biryani</CardTitle>
+                             <CardTitle tag="h6" >{this.props.selectProduct.filter.Soup==0?'Not':
+                            this.props.selectProduct.filter.Soup==1?'Best':
+                            this.props.selectProduct.filter.Soup==2?'Good':
+                            this.props.selectProduct.filter.Soup==3?'Normal':'Lesser'} for Soup</CardTitle>
                         </CardBody>
                       </Card></Col>
                          

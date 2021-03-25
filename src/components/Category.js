@@ -3,8 +3,9 @@ import { Button,Card, CardImg,  CardBody,
   CardTitle, Container,Row,Col,Input,FormGroup,Label} from 'reactstrap';
   import SecureLS from 'secure-ls';
   import { connect } from "react-redux";
-  import { products, addtocart, category,addArticle,user } from "../js/actions/index";
+  import { selectProduct} from "../js/actions/index";
   import {SingleSlider} from 'react-slider-kit';
+  import { Redirect} from "react-router-dom";
   import { Slider,Switch,Checkbox  } from '@material-ui/core';
   import Child from './dropdown';
   import 'react-dropdown-tree-select/dist/styles.css';
@@ -42,11 +43,11 @@ const Salt_Water = [
   }
   ,{
     value: 50,
-    label: 'Salt Water',
+    label: 'Salt',
   },
   {
     value: 100,
-    label: 'Fresh Water',
+    label: 'Fresh',
   },
 ];
 const Meat_Whiteness = [
@@ -337,7 +338,7 @@ const Size = [
   },
   {
     value: 100,
-    label: 'Extra Large',
+    label: 'x-Large',
   },
 ];
 function valuetext(value) {
@@ -358,9 +359,11 @@ function valueLabelFormat(value) {
                     fBone:4,
                     Salt_Water:2,
                     filter:{Thorns:4,Salt_Water:2,Meat_Whiteness:0,Taste_Class:0,Length:0,Body:0,Size:0,Steaks_Available:false,Fillets_Available:false,Whole_Available:false,Dots_Spots:false,Lines_Stripes:false,Price_Class:[0,99],Net_Wt_Steaks_Min:10,Net_Wt_Fillets_Min:10,Net_Wt_Whole_Min:10},
-                    colorFilter:{'white':true, 'black':true, 'silver':true, 'golden':true, 'gray':true, 'red':true, 'pink':true, 'green':true, 'brown':true, 'purple':true, 'yellow':true, 'orange':true, 'blue':true},
+                    colorFilter:{'white':true, 'black':true, 'silver':true, 'golden':true, 'gray':true, 'red':true,
+                     'pink':true, 'green':true, 'brown':true, 'purple':true, 'yellow':true, 'orange':true},
                     appliedFilter:[],
-                    select_all_color:true
+                    select_all_color:true,
+                    navigate:false
                   };
         }
     componentDidMount(){
@@ -451,15 +454,109 @@ function valueLabelFormat(value) {
         if(filter[`Dots_Spots`]!=false){ Dots_Spots=(1==fishDataa.filter[`Dots_Spots`]) }
         let Lines_Stripes=(fishDataa.filter[`Lines_Stripes`]<10);
         if(filter[`Lines_Stripes`]!=false){ Lines_Stripes=(1==fishDataa.filter[`Lines_Stripes`]) }
-
-        let Skin_Color_1=(fishDataa.filter[`Skin_Color_1`]!='none')
-        if(colorFilter.length > -1){ 
-           Skin_Color_1=fishDataa.filter[`Skin_Color_1`]=='none';
-          colorFilter.map((v,i)=>{
-            Skin_Color_1=Skin_Color_1 && v
-        })
-      }
-         if(thorn&& Salt_Water&&Meat_Whiteness&&Taste_Class&&Steaks_Available&&Fillets_Available&&Whole_Available&&Scales&&Dots_Spots&&Lines_Stripes&&Length&&Body&&Size&&Price_Class_Low&&Price_Class_High&Net_Wt_Steaks_Min&&Net_Wt_Fillets_Min&&Net_Wt_Whole_Min){
+       
+        //Red Check
+       let red1=fishDataa.filter[`Skin_Color_1`]!='red';
+       let red2=fishDataa.filter[`Skin_Color_2`]!='red';
+       let red3=fishDataa.filter[`Skin_Color_3`]!='red';
+       if(colorFilter["red"]==true){
+        red1=( fishDataa.filter[`Skin_Color_1`]=='red');
+        red2=( fishDataa.filter[`Skin_Color_2`]=='red')
+        red3=(fishDataa.filter[`Skin_Color_3`]=='red')} 
+         //Red Check
+       let white1=fishDataa.filter[`Skin_Color_1`]!='white';
+       let white2=fishDataa.filter[`Skin_Color_2`]!='white';
+       let white3=fishDataa.filter[`Skin_Color_3`]!='white';
+       if(colorFilter["white"]==true){
+        white1=( fishDataa.filter[`Skin_Color_1`]=='white');
+        white2=( fishDataa.filter[`Skin_Color_2`]=='white')
+        white3=(fishDataa.filter[`Skin_Color_3`]=='white')} 
+         //Red Check
+       let black1=fishDataa.filter[`Skin_Color_1`]!='black';
+       let black2=fishDataa.filter[`Skin_Color_2`]!='black';
+       let black3=fishDataa.filter[`Skin_Color_3`]!='black';
+       if(colorFilter["black"]==true){
+        black1=( fishDataa.filter[`Skin_Color_1`]=='black');
+        black2=( fishDataa.filter[`Skin_Color_2`]=='black')
+        black3=(fishDataa.filter[`Skin_Color_3`]=='black')} 
+         //Red Check
+       let silver1=fishDataa.filter[`Skin_Color_1`]!='silver';
+       let silver2=fishDataa.filter[`Skin_Color_2`]!='silver';
+       let silver3=fishDataa.filter[`Skin_Color_3`]!='silver';
+       if(colorFilter["silver"]==true){
+        silver1=( fishDataa.filter[`Skin_Color_1`]=='silver');
+        silver2=( fishDataa.filter[`Skin_Color_2`]=='silver')
+        silver3=(fishDataa.filter[`Skin_Color_3`]=='silver')} 
+         //Red Check
+       let golden1=fishDataa.filter[`Skin_Color_1`]!='golden';
+       let golden2=fishDataa.filter[`Skin_Color_2`]!='golden';
+       let golden3=fishDataa.filter[`Skin_Color_3`]!='golden';
+       if(colorFilter["golden"]==true){
+        golden1=( fishDataa.filter[`Skin_Color_1`]=='golden');
+        golden2=( fishDataa.filter[`Skin_Color_2`]=='golden')
+        golden3=(fishDataa.filter[`Skin_Color_3`]=='golden')} 
+         //Red Check
+       let gray1=fishDataa.filter[`Skin_Color_1`]!='gray';
+       let gray2=fishDataa.filter[`Skin_Color_2`]!='gray';
+       let gray3=fishDataa.filter[`Skin_Color_3`]!='gray';
+       if(colorFilter["gray"]==true){
+        gray1=( fishDataa.filter[`Skin_Color_1`]=='gray');
+        gray2=( fishDataa.filter[`Skin_Color_2`]=='gray')
+        gray3=(fishDataa.filter[`Skin_Color_3`]=='gray')} 
+         //Red Check
+       let pink1=fishDataa.filter[`Skin_Color_1`]!='pink';
+       let pink2=fishDataa.filter[`Skin_Color_2`]!='pink';
+       let pink3=fishDataa.filter[`Skin_Color_3`]!='pink';
+       if(colorFilter["pink"]==true){
+        pink1=( fishDataa.filter[`Skin_Color_1`]=='pink');
+        pink2=( fishDataa.filter[`Skin_Color_2`]=='pink')
+        pink3=(fishDataa.filter[`Skin_Color_3`]=='pink')} 
+         //Red Check
+       let green1=fishDataa.filter[`Skin_Color_1`]!='green';
+       let green2=fishDataa.filter[`Skin_Color_2`]!='green';
+       let green3=fishDataa.filter[`Skin_Color_3`]!='green';
+       if(colorFilter["green"]==true){
+        green1=( fishDataa.filter[`Skin_Color_1`]=='green');
+        green2=( fishDataa.filter[`Skin_Color_2`]=='green')
+        green3=(fishDataa.filter[`Skin_Color_3`]=='green')} 
+         //Red Check
+       let brown1=fishDataa.filter[`Skin_Color_1`]!='brown';
+       let brown2=fishDataa.filter[`Skin_Color_2`]!='brown';
+       let brown3=fishDataa.filter[`Skin_Color_3`]!='brown';
+       if(colorFilter["brown"]==true){
+        brown1=( fishDataa.filter[`Skin_Color_1`]=='brown');
+        brown2=( fishDataa.filter[`Skin_Color_2`]=='brown')
+        brown3=(fishDataa.filter[`Skin_Color_3`]=='brown')} 
+         //Red Check
+       let purple1=fishDataa.filter[`Skin_Color_1`]!='purple';
+       let purple2=fishDataa.filter[`Skin_Color_2`]!='purple';
+       let purple3=fishDataa.filter[`Skin_Color_3`]!='purple';
+       if(colorFilter["purple"]==true){
+        purple1=( fishDataa.filter[`Skin_Color_1`]=='purple');
+        purple2=( fishDataa.filter[`Skin_Color_2`]=='purple')
+        purple3=(fishDataa.filter[`Skin_Color_3`]=='purple')} 
+         //Red Check
+       let yellow1=fishDataa.filter[`Skin_Color_1`]!='yellow';
+       let yellow2=fishDataa.filter[`Skin_Color_2`]!='yellow';
+       let yellow3=fishDataa.filter[`Skin_Color_3`]!='yellow';
+       if(colorFilter["yellow"]==true){
+        yellow1=( fishDataa.filter[`Skin_Color_1`]=='yellow');
+        yellow2=( fishDataa.filter[`Skin_Color_2`]=='yellow')
+        yellow3=(fishDataa.filter[`Skin_Color_3`]=='yellow')} 
+         //Red Check
+       let orange1=fishDataa.filter[`Skin_Color_1`]!='orange';
+       let orange2=fishDataa.filter[`Skin_Color_2`]!='orange';
+       let orange3=fishDataa.filter[`Skin_Color_3`]!='orange';
+       if(colorFilter["orange"]==true){
+        orange1=( fishDataa.filter[`Skin_Color_1`]=='orange');
+        orange2=( fishDataa.filter[`Skin_Color_2`]=='orange')
+        orange3=(fishDataa.filter[`Skin_Color_3`]=='orange')} 
+        
+    
+         if(thorn&& Salt_Water&&Meat_Whiteness&&Taste_Class&&Steaks_Available&&Fillets_Available&&Whole_Available&&Scales&&Dots_Spots&&Lines_Stripes&&Length&&Body&&Size&&Price_Class_Low&&Price_Class_High&Net_Wt_Steaks_Min&&Net_Wt_Fillets_Min&&Net_Wt_Whole_Min
+    /*      && red1|| white1|| black1|| gray1 || silver1 || brown1 || purple1 || yellow1||orange1||green1||pink1||golden1 &&
+            red2|| white2|| black2|| gray2 || silver2 || brown2 || purple2 || yellow2||orange2||green2||pink2||golden2 &&
+            red3|| white3|| black3|| gray3 || silver3 || brown3 || purple3 || yellow3||orange3||green3||pink3||golden3*/ ){
               filtered.push(fishDataa)
            }
         })
@@ -474,16 +571,18 @@ function valueLabelFormat(value) {
       let { value, fBone,filter,appliedFilter,Steaks,Fillets,colorFilter,select_all_color} = this.state
     var tempo=0,tempo1=0;
     var color=this.state.colorFilter
-    
+    const { navigate } = this.state
+    if (navigate) {
+      return <Redirect to="/product" push={true} />
+    }
       return (
 
-        <div style={{marginTop:20}}>
-            <Container className="themed-container" fluid="sm" >
+        <div style={{marginTop:20,padding:10}}>
             <Row>
             
               <Col md="3">
               <div style={{flexDirection:"row",display:"flex"}}>
-              <Label size='sm' style={{padding:10}}>Thorns:</Label>
+              <Label size='sm' style={{padding:10}}>Thorns</Label>
                <Slider
                     defaultValue={0}
                     getAriaValueText={valuetext}
@@ -505,7 +604,8 @@ function valueLabelFormat(value) {
                     this.filter()}}
                   />
                   </div>
-                  <Label size='sm'>Salt Water:</Label>
+                  <div style={{flexDirection:"row",display:"flex"}}>
+              <Label size='sm' style={{padding:10}}>Water</Label>
                    <Slider
                     defaultValue={0}
                     getAriaValueText={valuetext}
@@ -522,8 +622,9 @@ function valueLabelFormat(value) {
                       Object.assign(filter,{'Salt_Water':tempo });
                     this.setState({filter:filter}) 
                     this.filter()}}
-                  />
-                  <Label size='sm'>Meat Whiteness:</Label>
+                  /></div>
+                  <div style={{flexDirection:"row",display:"flex"}}>
+              <Label size='sm' style={{padding:10}}>Meat Whiteness</Label>
                   <Slider
                     defaultValue={0}
                     getAriaValueText={valuetext}
@@ -541,9 +642,9 @@ function valueLabelFormat(value) {
                       Object.assign(filter,{'Meat_Whiteness':tempo });
                     this.setState({filter:filter}) 
                     this.filter()}}
-                  />
-                  <div style={{height:70}}>
-                    <Label size='sm'>Taste Class:</Label>
+                  /></div>
+                  <div style={{flexDirection:"row",display:"flex"}}>
+              <Label size='sm' style={{padding:10}}>Taste Class</Label>
                   <Slider
                   
                     defaultValue={0}
@@ -563,7 +664,9 @@ function valueLabelFormat(value) {
                     this.setState({filter:filter}) 
                     this.filter()}}
                   /></div>
-              <Label size='sm'>Price Class:</Label>
+              
+              <div style={{flexDirection:"row",display:"flex"}}>
+              <Label size='sm' style={{padding:10}}>Price Class</Label>
                   <Slider
                     defaultValue={[0,99]}
                     marks={Price_Class}
@@ -574,8 +677,9 @@ function valueLabelFormat(value) {
                     this.setState({filter:filter}) 
                     this.filter()}
                   }
-                  />
-                   <Label size='sm'>Net Weight Whole Minimum:</Label>
+                  /></div>
+                  <div style={{flexDirection:"row",display:"flex"}}>
+              <Label size='sm' style={{padding:10}}>Whole (Net Wt)</Label>
                   <Slider
                     defaultValue={0}
                     marks={Net_Wt_Whole_Min}
@@ -586,8 +690,9 @@ function valueLabelFormat(value) {
                     this.setState({filter:filter}) 
                     this.filter()}
                   }
-                  />
-                  <Label size='sm'>Net Weight Steaks Minimum:</Label>
+                  /></div>
+                 <div style={{flexDirection:"row",display:"flex"}}>
+              <Label size='sm' style={{padding:10}}>Steaks (Net Wt)</Label>
                   <Slider
                     defaultValue={0}
                     marks={Net_Wt_Steaks_Min}
@@ -599,8 +704,9 @@ function valueLabelFormat(value) {
                     this.filter()}
                   }
                   />
-                  
-                   <Label size='sm'>Net Weight Fillets Minimum:</Label>
+                  </div>
+                  <div style={{flexDirection:"row",display:"flex"}}>
+              <Label size='sm' style={{padding:10}}>Fillets (Net Wt)</Label>
                   <Slider
                     defaultValue={0}
                     marks={Net_Wt_Fillets_Min}
@@ -611,8 +717,9 @@ function valueLabelFormat(value) {
                     this.setState({filter:filter}) 
                     this.filter()}
                   }
-                  />
-                  <Label size='sm'>Length:</Label>
+                  /></div>
+                  <div style={{flexDirection:"row",display:"flex"}}>
+              <Label size='sm' style={{padding:10}}>Fish Length</Label>
                   <Slider
                     defaultValue={0}
                     getAriaValueText={valuetext}
@@ -633,8 +740,9 @@ function valueLabelFormat(value) {
                     this.setState({filter:filter}) 
                     this.filter()}
                   }
-                  />
-                  <Label size='sm'>Body:</Label>
+                  />  </div>
+                  <div style={{flexDirection:"row",display:"flex"}}>
+              <Label size='sm' style={{padding:10}}>Fish Body</Label>
                   <Slider
                     defaultValue={0}
                     getAriaValueText={valuetext}
@@ -653,8 +761,9 @@ function valueLabelFormat(value) {
                     this.setState({filter:filter}) 
                     this.filter()}
                   }
-                  />
-                  <Label size='sm'>Size:</Label>
+                  />  </div>
+                  <div style={{flexDirection:"row",display:"flex"}}>
+              <Label size='sm' style={{padding:10}}>Fish Size</Label>
                   <Slider
                     defaultValue={0}
                     getAriaValueText={valuetext}
@@ -675,8 +784,11 @@ function valueLabelFormat(value) {
                     this.setState({filter:filter}) 
                     this.filter()}
                   }
-                  />
-                  <Label size='sm'>Steaks Available:</Label>
+                  /></div>
+                  <div style={{marginLeft:30}}>
+                  <Row>
+                  <Col md='6'>
+                  <Label size='sm'>Steaks</Label>
                    <Switch
                         checked={filter['Steaks_Available']}
                         onChange={()=>{ 
@@ -686,8 +798,9 @@ function valueLabelFormat(value) {
                         color='primary'
                         name="checkedA"
                         inputProps={{ 'aria-label': 'primary checkbox' }}
-                      /> <br></br>
-                      <Label size='sm'>Fillets Available:</Label>
+                      /> </Col>
+                      <Col md='6'>
+                      <Label size='sm'>Fillets</Label>
                       <Switch
                         checked={filter['Fillets_Available']}
                         onChange={()=>{ 
@@ -697,30 +810,40 @@ function valueLabelFormat(value) {
                         color='primary'
                         name="checkedA"
                         inputProps={{ 'aria-label': 'primary checkbox' }}
-                      /><br></br>
-                      <Label size='sm'>Whole Available:</Label>
-                      <Switch
-                        checked={filter['Whole_Available']}
-                        onChange={()=>{ 
-                          Object.assign(filter,{'Whole_Available':!filter['Whole_Available'] });
-                        this.setState({filter:filter}) 
-                        this.filter()}}
-                        color='primary'
-                        name="checkedA"
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      /><br></br>
-                      <Label size='sm'>Scales Available:</Label>
-                      <Switch
-                        checked={filter['Scales']}
-                        onChange={()=>{ 
-                          Object.assign(filter,{'Scales':!filter['Scales'] });
-                        this.setState({filter:filter}) 
-                        this.filter()}}
-                        color='primary'
-                        name="checkedA"
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                      /><br></br>
-                       <Label size='sm'>Lines Stripes:</Label>
+                      />
+                      </Col>
+                      </Row>
+                    <Row>
+                       <Col md='6'>  
+                            <Label size='sm'>Whole</Label>
+                            <Switch
+                              checked={filter['Whole_Available']}
+                              onChange={()=>{ 
+                                Object.assign(filter,{'Whole_Available':!filter['Whole_Available'] });
+                              this.setState({filter:filter}) 
+                              this.filter()}}
+                              color='primary'
+                              name="checkedA"
+                              inputProps={{ 'aria-label': 'primary checkbox' }}
+                            />
+                      </Col>
+                      <Col md='6'>
+                          <Label size='sm'>Scales</Label>
+                          <Switch
+                            checked={filter['Scales']}
+                            onChange={()=>{ 
+                              Object.assign(filter,{'Scales':!filter['Scales'] });
+                            this.setState({filter:filter}) 
+                            this.filter()}}
+                            color='primary'
+                            name="checkedA"
+                            inputProps={{ 'aria-label': 'primary checkbox' }}
+                          />
+                      </Col>
+                    </Row>
+                       <Row>
+                         <Col md='6'>
+                       <Label size='sm'>Lines</Label>
                       <Switch
                         checked={filter['Lines_Stripes']}
                         onChange={()=>{ 
@@ -730,8 +853,9 @@ function valueLabelFormat(value) {
                         color='primary'
                         name="checkedA"
                         inputProps={{ 'aria-label': 'primary checkbox' }}
-                      /><br></br>
-                       <Label size='sm'>Dots Spots:</Label>
+                      /></Col>
+                      <Col md='6'>
+                       <Label size='sm'>Dots</Label>
                       <Switch
                         checked={filter['Dots_Spots']}
                         onChange={()=>{ 
@@ -741,22 +865,26 @@ function valueLabelFormat(value) {
                         color='primary'
                         name="checkedA"
                         inputProps={{ 'aria-label': 'primary checkbox' }}
-                      /><br></br>
-
-                      <Label size='sm'>Choose Color:</Label>
+                      />
+                      </Col>
+                      </Row>
+                          </div>
+                      <div>
+                        <div style={{flexDirection:"row",display:"flex",justifyContent:"space-between",padding:20}}>
+                      <Label size='sm'>Fish Color</Label>
                       <Button size='sm' onClick={()=>{
-                   color['white']=true; color['black']=true; color['silver']=true; color['golden']=true; color['gray']=true; color['red']=true; color['pink']=true; color['green']=true; color['brown']=true; color['purple']=true; color['yellow']=true; color['orange']=true
+                   color['white']=true; color['black']=true; color['silver']=true; color['golden']=true; 
+                   color['gray']=true; color['red']=true; color['pink']=true; color['green']=true;
+                    color['brown']=true; color['purple']=true; color['yellow']=true; color['orange']=true
                        
-                       this.filter()}} >Select all</Button>
+                       this.filter()}} > Select all</Button>
                          <Button size='sm' onClick={()=>{
-                   color['white']=false;
-                   color['black']=false;
-                   color['silver']=false;
-                   color['golden']=false; 
-                   color['gray']=false; color['red']=false; color['pink']=false; color['green']=false; color['brown']=false; color['purple']=false; color['yellow']=false; color['orange']=false
+                   color['white']=false; color['black']=false; color['silver']=false;color['golden']=false; 
+                   color['gray']=false; color['red']=false; color['pink']=false; color['green']=false;
+                    color['brown']=false; color['purple']=false; color['yellow']=false; color['orange']=false
                        
                        this.filter()}} >Clear</Button>
-                   
+                   </div>
                       <div style={{flexDirection:"row",justifyContent:"space-between"}}> 
 
                       <Checkbox 
@@ -766,7 +894,7 @@ function valueLabelFormat(value) {
                             this.setState({colorFilter:color})
                             this.filter()
                         }}
-                        color="primary"
+                        color="white"
                         inputProps={{ 'aria-label': 'secondary checkbox' }}
                         style={{border:'solid',backgroundColor:'white',borderRadius:0,borderColor:'white'}}
                       />
@@ -788,7 +916,7 @@ function valueLabelFormat(value) {
                             this.setState({colorFilter:color})
                             this.filter()
                         }}
-                        color="primary"
+                        color="silver"
                         inputProps={{ 'aria-label': 'secondary checkbox' }}
                         style={{border:'solid',backgroundColor:'silver',borderColor:'silver',borderRadius:0}}
                       />
@@ -799,24 +927,37 @@ function valueLabelFormat(value) {
                             this.setState({colorFilter:color})
                             this.filter()
                         }}
-                        color="primary"
+                        color="golden"
                         inputProps={{ 'aria-label': 'secondary checkbox' }}
                         style={{border:'solid',backgroundColor:'#b29700',borderColor:'#b29700',borderRadius:0}}
                       />
-                      </div>
-                      <div style={{flexDirection:"row",justifyContent:"space-between"}}> 
-                      <Checkbox
+                       <Checkbox
                       checked={color['gray']}
                         onChange={(e,w)=>{
                           color['gray']=w
                             this.setState({colorFilter:color})
                             this.filter()
                         }}
-                        color="primary"
+                        color="gray"
                         inputProps={{ 'aria-label': 'secondary checkbox' }}
                         style={{border:'solid',backgroundColor:'grey',borderRadius:0,borderColor:'grey'}}
                         
                       />
+                       <Checkbox
+                      checked={color['brown']}
+                        defaultChecked
+                        onChange={(e,w)=>{
+                          color['brown']=w
+                            this.setState({colorFilter:color})
+                            this.filter()
+                        }}
+                        color="brown"
+                        inputProps={{ 'aria-label': 'secondary checkbox' }}
+                        style={{border:'solid',backgroundColor:'brown',borderRadius:0,borderColor:'brown'}}
+                      />
+                      </div>
+                      <div style={{flexDirection:"row",justifyContent:"space-between"}}> 
+                     
                         <Checkbox
                         checked={color['red']}
                         onChange={(e,w)=>{
@@ -824,7 +965,7 @@ function valueLabelFormat(value) {
                             this.setState({colorFilter:color})
                             this.filter()
                         }}
-                        color="primary"
+                        color="red"
                         inputProps={{ 'aria-label': 'secondary checkbox' }}
                         style={{border:'solid',backgroundColor:'red',borderColor:'red',borderRadius:0}}
                       />
@@ -835,56 +976,9 @@ function valueLabelFormat(value) {
                             this.setState({colorFilter:color})
                             this.filter()
                         }}
-                        color="primary"
+                        color="pink"
                         inputProps={{ 'aria-label': 'secondary checkbox' }}
                         style={{border:'solid',backgroundColor:'pink',borderColor:'pink',borderRadius:0}}
-                      />
-                      <Checkbox
-                      checked={color['green']}
-                        onChange={(e,w)=>{
-                          color['green']=w
-                            this.setState({colorFilter:color})
-                            this.filter()
-                        }}
-                        color="primary"
-                        inputProps={{ 'aria-label': 'secondary checkbox' }}
-                        style={{border:'solid',backgroundColor:'green',borderColor:'green',borderRadius:0}}
-                      />
-                      </div>
-                      <div style={{flexDirection:"row",justifyContent:"space-between"}}> 
-                      <Checkbox
-                      checked={color['brown']}
-                        defaultChecked
-                        onChange={(e,w)=>{
-                          color['brown']=w
-                            this.setState({colorFilter:color})
-                            this.filter()
-                        }}
-                        color="primary"
-                        inputProps={{ 'aria-label': 'secondary checkbox' }}
-                        style={{border:'solid',backgroundColor:'brown',borderRadius:0,borderColor:'brown'}}
-                      />
-                        <Checkbox
-                        checked={color['purple']}
-                        onChange={(e,w)=>{
-                          color['purple']=w
-                            this.setState({colorFilter:color})
-                            this.filter()
-                        }}
-                        color="primary"
-                        inputProps={{ 'aria-label': 'secondary checkbox' }}
-                        style={{border:'solid',backgroundColor:'purple',borderColor:'purple',borderRadius:0}}
-                      />
-                      <Checkbox
-                      checked={color['yellow']}
-                        onChange={(e,w)=>{
-                          color['yellow']=w
-                            this.setState({colorFilter:color})
-                            this.filter()
-                        }}
-                        color="primary"
-                        inputProps={{ 'aria-label': 'secondary checkbox' }}
-                        style={{border:'solid',backgroundColor:'yellow',borderColor:'yellow',borderRadius:0}}
                       />
                        <Checkbox
                       checked={color['orange']}
@@ -893,24 +987,64 @@ function valueLabelFormat(value) {
                             this.setState({colorFilter:color})
                             this.filter()
                         }}
-                        color="primary"
+                        color="orange"
                         inputProps={{ 'aria-label': 'secondary checkbox' }}
                         style={{border:'solid',backgroundColor:'orange',borderColor:'orange',borderRadius:0}}
                       />
+                      <Checkbox
+                      checked={color['yellow']}
+                        onChange={(e,w)=>{
+                          color['yellow']=w
+                            this.setState({colorFilter:color})
+                            this.filter()
+                        }}
+                        color="yellow"
+                        inputProps={{ 'aria-label': 'secondary checkbox' }}
+                        style={{border:'solid',backgroundColor:'yellow',borderColor:'yellow',borderRadius:0}}
+                      />
+                      
+                       <Checkbox
+                      checked={color['green']}
+                        onChange={(e,w)=>{
+                          color['green']=w
+                            this.setState({colorFilter:color})
+                            this.filter()
+                        }}
+                        color='green'
+                        inputProps={{ 'aria-label': 'secondary checkbox' }}
+                        style={{border:'solid',backgroundColor:'green',borderColor:'green',borderRadius:0}}
+                      />
+                     
+                        <Checkbox
+                        checked={color['purple']}
+                        onChange={(e,w)=>{
+                          color['purple']=w
+                            this.setState({colorFilter:color})
+                            this.filter()
+                        }}
+                        color="purple"
+                        inputProps={{ 'aria-label': 'secondary checkbox' }}
+                        style={{border:'solid',backgroundColor:'purple',borderColor:'purple',borderRadius:0}}
+                      />
+                      
+                      </div>
                       </div>
               </Col>
               
               <Col md='1'></Col>
                 <Col>
                 <Row>
-                {appliedFilter.map((product) =>
+                {appliedFilter.map((product,i) =>
                  
-                <Col sm="4">
+                <Col sm="4" onClick={()=>{this.props.selectProduct(product)
+                  this.setState({navigate:true})
+                  }}>
                   <Card>
                       <CardBody  style={{backgroundColor: "#f6f6f6"}}>
                         <CardTitle tag="h5" >{product.filter.Local_Names} </CardTitle>
                         <CardTitle tag="h6" >Rs. {product.filter.Urdu}</CardTitle>
                         <CardTitle tag="h6" color="blue">Rs. {product.filter.Fishery_Price_Max}</CardTitle>
+                      {product.filter.Skin_Color_1 +' '+product.filter.Skin_Color_2+' '+product.filter.Skin_Color_3 }
                       </CardBody>
                   </Card>
                 </Col>
@@ -920,7 +1054,6 @@ function valueLabelFormat(value) {
                
               </Col>
             </Row>
-          </Container>
         </div>
        );
     }
@@ -936,9 +1069,12 @@ function valueLabelFormat(value) {
 const mapDispatchToProps = dispatch => {
   return {
     
+    selectProduct(product) {
+      dispatch(selectProduct(product));
+      
+    },
   };
 };
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps

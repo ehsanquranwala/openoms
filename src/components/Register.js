@@ -36,7 +36,7 @@ import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,La
                       "city":city,
                       "company":'',
                       "state":pinLocation,
-                      "postcode":'250',
+                      "postcode":'',
                       "country":'pk'},
                         "shipping":{"first_name":firstName,
                         "last_name":lastName,
@@ -47,7 +47,7 @@ import { Button,Card,  CardBody, CardHeader,Container,Row,Col,Input,FormGroup,La
                         "city":city,
                         "company":'',
                         "state":pinLocation,
-                        "postcode":'250',
+                        "postcode":'',
                         "country":'pk'}};
 
       fetch('https://blog.weeklyfishclub.com/wp-json/wc/v3/customers', 

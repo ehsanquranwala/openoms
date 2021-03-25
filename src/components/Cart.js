@@ -34,6 +34,7 @@ import { Card, CardImg, CardBody,
                     wifeCount:0,
                     coupon:'',
                     totaldiscount:0,
+                    pin:''
                     
                     };
     }
@@ -67,6 +68,7 @@ import { Card, CardImg, CardBody,
                               city:json.billing.city,
                               area:json.billing.address_2,
                               delivery:json.billing.postcode,
+                              pin:json.billing.company,
                               readonly:true
                            })} 
             else{ 
@@ -91,13 +93,13 @@ import { Card, CardImg, CardBody,
         var subTotal=0,totalActual=0;
         for(var aa=0;aa<= getCart.length-1;aa++){
           totalActual+=this.getretail(getCart[aa])*getCart[aa].quantity
-          if(getCart[aa].priceType == 'retail'){
+          if(getCart[aa].priceType == 'retail'){ alert('retail')
                         if(totalqty>=20){
                                 subTotal+=  this.getresale(getCart[aa])*getCart[aa].quantity}
                         else{   subTotal+=this.getretail(getCart[aa])*getCart[aa].quantity}
-          }else if(getCart[aa].priceType=='wholesale'){
+          }else if(getCart[aa].priceType=='wholesale'){alert('whole')
                                 subTotal+=  this.getwholesale(getCart[aa])*getCart[aa].quantity}
-          else if(getCart[aa].priceType=='special'){
+          else if(discountPercent>0){ alert('special')
                                 subTotal+=  this.getspecial(getCart[aa])*getCart[aa].quantity}
           else{subTotal+=0}
           
@@ -108,7 +110,7 @@ import { Card, CardImg, CardBody,
     }
   
     checkOut(){
-      const {firstName,lastName,email,phone,address,city,area,delivery,subTotal,discountPercent,discountRadio,total}=this.state;
+      const {firstName,lastName,email,phone,address,city,pin,area,delivery,subTotal,discountPercent,discountRadio,total,totalqty}=this.state;
       if(  phone!=='' && address!==''  ){
        let data={
                     "payment_method": "COD",
@@ -121,7 +123,7 @@ import { Card, CardImg, CardBody,
                                 "address_1":address ,
                                 "address_2":area ,
                                 "city":city,
-                                "company":'',
+                                "company":pin,
                                 "state":'',
                                 "postcode":delivery.toString(),
                                 "country":''},
@@ -131,14 +133,14 @@ import { Card, CardImg, CardBody,
                                 "email":email ,
                                 "phone":phone ,
                                 "address_1":subTotal.toString(),
-                                "address_2":discountPercent.toString() ,
-                                "city":discountRadio.toString(),
-                                "company":total.toString(),
+                                "address_2":total.toString() ,
+                                "city":totalqty.toString(),
+                                "company":discountPercent.toString(),
                                 "state":'',
                                 "postcode":delivery.toString(),
                                 "country":'pk'},
-                      "line_items": 
-                                this.state.cart,
+                      "line_items":[ {"product_id":12 ,
+                                    "quantity":11 }],
                       "shipping_lines": [
                                 {"method_id": "flat_rate",
                                 "method_title": "Flat Rate",
@@ -156,7 +158,8 @@ import { Card, CardImg, CardBody,
                         this.setState({cart:[],subTotal:0,total:0});
                         ls.set('cart',[]);
                         }
-                        else{alert(json)}
+                        else{
+                          alert(json)}
         console.log("Order book",json); });
       }else{alert("Please Enter Complete Details")}
     }
@@ -201,8 +204,7 @@ import { Card, CardImg, CardBody,
         //Apply Wholesale Price
         if(cart[i].quantity>20){
           priceType='wholesale';
-        }
-        else{  
+        }else{  
           if(cart[i].priceType=='special') {priceType='special';}else{priceType='retail';}
           }
       
@@ -322,10 +324,73 @@ import { Card, CardImg, CardBody,
             <Container className="themed-container" fluid="sm" >
             <Row>
             <Col md="8">
-             <Row><Col md='12'>
-              
+             <Card>
+               <CardHeader>Customer Details</CardHeader>
+              <CardBody style={{backgroundColor: "#f6f6f6"}}>
+                 <Row>
+                <Col md="3">
+                  <FormGroup>
+                    <Label  size="sm" >Email Address *</Label>
+                    <Input size="sm" readOnly={readonly} type='email'  name='email' placeholder='Enter Email' value={this.state.email} onChange={ (e)=>this.setState({email: e.target.value}) } required></Input>
+                  </FormGroup>
+                  </Col>
+                  <Col md="3">
+                  <FormGroup>
+                    <Label size="sm" >Phone *</Label>
+                    <Input size="sm" type='number'  name='phone' placeholder='Enter Phone' value={this.state.phone} onChange={ (e)=>this.setState({phone: e.target.value})} required></Input>
+                  </FormGroup> 
+                  </Col>
+                    <Col md="3">
+                      <FormGroup>
+                        <Label size="sm" >First Name</Label>
+                        <Input size="sm"  name='id' placeholder='Enter First Name' value={this.state.firstName} onChange={ (e)=>this.setState({firstName: e.target.value})}  required></Input>
+                      </FormGroup>
+                    </Col>
+                    <Col md="3">
+                      <FormGroup>
+                        <Label size="sm" >Last Name</Label>
+                        <Input size="sm"  name='pass' placeholder='Enter Last Name' value={this.state.lastName} onChange={ (e)=>this.setState({lastName: e.target.value})} required></Input>
+                      </FormGroup>
+                    </Col>
+                </Row>
+                  <Row>
+                <Col md="4">
+                  <FormGroup>
+                    <Label size="sm" >Address</Label>
+                    <Input  size="sm" name='address' placeholder='Enter Address' value={this.state.address} onChange={ (e)=>this.setState({address: e.target.value})} required></Input>
+                  </FormGroup>
+                  </Col>
+                <Col md="4">
+                  <FormGroup>
+                    <Label size="sm" >Pin Location</Label>
+                    <Input size="sm"  name='address' placeholder='Enter Pin Location' value={this.state.pin} onChange={ (e)=>this.setState({pin: e.target.value})} required></Input>
+                  </FormGroup>
+                  </Col>
+                <Col md="2">
+                  <FormGroup>
+                    <Label size="sm" >Area</Label>
+                    <Input size="sm"  name='area' placeholder='Enter Area' value={this.state.area} onChange={ (e)=>this.setState({area: e.target.value})} required></Input>
+                  </FormGroup>
+                  </Col>
+                  <Col md="2">
+                  <FormGroup>
+                    <Label size="sm" >City</Label>
+                    <Input  size="sm" name='city' placeholder='Enter City' value={this.state.city} onChange={ (e)=>this.setState({city: e.target.value})} required></Input>
+                  </FormGroup>
+                  </Col></Row>
+                 
+                 
+                  
+              </CardBody>
+            </Card>
+            <Card>
+            <CardHeader>Cart Items</CardHeader>
+            <CardBody style={{backgroundColor: "#f6f6f6"}}>
+            <Row> 
              
-             <Row>
+              
+            
+              
                <Table bordered={true} style={{fontSize:12}}>
                <thead>
                       <tr><th></th>
@@ -401,71 +466,10 @@ import { Card, CardImg, CardBody,
                   </tbody>
                </Table>
                  
-                    
-                </Row>
-                </Col>
-             </Row>
-             
-             <Row>
-               
-             <Card>
-               <CardHeader>Customer Details</CardHeader>
-              <CardBody style={{backgroundColor: "#f6f6f6"}}>
                 
-                  <Row>
-                <Col md="6">
-                  <FormGroup>
-                    <Label >Email Address *</Label>
-                    <Input readOnly={readonly} type='email'  name='email' placeholder='Enter Email' value={this.state.email} onChange={ (e)=>this.setState({email: e.target.value}) } required></Input>
-                  </FormGroup>
-                  </Col>
-                  <Col md="6">
-                  <FormGroup>
-                    <Label >Phone *</Label>
-                    <Input type='number'  name='phone' placeholder='Enter Phone' value={this.state.phone} onChange={ (e)=>this.setState({phone: e.target.value})} required></Input>
-                  </FormGroup> 
-                  </Col></Row>
-                  <Row>
-                    <Col md="6">
-                      <FormGroup>
-                        <Label >First Name</Label>
-                        <Input  name='id' placeholder='Enter First Name' value={this.state.firstName} onChange={ (e)=>this.setState({firstName: e.target.value})}  required></Input>
-                      </FormGroup>
-                    </Col>
-                    <Col md="6">
-                      <FormGroup>
-                        <Label >Last Name</Label>
-                        <Input  name='pass' placeholder='Enter Last Name' value={this.state.lastName} onChange={ (e)=>this.setState({lastName: e.target.value})} required></Input>
-                      </FormGroup>
-                    </Col>
-                </Row>
-                  <Row>
-                <Col md="12">
-                  <FormGroup>
-                    <Label >Address</Label>
-                    <Input  name='address' placeholder='Enter Address' value={this.state.address} onChange={ (e)=>this.setState({address: e.target.value})} required></Input>
-                  </FormGroup>
-                  </Col>
-                 </Row>
-                  <Row>
-                <Col md="6">
-                  <FormGroup>
-                    <Label >Area</Label>
-                    <Input  name='area' placeholder='Enter Area' value={this.state.area} onChange={ (e)=>this.setState({area: e.target.value})} required></Input>
-                  </FormGroup>
-                  </Col>
-                  <Col md="6">
-                  <FormGroup>
-                    <Label >City</Label>
-                    <Input  name='city' placeholder='Enter City' value={this.state.city} onChange={ (e)=>this.setState({city: e.target.value})} required></Input>
-                  </FormGroup>
-                  </Col></Row>
-                 
-                 
-                  
-              </CardBody>
-            </Card>
-                   </Row>
+             </Row>
+             </CardBody> 
+             </Card>      
             </Col>
             <Col md="4">
                 <Card>
@@ -539,7 +543,8 @@ import { Card, CardImg, CardBody,
                     </CardBody>
                 </Card>
             </Col>
-            </Row> 
+            </Row>
+            
             </Container>:
             <Container><h3>No product in cart. Start adding items to your cart <Button>here</Button></h3> </Container>}
                     <Modal size="lg" isOpen={discount} >

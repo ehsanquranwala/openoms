@@ -95,9 +95,11 @@
 "Thorns":1,"Meat_Whiteness":2,"Salt_Water":1,
 "Taste_Class":4,"Price_Class":6,
 "Whole_Available":0,"Steaks_Available":1,"Fillets_Available":0,
+
 "Net_Wt_Whole_Min":0,"Net_Wt_Whole_Max":0,
 "Net_Wt_Steaks_Min":700,"Net_Wt_Steaks_Max":700,
 "Net_Wt_Fillets_Min":0,"Net_Wt_Fillets_Max":0,
+
 "Pieces_Per_Kg_Min":0,"Pieces_Per_Kg_Max":0,
 "Piece_Weight_Min":0,"Piece_Weight_Max":0,
 "Whole_Fry":0,"Piece_Fry":1,"Fillets":0,
