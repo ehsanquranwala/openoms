@@ -8,7 +8,7 @@ import { Card, CardImg, CardBody,
   import {
     Redirect
   } from "react-router-dom";
-  import { products, addtocart, category,addArticle,user ,selectProduct} from "../js/actions/index";
+  import { products, addtocart, category,addArticle,user ,selectProduct,invoice} from "../js/actions/index";
   var ls = new SecureLS({encodingType: 'aes'});
   
   const token=ls.get('token')
@@ -17,7 +17,8 @@ import { Card, CardImg, CardBody,
       super(props);
       this.state = {
                     orders:[],
-                    navigate:false
+                    navigate:false,
+                    navInvoice:false
                     };
     }
     
@@ -40,10 +41,14 @@ import { Card, CardImg, CardBody,
       }
     }
    render() {
-    const { navigate } = this.state
+    const { navigate,navInvoice } = this.state
     if (navigate) {
       return <Redirect to="/product" push={true} />
     }
+    if (navInvoice) {
+      return <Redirect to="/invoice" push={true} />
+    }
+
       const {qty}=this.state;
        return (
           <div style={{marginTop:20}}>
@@ -70,6 +75,8 @@ import { Card, CardImg, CardBody,
                             ) }
                         </div>
                     </Col>
+                    <Button onClick={()=>{this.props.invoice(product)
+                                              this.setState({navInvoice:true})}}>Invoice</Button>
                       
                   </Row>:
                       <div>
@@ -94,6 +101,8 @@ import { Card, CardImg, CardBody,
                               <p style={{fontSize:11}}>{items.quantity}x {items.name} ,</p>
                             ) }
                         </div>
+                        <Button onClick={()=>{this.props.invoice(product)
+                                              this.setState({navInvoice:true})}}>Invoice</Button>
                     </Col>
                       
                   </Row>:
@@ -118,13 +127,13 @@ import { Card, CardImg, CardBody,
                                       this.setState({navigate:true})
                     }}>
                     <Col  md="4" >
-                    {product.images[0]?
-                        <CardImg  style={{width:80,height:70,padding:0}} src={product.images[0].src}  />
+                    {product.product.images[0]?
+                        <CardImg  style={{width:80,height:70,padding:0}} src={product.product.images[0].src}  />
                         :<div></div>}
                         </Col>
                     <Col  md="6">
-                        <CardTitle tag="h6" >{product.slug} </CardTitle>
-                        <CardTitle tag="h6" >Rs. {product.price}</CardTitle>
+                        <CardTitle tag="h6" >{product.product.slug} </CardTitle>
+                        <CardTitle tag="h6" >Rs. {product.product.price}</CardTitle>
                     </Col>
                  
                 </Row>
@@ -152,7 +161,9 @@ const mapDispatchToProps = dispatch => {
       dispatch(selectProduct(product));
       
     },
-   
+    invoice(order) {
+      dispatch(invoice(order));
+    }   
   };
 };
 

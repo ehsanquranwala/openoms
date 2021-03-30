@@ -35,8 +35,8 @@ const AppHeader = () => {
         <Collapse isOpen={isOpen} navbar>
           
          {loginDetail.role=='administrator'?
-         <Nav  className="mr-auto" navbar>
-            <NavItem>
+         <Nav  className="mr-auto" navbar style={{padding:10}}>
+            <NavItem style={{marginLeft:50}}>
               <Link style={{color:"#FFFFFF"}}  to="/Oms">Purchase</Link>
             </NavItem>
             <NavItem>

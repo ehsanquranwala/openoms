@@ -23,7 +23,7 @@ import { Card, CardImg, CardBody,
     }
   
     addCart(qty,desc,slug,price,image,average){
-      const productId= this.props.selectProduct.id
+      const productId= this.props.selectProduct.product.id
       var checkCart=0;
       let cart= ls.get('cart');
       if(cart!=''){

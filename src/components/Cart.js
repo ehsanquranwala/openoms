@@ -2,10 +2,10 @@ import React from "react";
 import { Card, CardImg, CardBody,
   CardTitle,Container,Row,Button,Input,Col,Label, CardHeader, CardSubtitle,FormGroup,
   Modal, ModalHeader, ModalBody, ModalFooter ,Table} from 'reactstrap';
-  import { Link } from "react-router-dom";
+  import { Link,Redirect } from "react-router-dom";
   import SecureLS from 'secure-ls';
   import { connect } from "react-redux";
-  import { products, addtocart, category,addArticle,user ,selectProduct} from "../js/actions/index";
+  import { products, addtocart, category,addArticle,user ,selectProduct,invoice} from "../js/actions/index";
   var ls = new SecureLS({encodingType: 'aes'});
   const token=ls.get('token')
  class Cart extends React.Component {
@@ -34,7 +34,9 @@ import { Card, CardImg, CardBody,
                     wifeCount:0,
                     coupon:'',
                     totaldiscount:0,
-                    pin:''
+                    pin:'',
+                    gotoInvoice:false,
+                    gotoHome:false
                     
                     };
     }
@@ -80,7 +82,6 @@ import { Card, CardImg, CardBody,
 
     getCart(){
      let getCart= ls.get('cart');
-     console.log(getCart)
       if(getCart===''){this.setState({delivery:0})}
       else{
         this.setState({cart:getCart})
@@ -93,13 +94,13 @@ import { Card, CardImg, CardBody,
         var subTotal=0,totalActual=0;
         for(var aa=0;aa<= getCart.length-1;aa++){
           totalActual+=this.getretail(getCart[aa])*getCart[aa].quantity
-          if(getCart[aa].priceType == 'retail'){ alert('retail')
+          if(getCart[aa].priceType == 'retail'){ 
                         if(totalqty>=20){
                                 subTotal+=  this.getresale(getCart[aa])*getCart[aa].quantity}
                         else{   subTotal+=this.getretail(getCart[aa])*getCart[aa].quantity}
-          }else if(getCart[aa].priceType=='wholesale'){alert('whole')
+          }else if(getCart[aa].priceType=='wholesale'){
                                 subTotal+=  this.getwholesale(getCart[aa])*getCart[aa].quantity}
-          else if(discountPercent>0){ alert('special')
+          else if(discountPercent>0){ 
                                 subTotal+=  this.getspecial(getCart[aa])*getCart[aa].quantity}
           else{subTotal+=0}
           
@@ -110,7 +111,16 @@ import { Card, CardImg, CardBody,
     }
   
     checkOut(){
-      const {firstName,lastName,email,phone,address,city,pin,area,delivery,subTotal,discountPercent,discountRadio,total,totalqty}=this.state;
+      const {firstName,lastName,email,phone,address,city,pin,area,delivery,subTotal,discountPercent,discountRadio,total,totalqty,cart}=this.state;
+      let cartItems=[]
+      cart.map((object,i)=>{
+        cartItems.push({
+          "method_id":object.product_id.toString(),
+          "method_title":object.quantity.toString(),
+          "total":object.price.toString(),
+        });
+      })
+     
       if(  phone!=='' && address!==''  ){
        let data={
                     "payment_method": "COD",
@@ -139,14 +149,9 @@ import { Card, CardImg, CardBody,
                                 "state":'',
                                 "postcode":delivery.toString(),
                                 "country":'pk'},
-                      "line_items":[ {"product_id":12 ,
-                                    "quantity":11 }],
-                      "shipping_lines": [
-                                {"method_id": "flat_rate",
-                                "method_title": "Flat Rate",
-                                "total": delivery.toString()
-                              }
-                        ]};
+                      "shipping_lines": cartItems};
+                        data["line_items"]=cart;
+                        console.log(data)
       fetch('https://blog.weeklyfishclub.com/wp-json/wc/v3/orders', 
       { method:'POST', 
         headers: {'Content-Type': 'application/json',
@@ -157,6 +162,8 @@ import { Card, CardImg, CardBody,
                         alert("Order Book Successfull");
                         this.setState({cart:[],subTotal:0,total:0});
                         ls.set('cart',[]);
+                        this.props.invoice(json)
+                        this.setState({gotoInvoice:true})
                         }
                         else{
                           alert(json)}
@@ -316,8 +323,14 @@ import { Card, CardImg, CardBody,
      return parseInt((product.average.price)+(product.average.specialbase)+(product.average.expense)+((product.average.price/100)*(product.average.specialpercent)));
      }
     render() {
-      var {subTotal,delivery,cart,address,readonly,discount,discountPercent,totalqty,totaldiscount,totalActual}=this.state;
+      var {gotoHome,gotoInvoice,subTotal,delivery,cart,address,readonly,discount,discountPercent,totalqty,totaldiscount,totalActual}=this.state;
      const total=subTotal+delivery;
+     if (gotoInvoice) {
+      return <Redirect to="/invoice" push={true} />
+    }
+    if (gotoHome) {
+      return <Redirect to="/" push={true} />
+    }
        return (
           <div style={{marginTop:20}}>
             {cart.length >0?
@@ -342,56 +355,43 @@ import { Card, CardImg, CardBody,
                   </Col>
                     <Col md="3">
                       <FormGroup>
-                        <Label size="sm" >First Name</Label>
-                        <Input size="sm"  name='id' placeholder='Enter First Name' value={this.state.firstName} onChange={ (e)=>this.setState({firstName: e.target.value})}  required></Input>
+                        <Label size="sm" >Full Name</Label>
+                        <Input size="sm"  name='id' placeholder='Enter Full Name' value={this.state.firstName} onChange={ (e)=>this.setState({firstName: e.target.value})}  required></Input>
                       </FormGroup>
                     </Col>
-                    <Col md="3">
-                      <FormGroup>
-                        <Label size="sm" >Last Name</Label>
-                        <Input size="sm"  name='pass' placeholder='Enter Last Name' value={this.state.lastName} onChange={ (e)=>this.setState({lastName: e.target.value})} required></Input>
-                      </FormGroup>
-                    </Col>
+                    <Col md="2">
+                  <FormGroup>
+                    <Label size="sm" >City</Label>
+                    <Input  size="sm" name='city' placeholder='Enter City' value={this.state.city} onChange={ (e)=>this.setState({city: e.target.value})} required></Input>
+                  </FormGroup>
+                  </Col>
                 </Row>
                   <Row>
-                <Col md="4">
+                <Col md="6">
                   <FormGroup>
-                    <Label size="sm" >Address</Label>
+                    <Label size="sm" >Address *</Label>
                     <Input  size="sm" name='address' placeholder='Enter Address' value={this.state.address} onChange={ (e)=>this.setState({address: e.target.value})} required></Input>
                   </FormGroup>
                   </Col>
-                <Col md="4">
+                <Col md="6">
                   <FormGroup>
                     <Label size="sm" >Pin Location</Label>
                     <Input size="sm"  name='address' placeholder='Enter Pin Location' value={this.state.pin} onChange={ (e)=>this.setState({pin: e.target.value})} required></Input>
                   </FormGroup>
                   </Col>
-                <Col md="2">
-                  <FormGroup>
-                    <Label size="sm" >Area</Label>
-                    <Input size="sm"  name='area' placeholder='Enter Area' value={this.state.area} onChange={ (e)=>this.setState({area: e.target.value})} required></Input>
-                  </FormGroup>
-                  </Col>
-                  <Col md="2">
-                  <FormGroup>
-                    <Label size="sm" >City</Label>
-                    <Input  size="sm" name='city' placeholder='Enter City' value={this.state.city} onChange={ (e)=>this.setState({city: e.target.value})} required></Input>
-                  </FormGroup>
-                  </Col></Row>
+                
+                  </Row>
                  
                  
                   
               </CardBody>
             </Card>
-            <Card>
+            <Card  style={{marginTop:5}}>
             <CardHeader>Cart Items</CardHeader>
             <CardBody style={{backgroundColor: "#f6f6f6"}}>
             <Row> 
              
-              
-            
-              
-               <Table bordered={true} style={{fontSize:12}}>
+             <Table bordered={true} style={{fontSize:12}}>
                <thead>
                       <tr><th></th>
                         <th>Product</th>
@@ -406,7 +406,7 @@ import { Card, CardImg, CardBody,
                   {cart.length >0?
                     cart.map((product,i) => 
                   <tr>
-                    <td><CardImg  style={{width:55,height:50,padding:0}} src={product.image} alt="Fish" /></td>
+                    <td>{product.product_id}<CardImg  style={{width:55,height:50,padding:0}} src={product.image} alt="Fish" /></td>
                     <td>{product.slug}</td>
                       <td ><Row>Retail: {this.getretail(product)}</Row>
                           <Row>Wholesale: {this.getwholesale(product)}</Row>
@@ -546,7 +546,7 @@ import { Card, CardImg, CardBody,
             </Row>
             
             </Container>:
-            <Container><h3>No product in cart. Start adding items to your cart <Button>here</Button></h3> </Container>}
+            <Container><h3>No product in cart. Start adding items to your cart <Button onClick={()=>this.setState({gotoHome:true})}>here</Button></h3> </Container>}
                     <Modal size="lg" isOpen={discount} >
                       <ModalHeader >Get Discount</ModalHeader>
                       <ModalBody>
@@ -590,7 +590,7 @@ import { Card, CardImg, CardBody,
                       <FormGroup check>
                         <Label size='sm' check>
                           <Input type="radio" name="radio1" value="disabled" onChange={(e)=>this.setState({discountRadio:e.currentTarget.value})}/>{' '}
-                          Taking care of a differntly abled family member, our moral support is with you and this small gift.
+                          Taking care of a differently abled family member, our moral support is with you and this small gift.
                         </Label>
                       </FormGroup>
                       <FormGroup check>
@@ -619,7 +619,9 @@ import { Card, CardImg, CardBody,
 
 const mapDispatchToProps = dispatch => {
   return {
-   
+    invoice(order) {
+      dispatch(invoice(order));
+    }
   };
 };
 

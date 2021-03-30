@@ -19,6 +19,7 @@ import Oms from './components/Oms';
 import Adminorder from './components/Adminorder';
 import AdminOrderList from './components/AdminOrderList';
 import PriceList from './components/PriceList';
+import Invoice from './components/Invoice';
 
 
 class App extends Component {
@@ -64,7 +65,9 @@ class App extends Component {
             <Route path="/Admin-OrderList" component={AdminOrderList}>
             
             </Route>
-           
+            <Route path="/invoice" component={Invoice}>
+            
+            </Route>
           <Route path="/" component={Home}>
             
           </Route>
