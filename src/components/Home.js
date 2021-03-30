@@ -23,7 +23,7 @@ import { Card, CardImg,  CardBody,
       this.getProduct()
       this.getCategory()
      }
-     loop(json){
+   /*  loop(json){
       let data=[];
       for(var a=0;a<= json.length-1;a++){
         let tempData1=[];
@@ -56,13 +56,14 @@ import { Card, CardImg,  CardBody,
        //console.log("category",data)
        this.props.addCategory(data)
     }
-     
+   */  
     getProduct(){
       if(this.props.product.length ===0){
      let price_table_data=[];
      let products=[];   
      let data = new FormData();
       data.append('post','getpurchase');
+      //get price table data
      fetch('https://blog.weeklyfishclub.com/api/create_post', {
         method:'POST', 
         body: data
@@ -74,6 +75,7 @@ import { Card, CardImg,  CardBody,
           
          }
        }); 
+       //get Woocommerce product data
       fetch('https://blog.weeklyfishclub.com/wp-json/wc/v3/products?per_page=99', {
         method:'GET', 
         headers: {'Authorization': 'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')}})
@@ -114,6 +116,7 @@ import { Card, CardImg,  CardBody,
                 }
               }
               var filter={}
+                //get JSON FILTERS data
               fishData.map((value,ia)=>{
                 if(json[i].sku == fishData[ia].Id){
                   filter=fishData[ia]
@@ -151,6 +154,7 @@ import { Card, CardImg,  CardBody,
     }
     getCategory(){
       if(this.props.category.length ===0){
+          //get Woocommerce Category data
       fetch('https://blog.weeklyfishclub.com/wp-json/wc/v3/products/categories?hide_empty=false', {
         method:'GET', 
         headers: {'Authorization': 'Basic ' + btoa('ck_1c32b3a20592d8658aa6f72350f7843f6e40acce:cs_10dd1b3cf0344130871395eb03936cb5dee5af0c')}})
@@ -179,7 +183,7 @@ import { Card, CardImg,  CardBody,
             <Container className="themed-container" fluid="sm" >
                 <Row>
                   {this.props.product.map((products,i) =>  <Col sm="3">
-                    <Card key={products.product.id} onClick={()=>{this.props.selectProduct(this.props.product[i])
+                    <Card style={{marginTop:5}} key={products.product.id} onClick={()=>{this.props.selectProduct(this.props.product[i])
                                                           this.setState({navigate:true})
                                                           }}>
                       <CardBody  style={{backgroundColor: "#f6f6f6"}}>

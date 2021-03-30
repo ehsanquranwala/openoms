@@ -56,7 +56,7 @@ import React from "react";
     else{bestfor='none'}
             this.state.data.push({id:                  product.product.id,
                                   Taste_Class:         Taste_Class,
-                                    Product:            product.product.name,
+                                    Product:           product.product.name,
                                     Thorns:             Thorns,
                                     Meat_Whiteness:     Meat_Whiteness,
                                     Net_Wt_Fillets_Min:  product.filter.Net_Wt_Fillets_Min,
@@ -103,7 +103,9 @@ import React from "react";
        
             <Row><Col>
              <div style={{height:800}}>
-            <DataGrid rows={rows} columns={columns} rowHeight={25} />
+            <DataGrid rows={rows} 
+            
+            columns={columns} rowHeight={25} />
             </div>
             </Col>
             </Row>

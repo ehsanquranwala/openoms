@@ -1036,16 +1036,14 @@ function valueLabelFormat(value) {
                 <Row>
                 {appliedFilter.map((product,i) =>
                  
-                <Col sm="4" onClick={()=>{this.props.selectProduct(product)
+                <Col sm="3" onClick={()=>{this.props.selectProduct(product)
                   this.setState({navigate:true})
                   }}>
-                  <Card>
+                  <Card style={{marginTop:5}}>
                       <CardBody  style={{backgroundColor: "#f6f6f6"}}>
                         <CardTitle tag="h5" >{product.filter.Local_Names} </CardTitle>
-                        <CardTitle tag="h6" >Rs. {product.filter.Urdu}</CardTitle>
                         <CardTitle tag="h6" color="blue">Rs. {product.filter.Fishery_Price_Max}</CardTitle>
-                      {product.filter.Skin_Color_1 +' '+product.filter.Skin_Color_2+' '+product.filter.Skin_Color_3 }
-                      </CardBody>
+                     </CardBody>
                   </Card>
                 </Col>
 

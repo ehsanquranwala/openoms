@@ -34,52 +34,35 @@ const AppHeader = () => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           
-         {loginDetail.role=='administrator'?
-         <Nav  className="mr-auto" navbar style={{padding:10}}>
-            <NavItem style={{marginLeft:50}}>
-              <Link style={{color:"#FFFFFF"}}  to="/Oms">Purchase</Link>
-            </NavItem>
-            <NavItem>
-              <Link style={{color:"#FFFFFF"}}  to="/Admin-order">Order</Link>
-            </NavItem>
-            <NavItem>
-              <Link style={{color:"#FFFFFF"}}  to="/Admin-OrderList">Order-List</Link>
-            </NavItem>
-            
-            <Link  onClick={()=>{dispatch(user([]),userdetail([])) }} to="/login">Logout</Link>
-            
-           </Nav>:<Nav  className="mr-auto" navbar>
+        {<Nav  className="mr-auto" navbar>
 
 
             <NavItem>
-              <Link style={{color:"#FFFFFF"}}  to="/">Store</Link>
+              <Link style={{color:"#FFFFFF",marginLeft:10}}  to="/">Store</Link>
             </NavItem>
            
             <NavItem>
-              <Link style={{color:"#FFFFFF"}} to="/category">Ocean</Link>
+              <Link style={{color:"#FFFFFF",marginLeft:10}} to="/category">Ocean</Link>
             </NavItem>
             <NavItem>
-              <Link style={{color:"#FFFFFF"}} to="/gallery">Gallery</Link>
-            </NavItem>
-            <NavItem>
-              <Link style={{color:"#FFFFFF"}} to="/price-list">Price List</Link>
+              <Link style={{color:"#FFFFFF",marginLeft:10}} to="/price-list">Price List</Link>
             </NavItem>
             
             <NavItem>
-              <Link style={{color:"#FFFFFF"}} to="/cart">Cart</Link>
+              <Link style={{color:"#FFFFFF",marginLeft:10}} to="/cart">Cart</Link>
             </NavItem>
             
             {console.log(loginDetail.role)}
             {
             login.length===0?
             <NavItem>
-              <Link style={{color:"#FFFFFF"}} to="/login">Login</Link>
+              <Link style={{color:"#FFFFFF",marginLeft:10}} to="/login">Login</Link>
             </NavItem>
             :
           <UncontrolledDropdown nav inNavbar>
             <NavItem>
               <DropdownToggle nav caret>
-              <Link style={{color:"#FFFFFF"}} >Profile</Link>
+              <Link style={{color:"#FFFFFF",marginLeft:10}} >Profile</Link>
               </DropdownToggle>
               </NavItem>
               <DropdownMenu right>

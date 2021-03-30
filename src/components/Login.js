@@ -31,11 +31,9 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
          .then(json => { 
            if(json.id){
             this.props.Adduserdetail(json)
-            if(json.role=='administrator')
-            { this.setState({admin:true})}
-            else{
+           
               this.setState({navigate:true})
-            }
+            
             } 
            else{ 
                        } 
@@ -71,12 +69,10 @@ import { Button,Card, CardBody, CardHeader,Container,Row,Col,Input,FormGroup,Lab
       if (navigate) {
         return <Redirect to="/" push={true} />
       }
-      if (admin) {
-        return <Redirect to="/Oms" push={true} />
-      }
+   
       
        return (
-          <div style={{marginTop:'10%'}}>
+          <div style={{marginTop:'5%'}}>
             <Container className="themed-container" fluid="sm" >
               <Row>
               <Col md="4"></Col>

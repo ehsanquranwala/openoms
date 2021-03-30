@@ -1,6 +1,6 @@
 {
   "name": "wfc",
-  "homepage": "https://test.weeklyfishclub.com",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
