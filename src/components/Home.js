@@ -4,13 +4,17 @@ import { Card, CardImg,  CardBody,
   import {
     Redirect
   } from "react-router-dom";
+
   import SecureLS from 'secure-ls';
   import { connect } from "react-redux";
+import background from '../assets/background.jpg';
   import { products, addtocart, category,addArticle,user ,selectProduct} from "../js/actions/index";
+  import {image} from './Images';
   var ls = new SecureLS({encodingType: 'aes'});
   var fishData = require('../assets/fishdata.json');
   const token=ls.get('token')
   require('dotenv').config()
+
    class Home extends React.Component {
     constructor(props) {
       super(props);
@@ -22,6 +26,7 @@ import { Card, CardImg,  CardBody,
     console.log(this.props.product)
       this.getProduct()
       this.getCategory()
+      console.log(image)
      }
    /*  loop(json){
       let data=[];
@@ -139,9 +144,10 @@ import { Card, CardImg,  CardBody,
                           specialbase:sum_special_base/temp.length,
                           specialpercent:sum_special_percent/temp.length,
                           coupon:coupon
-                         },
-               filter:filter
-                        })
+              },
+              filter:filter,
+              image:image[this.props.product[ia].product.sku]
+               })
                          console.log('Temp',temp)
               
             }
@@ -161,7 +167,7 @@ import { Card, CardImg,  CardBody,
         .then(response => response.json())
         .then(json => {
           if(json.length>0){
-            this.loop(json)
+           // this.loop(json)
           }else{} 
         
        });
@@ -172,28 +178,34 @@ import { Card, CardImg,  CardBody,
       this.setState({navigate:true})
      
     }
-    
+ 
     render() {
       const { navigate } = this.state
       if (navigate) {
         return <Redirect to="/product" push={true} />
       }
        return (
-          <div style={{marginTop:20}}>
-            <Container className="themed-container" fluid="sm" >
+          <div style={{backgroundImage: `url(${background})`,
+          backgroundSize: 'stretch',
+            overflow: 'hidden',
+           }}>
+            <Container className="themed-container" fluid="lg" >
                 <Row>
-                  {this.props.product.map((products,i) =>  <Col sm="3">
-                    <Card style={{marginTop:5}} key={products.product.id} onClick={()=>{this.props.selectProduct(this.props.product[i])
-                                                          this.setState({navigate:true})
+                                  {this.props.product.map((products,i) =>  <Col sm="2">
+                    <div style={{marginTop:5,border:0}} 
+                          key={products.product.id}
+                          onClick={()=>{this.props.selectProduct(this.props.product[i])
+                                                                this.setState({navigate:true})
                                                           }}>
-                      <CardBody  style={{backgroundColor: "#f6f6f6"}}>
-                        {products.product.images[0]?
-                      <CardImg  top width="20%" style={{width:200,height:150}} src={products.product.images[0].src}  />
-                        :<div></div>}<CardTitle tag="h5" >{products.product.slug} </CardTitle>
+                      <CardBody>
+                      <img  style={{width:180,height:180}}   src={image[this.props.product[i].product.sku]}  />
+                       
+                      
+                       <CardTitle tag="h5" style={{color:'#FFFFFF'}} >{products.product.slug} </CardTitle>
                         {this.props.selectProduct.average!=undefined?
                       <CardTitle tag="h6" color="blue">Rs. {this.props.selectProduct.average.price}</CardTitle>
                           : <div></div>}   </CardBody>
-                </Card></Col>)}
+                </div></Col>)}
               </Row>
             </Container>
           </div>

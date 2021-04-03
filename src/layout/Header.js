@@ -11,7 +11,7 @@ import {   Collapse,
     DropdownMenu,
     DropdownItem,} from 'reactstrap';
   import SecureLS from 'secure-ls';
-
+import logo from '../assets/logo.png';
   import {
     Link
   } from "react-router-dom";
@@ -27,14 +27,14 @@ const AppHeader = () => {
     const loginDetail = useSelector(state => state.userdetail);
     const toggle = () => setIsOpen(!isOpen);
     return (
-        <Navbar  style={{backgroundColor:"#006994",color:"#FFFFFF"}} light expand="md">
+        <Navbar  style={{backgroundColor:"#003f59",color:"#FFFFFF"}} light expand="md">
          <NavbarBrand style={{color:"#FFFFFF"}} to="/">
-        <img src={'https://blog.weeklyfishclub.com/wp-content/uploads/2021/02/tuna.jpg'} alt="Logo" style={{width:70, marginTop: -7}} />
-          Weekly Fish Club</NavbarBrand>
+        <img src={logo} alt="Logo" style={{width:70}} />
+          </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           
-        {<Nav  className="mr-auto" navbar>
+        {<Nav className="mr-auto" navbar>
 
 
             <NavItem>
@@ -55,9 +55,11 @@ const AppHeader = () => {
             {console.log(loginDetail.role)}
             {
             login.length===0?
-            <NavItem>
-              <Link style={{color:"#FFFFFF",marginLeft:10}} to="/login">Login</Link>
-            </NavItem>
+            
+              <NavItem >
+                <Link   style={{color:"#FFFFFF",marginLeft:10}} to="/login">Login</Link>
+              </NavItem>
+           
             :
           <UncontrolledDropdown nav inNavbar>
             <NavItem>
