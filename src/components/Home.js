@@ -7,7 +7,7 @@ import { Card, CardImg,  CardBody,
 
   import SecureLS from 'secure-ls';
   import { connect } from "react-redux";
-import background from '../assets/background.jpg';
+  import background from '../assets/background.jpg';
   import { products, addtocart, category,addArticle,user ,selectProduct} from "../js/actions/index";
   import {image} from './Images';
   var ls = new SecureLS({encodingType: 'aes'});
