@@ -185,10 +185,7 @@ import { Card, CardImg,  CardBody,
         return <Redirect to="/product" push={true} />
       }
        return (
-          <div style={{backgroundImage: `url(${background})`,
-          backgroundSize: 'stretch',
-            overflow: 'hidden',
-           }}>
+          <div >
             <Container className="themed-container" fluid="lg" >
                 <Row>
                                   {this.props.product.map((products,i) =>  <Col sm="2">

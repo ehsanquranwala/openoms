@@ -9,7 +9,7 @@ import {   Collapse,
     UncontrolledDropdown,
     DropdownToggle,
     DropdownMenu,
-    DropdownItem,} from 'reactstrap';
+    DropdownItem,Container} from 'reactstrap';
   import SecureLS from 'secure-ls';
 import logo from '../assets/logo.png';
   import {
@@ -27,7 +27,7 @@ const AppHeader = () => {
     const loginDetail = useSelector(state => state.userdetail);
     const toggle = () => setIsOpen(!isOpen);
     return (
-        <Navbar  style={{backgroundColor:"#003f59",color:"#FFFFFF"}} light expand="md">
+      <Container className="themed-container" fluid="lg" >  <Navbar  style={{color:"#FFFFFF"}} light expand="md">
          <NavbarBrand style={{color:"#FFFFFF"}} to="/">
         <img src={logo} alt="Logo" style={{width:70}} />
           </NavbarBrand>
@@ -86,6 +86,7 @@ const AppHeader = () => {
           </Nav>}
         </Collapse>
       </Navbar>
+      </Container> 
     );
 };
 
