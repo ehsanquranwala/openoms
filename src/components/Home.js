@@ -146,7 +146,7 @@ import background from '../assets/background.jpg';
                           coupon:coupon
               },
               filter:filter,
-              image:image[this.props.product[ia].product.sku]
+             // image:image[this.props.product[ia].product.sku]
                })
                          console.log('Temp',temp)
               
