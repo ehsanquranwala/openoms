@@ -12,6 +12,7 @@ import {   Collapse,
     DropdownItem,Container,Form,Button,Input} from 'reactstrap';
   import SecureLS from 'secure-ls';
 import logo from '../assets/logo.png';
+import search from '../assets/search.png';
   import {
     Link
   } from "react-router-dom";
@@ -34,8 +35,8 @@ const AppHeader = () => {
          &nbsp;Weekly Fish Club
           </NavbarBrand>
           <Form inline>
-      <Input type="text" placeholder="Search" className="mr-sm-2" />
-      <Button variant="outline-success">Search</Button>
+      <Input type="text" placeholder="Search Fishes " className="mr-sm-2" width={300} />
+      <Button variant="outline-success"><img src={search} alt="Logo" style={{width:20,fontFamily:"sans-serif"}} /></Button>
     </Form>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>

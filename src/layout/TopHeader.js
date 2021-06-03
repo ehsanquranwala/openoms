@@ -13,11 +13,14 @@ import {   Collapse,
   import SecureLS from 'secure-ls';
 import logo from '../assets/logo.png';
 import cart from '../assets/cart.png';
+import fb from '../assets/facebook.png';
+import whatsapp from '../assets/whatsapp.png';
   import {
     Link
   } from "react-router-dom";
   import { useDispatch, useSelector } from 'react-redux';
   import { user, userdetail} from "../js/actions/index";
+import { findByAltText } from '@testing-library/react';
   var ls = new SecureLS({encodingType: 'aes'});
   
 
@@ -33,15 +36,13 @@ const AppHeader = () => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           
-        {<Nav className="mr-auto"
+        {<Nav className="ml-auto"
         
          navbar>
   {
             login.length===0?
             
-              <NavItem >
-                <Link   style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/login">Sign in</Link>
-              </NavItem>
+            loginDetail.role
            
             :
           <UncontrolledDropdown nav inNavbar>
@@ -65,7 +66,16 @@ const AppHeader = () => {
               
             </UncontrolledDropdown>
             }
-
+            <NavItem>
+              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/cart">
+              <img src={fb} alt="Logo" style={{fontFamily:"sans-serif",width:'20px'}} />
+              </Link>
+            </NavItem>
+            <NavItem>
+              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/cart">
+              <img src={whatsapp} alt="Logo" style={{fontFamily:"sans-serif",width:'20px'}} />
+              </Link>
+            </NavItem>
            
             
             <NavItem>
@@ -74,7 +84,6 @@ const AppHeader = () => {
               </Link>
             </NavItem>
             
-            {console.log(loginDetail.role)}
           
 
           </Nav>}
