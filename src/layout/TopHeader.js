@@ -12,6 +12,7 @@ import {   Collapse,
     DropdownItem,Container} from 'reactstrap';
   import SecureLS from 'secure-ls';
 import logo from '../assets/logo.png';
+import cart from '../assets/cart.png';
   import {
     Link
   } from "react-router-dom";
@@ -65,19 +66,12 @@ const AppHeader = () => {
             </UncontrolledDropdown>
             }
 
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}}  to="/">Store</Link>
-            </NavItem>
            
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/category">Ocean</Link>
-            </NavItem>
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/price-list">Price List</Link>
-            </NavItem>
             
             <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/cart">Cart</Link>
+              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/cart">
+              <img src={cart} alt="Logo" style={{fontFamily:"sans-serif"}} />
+              </Link>
             </NavItem>
             
             {console.log(loginDetail.role)}

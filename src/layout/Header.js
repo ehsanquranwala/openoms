@@ -41,25 +41,7 @@ const AppHeader = () => {
         <Collapse isOpen={isOpen} navbar>
           
         {<Nav className="mr-auto" navbar>
-
-
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}}  to="/">Store</Link>
-            </NavItem>
-           
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/category">Ocean</Link>
-            </NavItem>
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/price-list">Price List</Link>
-            </NavItem>
-            
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/cart">Cart</Link>
-            </NavItem>
-            
-            {console.log(loginDetail.role)}
-            {
+        {
             login.length===0?
             
               <NavItem >
@@ -88,6 +70,24 @@ const AppHeader = () => {
               
             </UncontrolledDropdown>
             }
+
+            <NavItem>
+              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}}  to="/">Store</Link>
+            </NavItem>
+           
+            <NavItem>
+              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/category">Ocean</Link>
+            </NavItem>
+            <NavItem>
+              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/price-list">Price List</Link>
+            </NavItem>
+            
+            <NavItem>
+              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/cart">Cart</Link>
+            </NavItem>
+            
+            {console.log(loginDetail.role)}
+            
 
           </Nav>}
         </Collapse>
