@@ -27,11 +27,8 @@ const AppHeader = () => {
     const loginDetail = useSelector(state => state.userdetail);
     const toggle = () => setIsOpen(!isOpen);
     return (
-      <Container className="themed-container" fluid="lg" >  <Navbar  style={{color:"#FFFFFF"}} light expand="md">
-         <NavbarBrand style={{}} to="/">
-        <img src={logo} alt="Logo" style={{width:50,fontFamily:"sans-serif"}} />
-         &nbsp;Weekly Fish Club
-          </NavbarBrand>
+     <Navbar  style={{color:"#FFFFFF",backgroundColor:'blue'}} light expand="md">
+        
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           
@@ -87,7 +84,7 @@ const AppHeader = () => {
           </Nav>}
         </Collapse>
       </Navbar>
-      </Container> 
+     
     );
 };
 

@@ -185,8 +185,8 @@ import { Card, CardImg,  CardBody,
         return <Redirect to="/product" push={true} />
       }
        return (
-          <div >
-            <Container className="themed-container" fluid="lg" >
+          <div style={{width:'95%',alignItems:"center"}}>
+            
                 <Row>
                                   {this.props.product.map((products,i) =>  <Col sm="2">
                     <div style={{marginTop:5,border:0}} 
@@ -194,17 +194,17 @@ import { Card, CardImg,  CardBody,
                           onClick={()=>{this.props.selectProduct(this.props.product[i])
                                                                 this.setState({navigate:true})
                                                           }}>
-                      <CardBody>
+                      <CardBody style={{border:'solid',borderWidth:0.3,borderColor:'#f4f4f4'}}>
                       <img  style={{width:180,height:180}}   src={image[this.props.product[i].product.sku]}  />
                        
                       
-                       <CardTitle tag="h5" style={{color:'#FFFFFF'}} >{products.product.slug} </CardTitle>
+                       <CardTitle tag="h5" style={{color:'#000'}} >{products.filter.Local_Names} </CardTitle>
                         {this.props.selectProduct.average!=undefined?
                       <CardTitle tag="h6" color="blue">Rs. {this.props.selectProduct.average.price}</CardTitle>
                           : <div></div>}   </CardBody>
                 </div></Col>)}
               </Row>
-            </Container>
+            
           </div>
        );
     }
