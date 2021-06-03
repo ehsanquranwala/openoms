@@ -27,31 +27,15 @@ const AppHeader = () => {
     const loginDetail = useSelector(state => state.userdetail);
     const toggle = () => setIsOpen(!isOpen);
     return (
-     <Navbar  style={{color:"#FFFFFF",backgroundColor:'blue'}} light expand="md">
+     <Navbar  style={{color:"#FFFFFF",backgroundColor:'#005EB8'}} light expand="md">
         
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           
-        {<Nav className="mr-auto" navbar>
-
-
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}}  to="/">Store</Link>
-            </NavItem>
-           
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/category">Ocean</Link>
-            </NavItem>
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/price-list">Price List</Link>
-            </NavItem>
-            
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/cart">Cart</Link>
-            </NavItem>
-            
-            {console.log(loginDetail.role)}
-            {
+        {<Nav className="mr-auto"
+        
+         navbar>
+  {
             login.length===0?
             
               <NavItem >
@@ -80,6 +64,24 @@ const AppHeader = () => {
               
             </UncontrolledDropdown>
             }
+
+            <NavItem>
+              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}}  to="/">Store</Link>
+            </NavItem>
+           
+            <NavItem>
+              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/category">Ocean</Link>
+            </NavItem>
+            <NavItem>
+              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/price-list">Price List</Link>
+            </NavItem>
+            
+            <NavItem>
+              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/cart">Cart</Link>
+            </NavItem>
+            
+            {console.log(loginDetail.role)}
+          
 
           </Nav>}
         </Collapse>

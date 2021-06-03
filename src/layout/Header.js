@@ -9,7 +9,7 @@ import {   Collapse,
     UncontrolledDropdown,
     DropdownToggle,
     DropdownMenu,
-    DropdownItem,Container} from 'reactstrap';
+    DropdownItem,Container,Form,Button,Input} from 'reactstrap';
   import SecureLS from 'secure-ls';
 import logo from '../assets/logo.png';
   import {
@@ -27,11 +27,16 @@ const AppHeader = () => {
     const loginDetail = useSelector(state => state.userdetail);
     const toggle = () => setIsOpen(!isOpen);
     return (
-      <Container className="themed-container" fluid="lg" >  <Navbar  style={{color:"#FFFFFF"}} light expand="md">
-         <NavbarBrand style={{}} to="/">
+      <Container className="themed-container" fluid="lg" > 
+       <Navbar  style={{color:"#FFFFFF"}} light expand="md">
+         <NavbarBrand  style={{}} to="/">
         <img src={logo} alt="Logo" style={{width:50,fontFamily:"sans-serif"}} />
          &nbsp;Weekly Fish Club
           </NavbarBrand>
+          <Form inline>
+      <Input type="text" placeholder="Search" className="mr-sm-2" />
+      <Button variant="outline-success">Search</Button>
+    </Form>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           
