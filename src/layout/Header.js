@@ -35,7 +35,7 @@ const AppHeader = () => {
          &nbsp;Weekly Fish Club
           </NavbarBrand>
           <Form inline>
-      <Input type="text" placeholder="Search Fishes " className="mr-sm-2" width={300} />
+      <Input type="text" placeholder="Search Fishes " className="mr-md-6"  />
       <Button variant="outline-success"><img src={search} alt="Logo" style={{width:20,fontFamily:"sans-serif"}} /></Button>
     </Form>
         <NavbarToggler onClick={toggle} />
