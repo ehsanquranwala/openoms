@@ -4,7 +4,7 @@ import {Link,useParams} from "react-router-dom";
 import ImageGallery from 'react-image-gallery';
 import { Card, CardImg, CardBody,
   CardTitle, Container,Row,Button,Col,Label, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
-  import ReactPlayer from 'react-player'
+  import ReactPlayer from 'react-player';
   import SecureLS from 'secure-ls';
   var ls = new SecureLS({encodingType: 'aes'});
   var data = require('../assets/data.json');
