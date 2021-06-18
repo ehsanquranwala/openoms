@@ -1,39 +1,38 @@
-import React from "react";
+import React,{useEffect} from "react";
 
 import {Link,useParams} from "react-router-dom";
-import { connect } from "react-redux";
-import { products, addtocart, category,addArticle,user ,selectProduct} from "../js/actions/index";
+import ImageGallery from 'react-image-gallery';
 import { Card, CardImg, CardBody,
   CardTitle, Container,Row,Button,Col,Label, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
   import SecureLS from 'secure-ls';
   var ls = new SecureLS({encodingType: 'aes'});
+  var data = require('../assets/data.json');
+  var link = 'http://10.0.1.105/cowmandipk/';
+  var temp=[]
+  export default function Child() {
+    // We can use the `useParams` hook here to access
+    // the dynamic pieces of the URL.
+    let { id } = useParams();
+    useEffect(() => {    
+      data.map((e)=>{
+      if(e.id==id){
+            for(var a=1;a<=e.pic_count;a++){
+                temp.push({"original": link+"1/1.jpeg",
+                          "thumbnail": link+id1/1.jpeg"})
+            }
+      }
+    }
+      )
 
- export default class Product extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {product:{},
-                    image:'',
-                    qty:1 ,
-                    modal:false
-                    };
-    }
-    
-    componentDidMount(){
-      console.log(this.props.selectProduct)
-    }
-  
-   
-    
-    render() {
-   
-       return (
-          <div style={{marginTop:20}}>
-            <Container className="themed-container" fluid="sm" >
-             
-           
-          </Container>
-          </div>
-       );
-    }
- }
+      });
+    return (
+
+      <div>
+        <Container className="themed-container"  >
+          <Row>
+        <ImageGallery items={data} />
+        </Row></Container>
+      </div>
+    );
+  }
  

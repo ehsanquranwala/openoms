@@ -18,24 +18,25 @@ import { Card, CardImg,  CardBody,
       super(props);
       this.state = {
         navigate:false,
+        id:null,
                     };
     }
     componentDidMount(){
-    console.log(this.props.product)
+    //console.log(this.props.product)
       
      }
  
    
     setParam(id){
-      ls.set('productId',id );
-      this.setState({navigate:true})
+     
+      this.setState({navigate:true,id:id})
      
     }
  
     render() {
-      const { navigate } = this.state
+      const { navigate,id } = this.state
       if (navigate) {
-        return <Redirect to="/product" push={true} />
+        return <Redirect to={'/'+id} push={true} />
       }
        return (
         <div style={{marginTop:'1%'}}>
@@ -44,7 +45,7 @@ import { Card, CardImg,  CardBody,
         <ImageGallery items={data}
                       ref={i => this._imageGallery = i} 
                       onClick={(e)=>
-                            console.log(this._imageGallery.getCurrentIndex())
+                        this.setParam(this._imageGallery.getCurrentIndex())
                             } />
         </Row></Container>
         </div>

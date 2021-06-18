@@ -36,7 +36,7 @@ class App extends Component {
           <Route path="/category" component={Category}>
             
           </Route>
-          <Route path="/product" component={Product}>
+          <Route path="/:id" component={Product}>
             
           </Route>
           <Route path="/price-list" component={PriceList}>
