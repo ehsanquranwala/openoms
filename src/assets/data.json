@@ -1,32 +1,48 @@
-[{"id":1,
-"pic_count":10,
+[{"id":0,
+      "pic_count":4,
+      "gender":"male",
+      "teeth":"4",
+      "age":10,
+      "original": "http://10.0.1.105/cowmandipk/0/1.jpeg",
+      "thumbnail": "http://10.0.1.105/cowmandipk/0/1.jpeg"
+},
+{"id":1,
+"pic_count":6,
 "gender":"male",
 "teeth":"4",
 "age":10,
-"original": "https://picsum.photos/id/1018/1000/600/",
-"thumbnail": "https://picsum.photos/id/1018/250/150/"
+"original": "http://10.0.1.105/cowmandipk/1/1.jpeg",
+"thumbnail": "http://10.0.1.105/cowmandipk/1/1.jpeg"
 },
 {"id":2,
-"pic_count":10,
+"pic_count":1,
 "gender":"male",
 "teeth":"4",
 "age":10,
-"original": "https://picsum.photos/id/1018/1000/600/",
-"thumbnail": "https://picsum.photos/id/1018/250/150/"
+"original": "http://10.0.1.105/cowmandipk/2/1.jpeg",
+"thumbnail": "http://10.0.1.105/cowmandipk/2/1.jpeg"
 },
 {"id":3,
-"pic_count":10,
+"pic_count":2,
 "gender":"male",
 "teeth":"4",
 "age":10,
-"original": "https://picsum.photos/id/1018/1000/600/",
-"thumbnail": "https://picsum.photos/id/1018/250/150/"
+"original": "http://10.0.1.105/cowmandipk/3/1.jpeg",
+"thumbnail": "http://10.0.1.105/cowmandipk/3/1.jpeg"
 },
 {"id":4,
-"pic_count":10,
+"pic_count":1,
 "gender":"male",
 "teeth":"4",
 "age":10,
-"original": "https://picsum.photos/id/1018/1000/600/",
-"thumbnail": "https://picsum.photos/id/1018/250/150/"
+"original": "http://10.0.1.105/cowmandipk/4/1.jpeg",
+"thumbnail": "http://10.0.1.105/cowmandipk/4/1.jpeg"
+},
+{"id":5,
+"pic_count":4,
+"gender":"male",
+"teeth":"4",
+"age":10,
+"original": "http://10.0.1.105/cowmandipk/4/1.jpeg",
+"thumbnail": "http://10.0.1.105/cowmandipk/4/1.jpeg"
 }]

@@ -41,8 +41,11 @@ import { Card, CardImg,  CardBody,
         <div style={{marginTop:'1%'}}>
         <Container className="themed-container"  >
           <Row>
-        <ImageGallery items={data} 
-                      onClick={(e)=>console.log(getCurrentIndex())} />
+        <ImageGallery items={data}
+                      ref={i => this._imageGallery = i} 
+                      onClick={(e)=>
+                            console.log(this._imageGallery.getCurrentIndex())
+                            } />
         </Row></Container>
         </div>
        );
