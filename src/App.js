@@ -5,7 +5,6 @@ import {
   Route,
   Link,
 } from "react-router-dom";
-import AppHeader from './layout/Header';
 import TopHeader from './layout/TopHeader';
 import Home from './components/Home';
 import Login from './components/Login';
@@ -26,7 +25,7 @@ class App extends Component {
     <Router>
       <Fragment>
       <TopHeader/>
-            <AppHeader/>
+         
         <Switch>
           <Route path="/register" component={Register}>
             

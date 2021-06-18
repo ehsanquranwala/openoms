@@ -32,7 +32,9 @@ const AppHeader = () => {
     const toggle = () => setIsOpen(!isOpen);
     return (
      <Navbar  style={{color:"#FFFFFF",backgroundColor:'#005EB8'}} light expand="md">
-        
+        <NavbarBrand  style={{}} to="/">
+         &nbsp;Cow Mandi
+          </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           
