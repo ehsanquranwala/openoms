@@ -38,10 +38,11 @@ import { Card, CardImg,  CardBody,
         return <Redirect to="/product" push={true} />
       }
        return (
-        <div style={{marginTop:'5%'}}>
+        <div style={{marginTop:'1%'}}>
         <Container className="themed-container"  >
           <Row>
-        <ImageGallery items={data} />
+        <ImageGallery items={data} 
+                      onClick={(e)=>console.log(getCurrentIndex())} />
         </Row></Container>
         </div>
        );
