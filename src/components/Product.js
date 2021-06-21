@@ -8,7 +8,7 @@ import { Card, CardImg, CardBody,
   import SecureLS from 'secure-ls';
   var ls = new SecureLS({encodingType: 'aes'});
   var data = require('../assets/data.json');
-  var link = 'http://10.0.1.105/cowmandipk/';
+  var link = 'http://cowmandi.net/cowmandi_assets/';
   var temp =[]
   export default function Child() {
     // We can use the `useParams` hook here to access
@@ -37,7 +37,7 @@ import { Card, CardImg, CardBody,
         <Container className="themed-container"  >
           <Row>
               <ImageGallery items={temp} />
-              <ReactPlayer url='https://www.youtube.com/watch?v=ysz5S6PUM-U' />
+              <ReactPlayer url={link+id+'/video.mp4'} />
         </Row></Container>
       </div>
     );
