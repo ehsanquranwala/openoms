@@ -21,8 +21,8 @@ import { Card, CardImg, CardBody,
         if(temp.length==0){
         setCount(count + 1)  
             for(var a=1;a<=e.pic_count;a++){
-                temp.push({"original": link+id+'/'+a+'.jpeg',
-                          "thumbnail": link+id+'/'+a+'.jpeg'})
+                temp.push({"original": link+id+'/'+a+'.jpg',
+                          "thumbnail": link+id+'/'+a+'.jpg'})
             }
           }
       } 

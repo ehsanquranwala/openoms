@@ -38,9 +38,14 @@ const AppHeader = () => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           
-        {<Nav className="ml-auto"
+        {<Nav className="mr-auto"
         
          navbar>
+         <NavItem>
+              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/">
+              Home
+              </Link>
+            </NavItem>
   {
             login.length===0?
             
@@ -80,11 +85,6 @@ const AppHeader = () => {
             </NavItem>
            
             
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/cart">
-              <img src={cart} alt="Logo" style={{fontFamily:"sans-serif"}} />
-              </Link>
-            </NavItem>
             
           
 
