@@ -43,6 +43,7 @@ import { Card, CardImg,  CardBody,
         <Container className="themed-container"  >
           <Row>
         <ImageGallery items={data}
+        width={'100%'}
                       ref={i => this._imageGallery = i} 
                       onClick={(e)=>
                         this.setParam(this._imageGallery.getCurrentIndex())

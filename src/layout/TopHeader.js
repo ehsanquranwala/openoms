@@ -35,17 +35,18 @@ const AppHeader = () => {
         <NavbarBrand  style={{color:"#FFFFFF",fontWeight:"bold",fontFamily:"tahoma"}} to="/">
          Cow Mandi
           </NavbarBrand>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          
-        {<Nav className="mr-auto"
-        
-         navbar>
-         <NavItem>
+          <NavItem className="mr-auto">
               <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/">
               Home
               </Link>
             </NavItem>
+        <NavbarToggler onClick={toggle} />
+        <Collapse isOpen={isOpen} navbar>
+          
+        {<Nav className="ml-auto"
+        
+         navbar>
+        
   {
             login.length===0?
             
