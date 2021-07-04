@@ -8,6 +8,7 @@ import { Card, CardImg,  CardBody,
   import SecureLS from 'secure-ls';
   import ImageGallery from 'react-image-gallery';
   import {image} from './Images';
+  import banner from '../assets/banner.jpg';
   var ls = new SecureLS({encodingType: 'aes'});
   var data = require('../assets/data.json');
   const token=ls.get('token')
@@ -42,13 +43,19 @@ import { Card, CardImg,  CardBody,
         <div style={{marginTop:'1%'}}>
         <Container className="themed-container"  >
           <Row>
-        <ImageGallery items={data}
-        width={'100%'}
+        <ImageGallery
+        
+         items={data}
+         thumbnailPosition="right"
                       ref={i => this._imageGallery = i} 
                       onClick={(e)=>
                         this.setParam(this._imageGallery.getCurrentIndex())
                             } />
-        </Row></Container>
+        </Row>
+        <Row style={{mardinTop:10}}>
+          <img width={'100%'} src={banner}></img>
+        </Row>
+        </Container>
         </div>
        );
     }

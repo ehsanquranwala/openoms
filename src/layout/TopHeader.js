@@ -74,16 +74,21 @@ const AppHeader = () => {
               
             </UncontrolledDropdown>
             }
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/cart">
-              <img src={fb} alt="Logo" style={{fontFamily:"sans-serif",width:'20px'}} />
-              </Link>
-            </NavItem>
-            <NavItem>
-              <Link style={{color:"#000",marginLeft:10,fontFamily:"sans-serif"}} to="/cart">
-              <img src={whatsapp} alt="Logo" style={{fontFamily:"sans-serif",width:'20px'}} />
-              </Link>
-            </NavItem>
+          
+            
+            <a href="https://www.facebook.com/cowmandi.net" style={{fontFamily:"sans-serif",color:'white'}}>
+                <img src={fb} alt="Logo" style={{fontFamily:"sans-serif",width:'20px',marginLeft:20}} />
+                cowmandi.net
+            </a>
+              <a href="https://api.whatsapp.com/send?phone=+923432233434" style={{fontFamily:"sans-serif",color:'white'}}>
+              
+              <img src={whatsapp} alt="Logo" style={{fontFamily:"sans-serif",width:'20px',marginLeft:20}} >
+            
+              </img>
+              +92 343 2233434
+              </a>
+              
+            
            
             
             
